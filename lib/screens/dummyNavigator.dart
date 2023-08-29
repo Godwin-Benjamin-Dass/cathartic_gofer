@@ -10,12 +10,13 @@ class DummyNavigator extends StatelessWidget {
         appBar: AppBar(
           title: Text("Dummy Navigator"),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(onPressed: () {}, child: Text("Search Screen"))
-          ],
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(onPressed: () {}, child: Text("Search Screen"))
+            ],
+          ),
         ),
       ),
     );

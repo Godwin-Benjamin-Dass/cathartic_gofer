@@ -27,9 +27,9 @@ class DummyNavigator extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {
                     // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (context) => const Alarm()));
+                    //     MaterialPageRoute(builder: (context) => Alarm()));
                   },
-                  child: Text("Alarm"))
+                  child: const Text("alarm"))
             ],
           ),
         ),

@@ -39,6 +39,10 @@ dependencies:
   firebase_database: ^10.2.5
   flutter_typeahead: ^4.6.2
   url_launcher: ^6.1.14
+  flutter_alarm_clock: ^0.1.1
+  flutter_local_notifications: ^5.0.0
+  timezone: ^0.7.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

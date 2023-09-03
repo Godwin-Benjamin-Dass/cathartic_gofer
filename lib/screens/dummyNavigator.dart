@@ -1,3 +1,4 @@
+import 'package:cathartic_gofer/screens/alarm/alarm.dart';
 import 'package:flutter/material.dart';
 
 class DummyNavigator extends StatelessWidget {
@@ -14,7 +15,13 @@ class DummyNavigator extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(onPressed: () {}, child: Text("Search Screen"))
+              ElevatedButton(onPressed: () {}, child: Text("Search Screen")),
+              ElevatedButton(
+                  onPressed: () {
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) => Alarm()));
+                  },
+                  child: Text("alarm"))
             ],
           ),
         ),

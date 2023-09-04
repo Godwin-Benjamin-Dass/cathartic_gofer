@@ -1,4 +1,4 @@
-import 'package:cathartic_gofer/screens/alarm/alarm.dart';
+import 'package:cathartic_gofer/dashboard/homepage.dart';
 import 'package:flutter/material.dart';
 
 class DummyNavigator extends StatelessWidget {
@@ -18,10 +18,10 @@ class DummyNavigator extends StatelessWidget {
               ElevatedButton(onPressed: () {}, child: Text("Search Screen")),
               ElevatedButton(
                   onPressed: () {
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (context) => Alarm()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Homepage()));
                   },
-                  child: Text("alarm"))
+                  child: Text("Go to Dashboard"))
             ],
           ),
         ),

@@ -38,6 +38,9 @@ dependencies:
   firebase_core: ^2.15.1
   google_fonts: 
   intl: ^0.17.0
+  firebase_database: ^10.2.5
+  flutter_typeahead: ^4.6.2
+  url_launcher: ^6.1.14
 
 
 dev_dependencies:

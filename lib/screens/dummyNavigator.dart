@@ -1,4 +1,5 @@
 import 'package:cathartic_gofer/dashboard/homepage.dart';
+import 'package:cathartic_gofer/screens/searchFlow/searchScreen.dart';
 import 'package:flutter/material.dart';
 
 class DummyNavigator extends StatelessWidget {
@@ -9,19 +10,26 @@ class DummyNavigator extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Dummy Navigator"),
+          title: const Text("Dummy Navigator"),
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(onPressed: () {}, child: Text("Search Screen")),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const searchScreen()));
+                  },
+                  child: const Text("Search Screen")),
               ElevatedButton(
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Homepage()));
                   },
-                  child: Text("Go to Dashboard"))
+                  child: const Text("alarm"))
             ],
           ),
         ),

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:cathartic_gofer/dashboard/homepage.dart';
 import 'package:cathartic_gofer/screens/searchFlow/searchScreen.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +28,12 @@ class DummyNavigator extends StatelessWidget {
                   child: const Text("Search Screen")),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Homepage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Homepage()));
                   },
-                  child: const Text("alarm"))
+                  child: const Text("Dashboard")),
             ],
           ),
         ),

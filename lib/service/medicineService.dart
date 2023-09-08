@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, camel_case_types, avoid_print
+
 import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';

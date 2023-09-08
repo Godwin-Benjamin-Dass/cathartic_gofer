@@ -2,6 +2,8 @@
 //
 //     final medicineModel = medicineModelFromJson(jsonString);
 
+// ignore_for_file: file_names
+
 import 'dart:convert';
 
 MedicineModel medicineModelFromJson(String str) =>

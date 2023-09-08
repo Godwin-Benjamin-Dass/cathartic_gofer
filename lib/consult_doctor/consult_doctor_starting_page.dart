@@ -8,7 +8,7 @@ class ConsultDoctorStartingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Color(0xff0075FF),
+      backgroundColor: const Color(0xff0075FF),
       body: Column(
         children: [
           Row(
@@ -23,7 +23,7 @@ class ConsultDoctorStartingPage extends StatelessWidget {
               )
             ],
           ),
-          Spacer(),
+          const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -39,27 +39,27 @@ class ConsultDoctorStartingPage extends StatelessWidget {
                         style: GoogleFonts.poppins(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            color: Color(0xff0075FF)),
+                            color: const Color(0xff0075FF)),
                       ),
                       Text(
                         "Online",
                         style: GoogleFonts.poppins(
                             fontSize: 24,
-                            color: Color(0xff0075FF),
+                            color: const Color(0xff0075FF),
                             fontWeight: FontWeight.w800),
                       ),
                       Text(
                         "Doctor",
                         style: GoogleFonts.poppins(
                             fontSize: 22,
-                            color: Color(0xff0075FF),
+                            color: const Color(0xff0075FF),
                             fontWeight: FontWeight.w500),
                       )
                     ]),
               ),
               Container(
                 alignment: Alignment.bottomRight,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
@@ -75,12 +75,12 @@ class ConsultDoctorStartingPage extends StatelessWidget {
               )
             ],
           ),
-          Spacer(
+          const Spacer(
             flex: 4,
           ),
           InkWell(
             onTap: () {},
-            splashColor: Color(0xff0075FF),
+            splashColor: const Color(0xff0075FF),
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25), color: Colors.white),
@@ -93,14 +93,14 @@ class ConsultDoctorStartingPage extends StatelessWidget {
                     Text(
                       "Get Started",
                       style: GoogleFonts.poppins(
-                          color: Color(0xff0075FF),
+                          color: const Color(0xff0075FF),
                           fontSize: 20,
                           fontWeight: FontWeight.w500),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
-                    Icon(
+                    const Icon(
                       Icons.arrow_forward_ios_rounded,
                       size: 22,
                       color: Color(0xff0075FF),
@@ -110,7 +110,7 @@ class ConsultDoctorStartingPage extends StatelessWidget {
               ),
             ),
           ),
-          Spacer(
+          const Spacer(
             flex: 2,
           ),
         ],

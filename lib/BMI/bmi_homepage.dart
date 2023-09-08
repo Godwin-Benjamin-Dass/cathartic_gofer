@@ -1,10 +1,12 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:cathartic_gofer/BMI/result_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class BMIHomepage extends StatefulWidget {
-  BMIHomepage({super.key});
+  const BMIHomepage({super.key});
 
   @override
   State<BMIHomepage> createState() => _BMIHomepageState();
@@ -21,18 +23,17 @@ class _BMIHomepageState extends State<BMIHomepage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     dateController.text =
         DateFormat('dd-MM-yyyy').format(DateTime.now()).toString();
     int start = 20;
     for (int i = 0; i < 150; i++) {
       int tot = start + i;
-      weightList.add("${tot} kg");
+      weightList.add("$tot kg");
     }
     for (int i = 2; i < 8; i++) {
-      for (int j = 1; j < 10; j++) {
-        heightList.add("${i}.${j}\"");
+      for (int j = 1; j < 13; j++) {
+        heightList.add("$i.$j\"");
       }
     }
   }
@@ -40,23 +41,39 @@ class _BMIHomepageState extends State<BMIHomepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffDDECFF),
+      backgroundColor: const Color(0xffDDECFF),
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.only(left: 25, right: 25, top: 60),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Text(
-                "BMI Calculator",
-                style: GoogleFonts.poppins(
-                    fontSize: 40,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      size: 28,
+                    )),
+                const SizedBox(
+                  width: 20,
+                ),
+                Center(
+                  child: Text(
+                    "BMI Calculator",
+                    style: GoogleFonts.poppins(
+                        fontSize: 38,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Row(
@@ -72,18 +89,18 @@ class _BMIHomepageState extends State<BMIHomepage> {
                           fontWeight: FontWeight.w600,
                           color: Colors.black),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Container(
                       height: 56,
                       width: 155,
                       decoration: BoxDecoration(
-                          color: Color(0xff0075FF),
+                          color: const Color(0xff0075FF),
                           borderRadius: BorderRadius.circular(20)),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
-                            dropdownColor: Color(0xff0075FF),
+                            dropdownColor: const Color(0xff0075FF),
                             hint: Padding(
                               padding: const EdgeInsets.only(left: 15),
                               child: Text(
@@ -100,9 +117,9 @@ class _BMIHomepageState extends State<BMIHomepage> {
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14),
                             iconSize: 20,
-                            icon: Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: const Icon(
+                            icon: const Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Icon(
                                 Icons.keyboard_arrow_down_rounded,
                                 color: Colors.white,
                               ),
@@ -125,23 +142,25 @@ class _BMIHomepageState extends State<BMIHomepage> {
                           fontWeight: FontWeight.w600,
                           color: Colors.black),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Container(
                         height: 56,
                         width: 164,
                         decoration: BoxDecoration(
-                            color: Color(0xff0075FF),
+                            color: const Color(0xff0075FF),
                             borderRadius: BorderRadius.circular(20)),
                         child: TextField(
                           readOnly: true,
                           style: GoogleFonts.poppins(
                               color: Colors.white,
-                              fontWeight:
-                                  dateController == DateTime.now().toString()
-                                      ? FontWeight.w400
-                                      : FontWeight.w600,
+                              fontWeight: dateController.text ==
+                                      DateFormat('dd-MM-yyyy')
+                                          .format(DateTime.now())
+                                          .toString()
+                                  ? FontWeight.normal
+                                  : FontWeight.w600,
                               fontSize: 14),
                           controller:
                               dateController, //editing controller of this TextField
@@ -174,7 +193,7 @@ class _BMIHomepageState extends State<BMIHomepage> {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 35,
             ),
             Row(
@@ -190,19 +209,19 @@ class _BMIHomepageState extends State<BMIHomepage> {
                           fontWeight: FontWeight.w600,
                           color: Colors.black),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Container(
                       height: 56,
                       width: 155,
                       decoration: BoxDecoration(
-                          color: Color(0xff0075FF),
+                          color: const Color(0xff0075FF),
                           borderRadius: BorderRadius.circular(20)),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                             isExpanded: true,
-                            dropdownColor: Color(0xff0075FF),
+                            dropdownColor: const Color(0xff0075FF),
                             hint: Padding(
                               padding: const EdgeInsets.only(left: 15),
                               child: Text(
@@ -219,9 +238,9 @@ class _BMIHomepageState extends State<BMIHomepage> {
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14),
                             iconSize: 20,
-                            icon: Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: const Icon(
+                            icon: const Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Icon(
                                 Icons.keyboard_arrow_down_rounded,
                                 color: Colors.white,
                               ),
@@ -244,19 +263,19 @@ class _BMIHomepageState extends State<BMIHomepage> {
                           fontWeight: FontWeight.w600,
                           color: Colors.black),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Container(
                       height: 56,
                       width: 164,
                       decoration: BoxDecoration(
-                          color: Color(0xff0075FF),
+                          color: const Color(0xff0075FF),
                           borderRadius: BorderRadius.circular(20)),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                             isExpanded: true,
-                            dropdownColor: Color(0xff0075FF),
+                            dropdownColor: const Color(0xff0075FF),
                             hint: Padding(
                               padding: const EdgeInsets.only(left: 15),
                               child: Text(
@@ -273,9 +292,9 @@ class _BMIHomepageState extends State<BMIHomepage> {
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14),
                             iconSize: 20,
-                            icon: Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: const Icon(
+                            icon: const Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: Icon(
                                 Icons.keyboard_arrow_down_rounded,
                                 color: Colors.white,
                               ),
@@ -291,7 +310,7 @@ class _BMIHomepageState extends State<BMIHomepage> {
               ],
             ),
             Image.asset("assets/images/tablet.png"),
-            SizedBox(
+            const SizedBox(
               height: 60,
             ),
             Center(
@@ -302,8 +321,85 @@ class _BMIHomepageState extends State<BMIHomepage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18))),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ResultPage()));
+                    if (dateController.text !=
+                            DateFormat('dd-MM-yyyy')
+                                .format(DateTime.now())
+                                .toString() &&
+                        gender != null) {
+                      String inches = height!
+                          .substring(height!.length - 2, height!.length - 1);
+                      double feet = int.parse(inches) / 12;
+                      String feets = height!.substring(0, 1);
+                      double totFeet = int.parse(feets) + feet;
+                      double meter = totFeet * 0.3048;
+                      String _weight = weight!.substring(0, 2);
+                      double bmi = int.parse(_weight) / (meter * meter);
+                      String totBmi = bmi.toString();
+                      if (totBmi.length > 6) {
+                        totBmi = totBmi.substring(0, 5);
+                      }
+
+                      if (bmi <= 18.5) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ResultPage(
+                                      bgcolor: const Color(0xff53C8F7),
+                                      bmi: totBmi,
+                                      img: "assets/images/underweight.jpg",
+                                      remark:
+                                          "Increase 10kg to have normal BMI",
+                                      status: "UnderWeight",
+                                    )));
+                      } else if (bmi > 18.5 && bmi <= 24.9) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ResultPage(
+                                      bgcolor: const Color(0xff7BADE7),
+                                      bmi: totBmi,
+                                      img: "assets/images/normal.jpg",
+                                      remark: "You have a Normal BMI",
+                                      status: "Normal",
+                                    )));
+                      } else if (bmi >= 25 && bmi <= 29.9) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ResultPage(
+                                      bgcolor: const Color(0xffA978BF),
+                                      bmi: totBmi,
+                                      img: "assets/images/overweight.jpg",
+                                      remark: "Reduce 5kg to have normal BMI",
+                                      status: "Over Weight",
+                                    )));
+                      } else if (bmi >= 30 && bmi <= 39.9) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ResultPage(
+                                      bgcolor: const Color(0xffDD6C9A),
+                                      bmi: totBmi,
+                                      img: "assets/images/obesity.jpg",
+                                      remark: "Reduce 15kg to have normal BMI",
+                                      status: "Obesity",
+                                    )));
+                      } else if (bmi >= 40) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ResultPage(
+                                      bgcolor: const Color(0xffF3D3EA),
+                                      bmi: totBmi,
+                                      img: "assets/images/extremeobesity.jpg",
+                                      remark: "Reduce 30kg to have normal BMI",
+                                      status: "Extreme Obesity",
+                                    )));
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("Please Provide all the details...")));
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -312,7 +408,7 @@ class _BMIHomepageState extends State<BMIHomepage> {
                       style: GoogleFonts.poppins(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xff0075FF),
+                        color: const Color(0xff0075FF),
                       ),
                     ),
                   )),

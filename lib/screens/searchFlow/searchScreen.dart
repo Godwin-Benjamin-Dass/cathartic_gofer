@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, camel_case_types, avoid_print
+
 import 'package:cathartic_gofer/models/medicineModel.dart';
 import 'package:cathartic_gofer/screens/searchFlow/viewMedicineScreen.dart';
 import 'package:cathartic_gofer/service/medicineService.dart';
@@ -18,7 +20,6 @@ class _searchScreenState extends State<searchScreen> {
     isLoading = true;
     setState(() {});
 
-    print("fetching......");
     medic = await medicineService.fetchMedicine();
     print("fetched......");
 
@@ -28,7 +29,6 @@ class _searchScreenState extends State<searchScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchData();
   }
@@ -103,7 +103,7 @@ class _searchScreenState extends State<searchScreen> {
 class SearchResultList extends StatelessWidget {
   final List<MedicineModel> items;
 
-  SearchResultList({required this.items});
+  const SearchResultList({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {

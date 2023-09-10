@@ -5,6 +5,7 @@ import 'package:cathartic_gofer/screens/searchFlow/viewMedicineScreen.dart';
 import 'package:cathartic_gofer/service/medicineService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class searchScreen extends StatefulWidget {
   const searchScreen({super.key});
@@ -37,7 +38,7 @@ class _searchScreenState extends State<searchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white,
           elevation: 0,
           automaticallyImplyLeading: false,
           leading: IconButton(
@@ -65,16 +66,22 @@ class _searchScreenState extends State<searchScreen> {
             : Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TypeAheadField<MedicineModel>(
-                  textFieldConfiguration: const TextFieldConfiguration(
-                    decoration: InputDecoration(
-                      hintText: 'Search...',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffD4D4D4)),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
+                  textFieldConfiguration: TextFieldConfiguration(
+                      decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ),
+                    fillColor: const Color(0xffD9D9D9),
+                    filled: true,
+                    prefixIcon:
+                        const Icon(Icons.search, color: Color(0xff9B9B9B)),
+                    hintText: "Search",
+                    hintStyle: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xff9B9B9B)),
+                  )),
                   suggestionsCallback: (pattern) async {
                     return medic
                         .where((item) => item.name!

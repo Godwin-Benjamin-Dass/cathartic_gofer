@@ -1,9 +1,10 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
-import 'package:cathartic_gofer/BMI/result_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+
+import 'result_page.dart';
 
 class BMIHomepage extends StatefulWidget {
   const BMIHomepage({super.key});

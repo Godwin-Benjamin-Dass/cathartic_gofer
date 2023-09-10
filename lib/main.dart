@@ -1,8 +1,10 @@
-import 'package:cathartic_gofer/screens/dummyNavigator.dart';
+import 'package:cathartic_gofer/provider/medicineSheduleProvider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
+import 'screens/dashboard/homepage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,9 +19,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: DummyNavigator(),
-      debugShowCheckedModeBanner: false,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => medicineSheduleProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        home: Homepage(),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: "Work Sans",
+        ),
+      ),
     );
   }
 }

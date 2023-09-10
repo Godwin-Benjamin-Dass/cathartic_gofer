@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, camel_case_types, no_leading_underscores_for_local_identifiers
+
 import 'package:cathartic_gofer/models/medicineModel.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -273,7 +275,8 @@ class viewMedicineScreen extends StatelessWidget {
                       })),
               Center(
                 child: TextButton(
-                    onPressed: _launchUrl, child: Text("Search Online....")),
+                    onPressed: _launchUrl,
+                    child: const Text("Search Online....")),
               )
             ],
           ),

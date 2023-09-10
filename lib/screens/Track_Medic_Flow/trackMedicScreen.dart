@@ -70,7 +70,7 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
         ],
       ),
       body: isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Consumer<medicineSheduleProvider>(

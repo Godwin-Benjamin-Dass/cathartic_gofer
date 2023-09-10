@@ -1,4 +1,5 @@
 import 'package:cathartic_gofer/screens/BMI/bmi_homepage.dart';
+import 'package:cathartic_gofer/screens/Track_Medic_Flow/trackMedicScreen.dart';
 import 'package:cathartic_gofer/screens/consult_doctor/consult_doctor_starting_page.dart';
 import 'package:cathartic_gofer/screens/dashboard/widgets/black_divider.dart';
 import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_20_bold.dart';
@@ -138,31 +139,39 @@ class Homepage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 5,
-                              offset: Offset(0, 4))
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const TrackMedicScreen()));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Colors.grey,
+                                blurRadius: 5,
+                                offset: Offset(0, 4))
+                          ],
+                          color: const Color(0xffFF0101),
+                          borderRadius: BorderRadius.circular(20)),
+                      height: 159,
+                      width: 159,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/heart.png"),
+                          Text(
+                            "Track medic",
+                            style: GoogleFonts.poppins(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800),
+                          )
                         ],
-                        color: const Color(0xffFF0101),
-                        borderRadius: BorderRadius.circular(20)),
-                    height: 159,
-                    width: 159,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset("assets/images/heart.png"),
-                        Text(
-                          "Track medic",
-                          style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800),
-                        )
-                      ],
+                      ),
                     ),
                   ),
                   Container(

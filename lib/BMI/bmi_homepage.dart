@@ -32,7 +32,7 @@ class _BMIHomepageState extends State<BMIHomepage> {
       weightList.add("$tot kg");
     }
     for (int i = 2; i < 8; i++) {
-      for (int j = 1; j < 13; j++) {
+      for (int j = 0; j < 13; j++) {
         heightList.add("$i.$j\"");
       }
     }
@@ -183,7 +183,9 @@ class _BMIHomepageState extends State<BMIHomepage> {
                                 dateController.text = formattedDate;
                               });
                             } else {
-                              String formattedDate = DateTime.now().toString();
+                              String formattedDate = DateFormat('dd-MM-yyyy')
+                                  .format(DateTime.now())
+                                  .toString();
 
                               dateController.text = formattedDate;
                             }
@@ -326,8 +328,17 @@ class _BMIHomepageState extends State<BMIHomepage> {
                                 .format(DateTime.now())
                                 .toString() &&
                         gender != null) {
-                      String inches = height!
-                          .substring(height!.length - 2, height!.length - 1);
+                      String dot = height!
+                          .substring(height!.length - 3, height!.length - 2);
+                      String inches;
+                      if (dot == ".") {
+                        inches = height!
+                            .substring(height!.length - 2, height!.length - 1);
+                      } else {
+                        inches = height!
+                            .substring(height!.length - 3, height!.length - 1);
+                      }
+
                       double feet = int.parse(inches) / 12;
                       String feets = height!.substring(0, 1);
                       double totFeet = int.parse(feets) + feet;

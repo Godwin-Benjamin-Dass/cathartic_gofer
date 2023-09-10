@@ -1,8 +1,10 @@
-import 'package:cathartic_gofer/BMI/bmi_homepage.dart';
-import 'package:cathartic_gofer/consult_doctor/consult_doctor_starting_page.dart';
-import 'package:cathartic_gofer/dashboard/widgets/black_divider.dart';
-import 'package:cathartic_gofer/dashboard/widgets/text_with_poppins_20_bold.dart';
-import 'package:cathartic_gofer/dashboard/widgets/text_with_poppins_22_bold.dart';
+import 'package:cathartic_gofer/screens/BMI/bmi_homepage.dart';
+import 'package:cathartic_gofer/screens/Track_Medic_Flow/trackMedicScreen.dart';
+import 'package:cathartic_gofer/screens/consult_doctor/consult_doctor_starting_page.dart';
+import 'package:cathartic_gofer/screens/dashboard/widgets/black_divider.dart';
+import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_20_bold.dart';
+import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_22_bold.dart';
+import 'package:cathartic_gofer/screens/searchFlow/searchScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -32,7 +34,7 @@ class Homepage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Icon(
@@ -40,8 +42,7 @@ class Homepage extends StatelessWidget {
                                 color: Colors.white,
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 16, right: 16),
+                                padding: EdgeInsets.only(left: 16, right: 16),
                                 child: Icon(
                                   Icons.menu,
                                   color: Colors.white,
@@ -52,15 +53,15 @@ class Homepage extends StatelessWidget {
                           Image.asset(
                             "assets/images/profileImg.png",
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 15),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 15),
                             child: BlackDivider(),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8, top: 12),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 8, top: 12),
                             child: Row(
                               children: [
                                 TextWithPoppinsSize20FwBold(
@@ -72,14 +73,14 @@ class Homepage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 8.0),
                             child: TextWithPoppinsSize20FwBold(
                                 text: "How can we help you",
                                 color: Colors.black),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 8.0),
                             child: TextWithPoppinsSize20FwBold(
                                 text: "today ?", color: Colors.black),
                           )
@@ -95,6 +96,12 @@ class Homepage extends StatelessWidget {
               child: SizedBox(
                 height: 55,
                 child: TextField(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const searchScreen()));
+                  },
                   style: GoogleFonts.poppins(
                       fontSize: 18,
                       color: Colors.black,
@@ -104,24 +111,25 @@ class Homepage extends StatelessWidget {
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    fillColor: Color(0xffD9D9D9),
+                    fillColor: const Color(0xffD9D9D9),
                     filled: true,
-                    prefixIcon: Icon(Icons.search, color: Color(0xff9B9B9B)),
+                    prefixIcon:
+                        const Icon(Icons.search, color: Color(0xff9B9B9B)),
                     hintText: "Search",
                     hintStyle: GoogleFonts.poppins(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xff9B9B9B)),
+                        color: const Color(0xff9B9B9B)),
                   ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, top: 40),
+            const Padding(
+              padding: EdgeInsets.only(left: 20, top: 40),
               child: BlackDivider(),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, top: 10, bottom: 30),
+            const Padding(
+              padding: EdgeInsets.only(left: 20, top: 10, bottom: 30),
               child: TextwithPoppinsSize22FwBold(
                 text: "Categories",
               ),
@@ -131,42 +139,50 @@ class Homepage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 5,
-                              offset: Offset(0, 4))
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const TrackMedicScreen()));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Colors.grey,
+                                blurRadius: 5,
+                                offset: Offset(0, 4))
+                          ],
+                          color: const Color(0xffFF0101),
+                          borderRadius: BorderRadius.circular(20)),
+                      height: 159,
+                      width: 159,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/heart.png"),
+                          Text(
+                            "Track medic",
+                            style: GoogleFonts.poppins(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800),
+                          )
                         ],
-                        color: Color(0xffFF0101),
-                        borderRadius: BorderRadius.circular(20)),
-                    height: 159,
-                    width: 159,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset("assets/images/heart.png"),
-                        Text(
-                          "Track medic",
-                          style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800),
-                        )
-                      ],
+                      ),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                               color: Colors.grey,
                               blurRadius: 5,
                               offset: Offset(0, 4))
                         ],
-                        color: Color(0xffFFB800),
+                        color: const Color(0xffFFB800),
                         borderRadius: BorderRadius.circular(20)),
                     height: 159,
                     width: 159,
@@ -208,17 +224,17 @@ class Homepage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  ConsultDoctorStartingPage()));
+                                  const ConsultDoctorStartingPage()));
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                                 color: Colors.grey,
                                 blurRadius: 5,
                                 offset: Offset(0, 4))
                           ],
-                          color: Color(0xff00D1FF),
+                          color: const Color(0xff00D1FF),
                           borderRadius: BorderRadius.circular(20)),
                       height: 159,
                       width: 159,
@@ -240,13 +256,13 @@ class Homepage extends StatelessWidget {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                               color: Colors.grey,
                               blurRadius: 5,
                               offset: Offset(0, 4))
                         ],
-                        color: Color(0xff00FF85),
+                        color: const Color(0xff00FF85),
                         borderRadius: BorderRadius.circular(20)),
                     height: 159,
                     width: 159,
@@ -270,8 +286,8 @@ class Homepage extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, top: 40, bottom: 10),
+            const Padding(
+              padding: EdgeInsets.only(left: 20, top: 40, bottom: 10),
               child: TextwithPoppinsSize22FwBold(
                 text: "Calculate Your BMI",
               ),
@@ -285,13 +301,13 @@ class Homepage extends StatelessWidget {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                             color: Colors.grey,
                             blurRadius: 5,
                             offset: Offset(0, 4))
                       ],
-                      color: Color(0xff0075FF),
+                      color: const Color(0xff0075FF),
                       borderRadius: BorderRadius.circular(25)),
                   child: Padding(
                     padding:
@@ -306,7 +322,7 @@ class Homepage extends StatelessWidget {
                               style: GoogleFonts.poppins(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
-                                  color: Color(0xffFFFFFF)),
+                                  color: const Color(0xffFFFFFF)),
                             ),
                             Text(
                               "BIG ",
@@ -324,7 +340,7 @@ class Homepage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Row(
@@ -356,9 +372,9 @@ class Homepage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 15),
+                            const Spacer(),
+                            const Padding(
+                              padding: EdgeInsets.only(right: 15),
                               child: Icon(
                                 Icons.arrow_forward_ios_rounded,
                                 color: Colors.white,
@@ -382,7 +398,7 @@ class Homepage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             )
           ],

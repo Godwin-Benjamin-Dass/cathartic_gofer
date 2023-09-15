@@ -347,10 +347,34 @@ class _BMIHomepageState extends State<BMIHomepage> {
                       double meter = totFeet * 0.3048;
 
                       String _weight = weight!.substring(0, 3);
+                      if (_weight.substring(2, 3) == " ") {
+                        _weight = _weight.substring(0, 2);
+                      } else {
+                        _weight = _weight;
+                      }
                       double bmi = int.parse(_weight) / (meter * meter);
                       String totBmi = bmi.toString();
                       if (totBmi.length > 6) {
                         totBmi = totBmi.substring(0, 5);
+                      }
+
+                      double low = 18.5 * (meter * meter);
+                      double high = 24.9 * (meter * meter);
+
+                      double? value;
+                      if (int.parse(_weight) < low) {
+                        value = (low - int.parse(_weight));
+                      } else if (int.parse(_weight) > high) {
+                        value = int.parse(_weight) - high;
+                      } else {
+                        value = 0;
+                      }
+                      String val = value.toString();
+                      if (val.length > 3) {
+                        val = val.substring(0, 2);
+                      }
+                      if (val.substring(1, 2) == ".") {
+                        val = val.substring(0, 1);
                       }
 
                       if (bmi <= 18.5) {
@@ -362,10 +386,10 @@ class _BMIHomepageState extends State<BMIHomepage> {
                                       bmi: totBmi,
                                       img: "assets/images/underweight.jpg",
                                       remark:
-                                          "Increase 10kg to have normal BMI",
+                                          "Increase $val kg to have normal BMI",
                                       status: "UnderWeight",
                                     )));
-                      } else if (bmi > 18.5 && bmi <= 24.9) {
+                      } else if (bmi > 18.5 && bmi <= 25) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -376,7 +400,7 @@ class _BMIHomepageState extends State<BMIHomepage> {
                                       remark: "You have a Normal BMI",
                                       status: "Normal",
                                     )));
-                      } else if (bmi >= 25 && bmi <= 29.9) {
+                      } else if (bmi > 25 && bmi <= 29.9) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -384,7 +408,8 @@ class _BMIHomepageState extends State<BMIHomepage> {
                                       bgcolor: const Color(0xffA978BF),
                                       bmi: totBmi,
                                       img: "assets/images/overweight.jpg",
-                                      remark: "Reduce 5kg to have normal BMI",
+                                      remark:
+                                          "Reduce $val kg to have normal BMI",
                                       status: "Over Weight",
                                     )));
                       } else if (bmi >= 30 && bmi <= 39.9) {
@@ -395,7 +420,8 @@ class _BMIHomepageState extends State<BMIHomepage> {
                                       bgcolor: const Color(0xffDD6C9A),
                                       bmi: totBmi,
                                       img: "assets/images/obesity.jpg",
-                                      remark: "Reduce 15kg to have normal BMI",
+                                      remark:
+                                          "Reduce $val kg to have normal BMI",
                                       status: "Obesity",
                                     )));
                       } else if (bmi >= 40) {
@@ -406,7 +432,8 @@ class _BMIHomepageState extends State<BMIHomepage> {
                                       bgcolor: const Color(0xffF3D3EA),
                                       bmi: totBmi,
                                       img: "assets/images/extremeobesity.jpg",
-                                      remark: "Reduce 30kg to have normal BMI",
+                                      remark:
+                                          "Reduce $val kg to have normal BMI",
                                       status: "Extreme Obesity",
                                     )));
                       }

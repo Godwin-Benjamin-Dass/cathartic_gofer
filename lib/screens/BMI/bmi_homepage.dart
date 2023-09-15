@@ -331,6 +331,7 @@ class _BMIHomepageState extends State<BMIHomepage> {
                         gender != null) {
                       String dot = height!
                           .substring(height!.length - 3, height!.length - 2);
+
                       String inches;
                       if (dot == ".") {
                         inches = height!
@@ -344,7 +345,8 @@ class _BMIHomepageState extends State<BMIHomepage> {
                       String feets = height!.substring(0, 1);
                       double totFeet = int.parse(feets) + feet;
                       double meter = totFeet * 0.3048;
-                      String _weight = weight!.substring(0, 2);
+
+                      String _weight = weight!.substring(0, 3);
                       double bmi = int.parse(_weight) / (meter * meter);
                       String totBmi = bmi.toString();
                       if (totBmi.length > 6) {

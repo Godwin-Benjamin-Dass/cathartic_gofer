@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        home: Homepage(),
+        home: const Homepage(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: "Work Sans",

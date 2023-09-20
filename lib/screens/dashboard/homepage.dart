@@ -7,9 +7,31 @@ import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_22_b
 import 'package:cathartic_gofer/screens/searchFlow/searchScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   const Homepage({super.key});
+
+  @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    requestNotificationPermission();
+  }
+
+  void requestNotificationPermission() async {
+    final status = await Permission.notification.request();
+    if (status.isGranted) {
+      debugPrint("granted");
+    } else {
+      debugPrint("not granted");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,8 +206,8 @@ class Homepage extends StatelessWidget {
                         ],
                         color: const Color(0xffFFB800),
                         borderRadius: BorderRadius.circular(20)),
-                    height: 159,
                     width: 159,
+                    height: 159,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,

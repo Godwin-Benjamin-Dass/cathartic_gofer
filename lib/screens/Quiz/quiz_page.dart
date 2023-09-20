@@ -24,7 +24,8 @@ class _Quiz_PAgeState extends State<Quiz_PAge> {
                       MaterialPageRoute(
                           builder: (context) => Quiz_Question(
                                 score: 0,
-                                image: "assets/images/one.svg",
+                                image: "assets/images/one.png",
+                                page_no: 1,
                               )));
                 },
                 child: const Text("Get Started")),

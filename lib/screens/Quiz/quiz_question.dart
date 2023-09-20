@@ -8,9 +8,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 // ignore: camel_case_types
 class Quiz_Question extends ConsumerStatefulWidget {
-  Quiz_Question({super.key, required this.score, this.image});
+  Quiz_Question(
+      {super.key, required this.score, this.image, required this.page_no});
   var score;
   var image;
+  int page_no;
   @override
   ConsumerState<Quiz_Question> createState() => _Quiz_QuestionState();
 }
@@ -62,7 +64,7 @@ class _Quiz_QuestionState extends ConsumerState<Quiz_Question> {
                 Padding(
                   padding: EdgeInsets.only(
                       top: height.toInt() * 0.19, left: width.toInt() * 0.3),
-                  child: SvgPicture.asset(widget.image),
+                  child: Image.asset(widget.image),
                 )
               ],
             ),

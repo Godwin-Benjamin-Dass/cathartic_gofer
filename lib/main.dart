@@ -2,15 +2,22 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cathartic_gofer/provider/medicineSheduleProvider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
 
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
 
 import 'firebase_options.dart';
 import 'screens/dashboard/homepage.dart';
 
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 void main() async {
+  call() {}
   WidgetsFlutterBinding.ensureInitialized();
+  Workmanager().initialize(isInDebugMode: true, call);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

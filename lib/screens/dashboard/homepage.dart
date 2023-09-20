@@ -10,6 +10,7 @@ import 'package:cathartic_gofer/screens/searchFlow/searchScreen.dart';
 import 'package:cathartic_gofer/service/diseaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -23,6 +24,16 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    requestNotificationPermission();
+  }
+
+  void requestNotificationPermission() async {
+    final status = await Permission.notification.request();
+    if (status.isGranted) {
+      debugPrint("granted");
+    } else {
+      debugPrint("not granted");
+    }
     DiseaseService.predictHeartDisease(sex: 1);
   }
 

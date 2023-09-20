@@ -1,0 +1,60 @@
+{
+"data":
+  [
+    {"id":1,
+    "question": "Who is the father of medicine?",
+    "A": "Hippocrates",
+    "B": "The Beatles",
+    "C": "Queen Isabella I",
+    "D": "Diana",
+    "answer": "Hippocrates"
+  },
+  {"id":2,
+    "question": "Which of the following is used for washing wounds?",
+    "A": "Tartaric Acid",
+    "B": "Salicyclic Acid",
+    "C": "Oxalic Acid",
+    "D": "Boric Acid",
+    "answer": "Boric Acid"
+  },
+  {"id":3,
+    "question": "Which mirror is used by doctors for examining eyes, ears, nose and throat?",
+    "A": "Concave mirror",
+    "B": "Convex mirror",
+    "C": "Normal mirror",
+    "D": "Plane mirror",
+    "answer": "Concave mirror"
+  },{
+    "id":3,
+    "question": "Tamiflu is front line drug against",
+    "A": "AIDS",
+    "B": "Bird Flu",
+    "C": "Swine Flu",
+    "D": "Cancer",
+    "answer": "Bird Flu"
+  },
+  {
+    "id":4,
+    "question": "Who is considered the father of Surgery?",
+    "A": "Yatindra Mohan Sengupta",
+    "B": "Chitta Ranjan Das",
+    "C": "Susruta",
+    "D": "Chanakya",
+    "answer": "Susruta"
+  },
+  {"id":5,
+    "question": "The injection of anti-toxin is given to prevent",
+    "A": "Tetanus",
+    "B": "Tuberculosis",
+    "C": "Typhoid",
+    "D": "Filariasis",
+    "answer": "Tetanus"
+  }
+  
+  
+  
+  
+]
+  
+}
+

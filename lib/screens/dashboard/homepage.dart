@@ -1,10 +1,13 @@
 import 'package:cathartic_gofer/screens/BMI/bmi_homepage.dart';
+import 'package:cathartic_gofer/screens/Quiz/quiz_page.dart';
 import 'package:cathartic_gofer/screens/Track_Medic_Flow/trackMedicScreen.dart';
+import 'package:cathartic_gofer/screens/chatBot/chat_bot_controller.dart';
 import 'package:cathartic_gofer/screens/consult_doctor/consult_doctor_starting_page.dart';
 import 'package:cathartic_gofer/screens/dashboard/widgets/black_divider.dart';
 import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_20_bold.dart';
 import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_22_bold.dart';
 import 'package:cathartic_gofer/screens/searchFlow/searchScreen.dart';
+import 'package:cathartic_gofer/service/diseaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -31,6 +34,7 @@ class _HomepageState extends State<Homepage> {
     } else {
       debugPrint("not granted");
     }
+    DiseaseService.predictHeartDisease(sex: 1);
   }
 
   @override
@@ -196,40 +200,48 @@ class _HomepageState extends State<Homepage> {
                       ),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 5,
-                              offset: Offset(0, 4))
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ChatBotController()));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Colors.grey,
+                                blurRadius: 5,
+                                offset: Offset(0, 4))
+                          ],
+                          color: const Color(0xffFFB800),
+                          borderRadius: BorderRadius.circular(20)),
+                      height: 159,
+                      width: 159,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/images/pad.png",
+                          ),
+                          Text(
+                            "Tell us your",
+                            style: GoogleFonts.poppins(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800),
+                          ),
+                          Text(
+                            "problem",
+                            style: GoogleFonts.poppins(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800),
+                          )
                         ],
-                        color: const Color(0xffFFB800),
-                        borderRadius: BorderRadius.circular(20)),
-                    width: 159,
-                    height: 159,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/images/pad.png",
-                        ),
-                        Text(
-                          "Tell us your",
-                          style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800),
-                        ),
-                        Text(
-                          "problem",
-                          style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800),
-                        )
-                      ],
+                      ),
                     ),
                   ),
                 ],
@@ -276,33 +288,41 @@ class _HomepageState extends State<Homepage> {
                       ),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 5,
-                              offset: Offset(0, 4))
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Quiz_PAge()));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Colors.grey,
+                                blurRadius: 5,
+                                offset: Offset(0, 4))
+                          ],
+                          color: const Color(0xff00FF85),
+                          borderRadius: BorderRadius.circular(20)),
+                      height: 159,
+                      width: 159,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/images/Quiz.png",
+                          ),
+                          Text(
+                            "Play Quiz",
+                            style: GoogleFonts.poppins(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800),
+                          ),
                         ],
-                        color: const Color(0xff00FF85),
-                        borderRadius: BorderRadius.circular(20)),
-                    height: 159,
-                    width: 159,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/images/Quiz.png",
-                        ),
-                        Text(
-                          "Play Quiz",
-                          style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],

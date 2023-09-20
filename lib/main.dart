@@ -2,6 +2,8 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cathartic_gofer/provider/medicineSheduleProvider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
+
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
@@ -12,7 +14,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  runApp(rp.ProviderScope(
+      child: MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (context) => medicineSheduleProvider(),
+    ),
+  ], child: const MyApp())));
 }
 
 class SplashScreen extends StatelessWidget {
@@ -59,18 +67,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => medicineSheduleProvider(),
-        ),
-      ],
-      child: MaterialApp(
-        home: const SplashScreen1(),
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: "Work Sans",
-        ),
+    return MaterialApp(
+      home: const SplashScreen1(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: "Work Sans",
       ),
     );
   }

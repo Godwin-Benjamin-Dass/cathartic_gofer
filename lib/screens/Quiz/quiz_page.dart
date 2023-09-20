@@ -22,7 +22,11 @@ class _Quiz_PAgeState extends State<Quiz_PAge> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const Quiz_Question()));
+                          builder: (context) => Quiz_Question(
+                                score: 0,
+                                image: "assets/images/one.png",
+                                page_no: 1,
+                              )));
                 },
                 child: const Text("Get Started")),
           )

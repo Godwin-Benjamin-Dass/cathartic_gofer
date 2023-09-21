@@ -9,8 +9,7 @@ import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_20_b
 import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_22_bold.dart';
 import 'package:cathartic_gofer/screens/searchFlow/searchScreen.dart';
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

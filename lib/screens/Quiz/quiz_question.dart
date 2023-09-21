@@ -4,11 +4,15 @@ import 'package:cathartic_gofer/provider/quiz_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 // ignore: camel_case_types
 class Quiz_Question extends ConsumerStatefulWidget {
-  const Quiz_Question({super.key});
-
+  Quiz_Question(
+      {super.key, required this.score, this.image, required this.page_no});
+  var score;
+  var image;
+  int page_no;
   @override
   ConsumerState<Quiz_Question> createState() => _Quiz_QuestionState();
 }
@@ -16,6 +20,10 @@ class Quiz_Question extends ConsumerStatefulWidget {
 // ignore: camel_case_types
 class _Quiz_QuestionState extends ConsumerState<Quiz_Question> {
   List items = [];
+  bool answer = false;
+  Color bg = Colors.white;
+  Color border = Colors.black;
+  Color border1 = Colors.red;
   Future<dynamic> readJson() async {
     final String response =
         await rootBundle.loadString('assets/Jsondata/data.json');
@@ -56,7 +64,7 @@ class _Quiz_QuestionState extends ConsumerState<Quiz_Question> {
                 Padding(
                   padding: EdgeInsets.only(
                       top: height.toInt() * 0.19, left: width.toInt() * 0.3),
-                  child: Image.asset("assets/images/image.png"),
+                  child: Image.asset(widget.image),
                 )
               ],
             ),
@@ -78,16 +86,33 @@ class _Quiz_QuestionState extends ConsumerState<Quiz_Question> {
             child: Center(
               child: InkWell(
                 onTap: () {
-                  ref.read(markProvider.notifier).state++;
-                  // print(ref.watch(markProvider).toString());
+                  if (items[0]['A'].toString() ==
+                      items[0]['answer'].toString()) {
+                    print("hi");
+                    setState(() {
+                      answer = true;
+                    });
+                    ref.read(markProvider.notifier).state++;
+                  }
                 },
                 child: Container(
                   height: 70,
                   width: width * 0.85,
                   decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Text(items[0]['A'].toString()),
+                    border: answer
+                        ? Border.all(color: border)
+                        : Border.all(color: border1),
+                    color:
+                        answer ? const Color.fromARGB(255, 100, 255, 105) : bg,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("A)   "),
+                      Text(items[0]['A'].toString()),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -95,41 +120,104 @@ class _Quiz_QuestionState extends ConsumerState<Quiz_Question> {
           Padding(
             padding: EdgeInsets.only(top: height.toInt() * 0.50),
             child: Center(
-              child: Container(
-                height: 70,
-                width: width * 0.85,
-                decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(20)),
-                child: Text(items[0]['B'].toString()),
+              child: InkWell(
+                onTap: () {
+                  if (items[0]['B'].toString() ==
+                      items[0]['answer'].toString()) {
+                    print("hi");
+                    setState(() {
+                      answer = true;
+                    });
+                    ref.read(markProvider.notifier).state++;
+                  }
+                },
+                child: Container(
+                  height: 70,
+                  width: width * 0.85,
+                  decoration: BoxDecoration(
+                    color: bg,
+                    borderRadius: BorderRadius.circular(20),
+                    border: answer
+                        ? Border.all(color: border1)
+                        : Border.all(color: border),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("B)   "),
+                      Text(items[0]['B'].toString()),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: height.toInt() * 0.68),
             child: Center(
-              child: Container(
-                height: 70,
-                width: width * 0.85,
-                decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(20)),
-                child: Text(items[0]['C'].toString()),
+              child: InkWell(
+                onTap: () {
+                  if (items[0]['C'].toString() ==
+                      items[0]['answer'].toString()) {
+                    print("hi");
+                    setState(() {
+                      answer = true;
+                    });
+                    ref.read(markProvider.notifier).state++;
+                  }
+                },
+                child: Container(
+                  height: 70,
+                  width: width * 0.85,
+                  decoration: BoxDecoration(
+                    color: bg,
+                    borderRadius: BorderRadius.circular(20),
+                    border: answer
+                        ? Border.all(color: border1)
+                        : Border.all(color: border),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("C)   "),
+                      Text(items[0]['C'].toString()),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: height.toInt() * 0.86),
             child: Center(
-              child: GestureDetector(
+              child: InkWell(
                 onTap: () {
-                  print(ref.watch(markProvider).toString());
+                  if (items[0]['D'].toString() ==
+                      items[0]['answer'].toString()) {
+                    print("hi");
+                    setState(() {
+                      answer = true;
+                    });
+                    ref.read(markProvider.notifier).state++;
+                  }
                 },
                 child: Container(
                   height: 70,
                   width: width * 0.85,
                   decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Text(items[0]['D'].toString()),
+                    color: bg,
+                    borderRadius: BorderRadius.circular(20),
+                    border: answer
+                        ? Border.all(color: border1)
+                        : Border.all(color: border),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("D)   "),
+                      Text(items[0]['D'].toString()),
+                    ],
+                  ),
                 ),
               ),
             ),

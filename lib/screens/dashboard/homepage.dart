@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cathartic_gofer/screens/BMI/bmi_homepage.dart';
 import 'package:cathartic_gofer/screens/Quiz/quiz_page.dart';
 import 'package:cathartic_gofer/screens/Track_Medic_Flow/trackMedicScreen.dart';
@@ -7,7 +8,9 @@ import 'package:cathartic_gofer/screens/dashboard/widgets/black_divider.dart';
 import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_20_bold.dart';
 import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_22_bold.dart';
 import 'package:cathartic_gofer/screens/searchFlow/searchScreen.dart';
-import 'package:cathartic_gofer/service/diseaseService.dart';
+import 'package:dots_indicator/dots_indicator.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,11 +24,18 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    DiseaseService.predictHeartDisease(sex: 1);
+    // NotificationService.postData();
   }
+ 
 
+  List imgList = [
+    "assets/images/covid.png",
+    "assets/images/news.jpeg",
+    "assets/images/news.jpeg",
+    "assets/images/news.jpeg"
+  ];
+  int index = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,7 +127,7 @@ class _HomepageState extends State<Homepage> {
                         MaterialPageRoute(
                             builder: (context) => const searchScreen()));
                   },
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                       fontWeight: FontWeight.w600),
@@ -128,10 +138,11 @@ class _HomepageState extends State<Homepage> {
                     ),
                     fillColor: const Color(0xffD9D9D9),
                     filled: true,
+                    contentPadding: EdgeInsets.only(left: 10),
                     prefixIcon:
                         const Icon(Icons.search, color: Color(0xff9B9B9B)),
                     hintText: "Search",
-                    hintStyle: GoogleFonts.poppins(
+                    hintStyle: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: const Color(0xff9B9B9B)),
@@ -140,17 +151,64 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
             const Padding(
-              padding: EdgeInsets.only(left: 20, top: 40),
+              padding: EdgeInsets.only(left: 20, top: 30),
               child: BlackDivider(),
             ),
             const Padding(
               padding: EdgeInsets.only(left: 20, top: 10, bottom: 30),
               child: TextwithPoppinsSize22FwBold(
+                text: "Top Picks Today",
+              ),
+            ),
+            CarouselSlider(
+                items: imgList
+                    .map((item) => Image.asset(
+                          item,
+                          fit: BoxFit.cover,
+                        ))
+                    .toList(),
+                options: CarouselOptions(
+                  onPageChanged: (val, carouselPageChangedReason) {
+                    setState(() {
+                      index = val;
+                    });
+                  },
+                  viewportFraction: 0.8,
+                  height: 150,
+                  autoPlay: true,
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  autoPlayCurve: Curves.linear,
+                )),
+            SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: DotsIndicator(
+                  dotsCount: imgList.length,
+                  position: index,
+                  decorator: DotsDecorator(
+                      spacing: EdgeInsets.all(2),
+                      color: Color(0xffD9D9D9),
+                      activeColor: Color(0xff0075FF),
+                      size: Size(12, 10),
+                      activeSize: Size(14, 14))),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                top: 30,
+                bottom: 30,
+              ),
+              child: TextwithPoppinsSize22FwBold(
                 text: "Categories",
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

@@ -1,18 +1,24 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cathartic_gofer/provider/medicineSheduleProvider.dart';
+import 'package:cathartic_gofer/screens/auth/starting_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
 import 'package:provider/provider.dart';
-
 import 'firebase_options.dart';
-import 'screens/dashboard/homepage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(rp.ProviderScope(
+    child: MultiProvider(child: const MyApp(), providers: [
+      ChangeNotifierProvider(
+        create: (context) => medicineSheduleProvider(),
+      ),
+    ]),
+  ));
 }
 
 class SplashScreen extends StatelessWidget {
@@ -30,7 +36,7 @@ class SplashScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.black,
-      nextScreen: const Homepage(),
+      nextScreen: const Startingpage(),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.bottomToTop,
     );
@@ -59,18 +65,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => medicineSheduleProvider(),
-        ),
-      ],
-      child: MaterialApp(
-        home: const SplashScreen1(),
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: "Work Sans",
-        ),
+    return MaterialApp(
+      home: const SplashScreen1(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: "Work Sans",
       ),
     );
   }

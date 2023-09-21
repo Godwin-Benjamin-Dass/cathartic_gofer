@@ -1,6 +1,7 @@
+import 'dart:math';
+
 import 'package:cathartic_gofer/screens/Quiz/quiz_question.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Quiz_PAge extends StatefulWidget {
   const Quiz_PAge({super.key});
@@ -12,6 +13,15 @@ class Quiz_PAge extends StatefulWidget {
 class _Quiz_PAgeState extends State<Quiz_PAge> {
   @override
   Widget build(BuildContext context) {
+    List<int> numberList = [];
+    Random randomizer = new Random();
+    while (numberList.length < 5) {
+      int random_number = randomizer.nextInt(5);
+      if (!numberList.contains(random_number + 1)) {
+        numberList.add(random_number + 1);
+      }
+    }
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -19,13 +29,12 @@ class _Quiz_PAgeState extends State<Quiz_PAge> {
           Center(
             child: TextButton(
                 onPressed: () {
+                  print(numberList);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => Quiz_Question(
-                                score: 0,
-                                image: "assets/images/one.png",
-                                page_no: 1,
+                                list: numberList,
                               )));
                 },
                 child: const Text("Get Started")),

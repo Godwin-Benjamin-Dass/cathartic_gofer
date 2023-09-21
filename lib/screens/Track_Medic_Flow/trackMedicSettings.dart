@@ -29,7 +29,6 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
     mor = prefs.getString('mor') ?? "08:00";
     aft = prefs.getString('aft') ?? "13:00";
     nig = prefs.getString('nig') ?? "20:00";
-    NotificationService.initialize(flutterLocalNotificationsPlugin, context);
     isLoading = false;
     setState(() {});
   }
@@ -228,13 +227,7 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                           fetchAndSetData(mor!, aft!, nig!).then((value) {
                             for (int i = 0; i < dhm.length; i++) {
                               print("hi");
-                              NotificationService.scheduleNotification(
-                                  id: i,
-                                  title: "your reminder for: ${dhm[i].time!}",
-                                  body: "Click to see the medicines",
-                                  payLoad: dateHistoryModelToJson(dhm[i]),
-                                  flnp: flutterLocalNotificationsPlugin,
-                                  scheduledNotificationDateTime: dhm[i].date!);
+                            
                             }
                           });
                         }

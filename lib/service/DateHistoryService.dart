@@ -36,11 +36,9 @@ class DateHistoryService {
       final index = encodedHistories.indexWhere(
           (historyData) => historyData['id'] == updatedHistoryJson['id']);
       if (index != -1) {
-        // Update the date history entry in the list
         encodedHistories[index] = updatedHistoryJson;
         await prefs.setString(_dateListKey, jsonEncode(encodedHistories));
 
-        // Update the individual date history entry
         final key = '$_keyPrefix${updatedHistoryJson['id']}';
         await prefs.setString(key, jsonEncode(updatedHistoryJson));
         debugPrint("updated");
@@ -107,5 +105,21 @@ class DateHistoryService {
     }).toList();
     final encodedHistoriesJson = jsonEncode(encodedHistories);
     await prefs.setString(_dateListKey, encodedHistoriesJson);
+  }
+
+  static Future<void> addDateHistory(dateHistoryModel newHistory) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final encodedHistoriesJson = prefs.getString(_dateListKey);
+    final List<dynamic> encodedHistories =
+        encodedHistoriesJson != null ? jsonDecode(encodedHistoriesJson) : [];
+
+    final newHistoryJson = newHistory.toJson();
+    encodedHistories.add(newHistoryJson);
+
+    await prefs.setString(_dateListKey, jsonEncode(encodedHistories));
+
+    final key = '$_keyPrefix${newHistoryJson['id']}';
+    await prefs.setString(key, jsonEncode(newHistoryJson));
   }
 }

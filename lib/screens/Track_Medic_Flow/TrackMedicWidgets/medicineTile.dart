@@ -8,21 +8,25 @@ class medicineTile extends StatelessWidget {
   const medicineTile({
     super.key,
     required this.msl,
+    this.isCustom = false,
   });
   final medicineSheduleModel msl;
+  final isCustom;
   @override
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
             title: Text(msl.medicine!),
-            subtitle: Text("${msl.intakeMethod!} Food"),
+            subtitle: Text(isCustom
+                ? "${msl.dateTime!.toString().substring(0, 19)}"
+                : "${msl.intakeMethod!} Food"),
             trailing: PopupMenuButton(
               position: PopupMenuPosition.under,
               surfaceTintColor: Colors.white,
               icon: const Icon(Icons.more_vert),
               onSelected: (int value) {
                 if (value == 0) {
-                  showAddList(context, msl, true);
+                  showAddList(context, msl, true, isCustom, 0);
                 }
                 if (value == 1) {
                   Provider.of<medicineSheduleProvider>(context, listen: false)
@@ -30,14 +34,19 @@ class medicineTile extends StatelessWidget {
                 }
               },
               itemBuilder: (context) => [
-                const PopupMenuItem(
-                  value: 0,
-                  child: Text("Edit"),
-                ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 1,
                   child: Text("Remove"),
                 ),
+                isCustom
+                    ? PopupMenuItem(
+                        value: 3,
+                        child: Text(""),
+                      )
+                    : PopupMenuItem(
+                        value: 0,
+                        child: Text("Edit"),
+                      ),
               ],
             )));
   }

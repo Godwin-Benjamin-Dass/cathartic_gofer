@@ -30,6 +30,8 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
   bool morning = true;
   bool afternoon = false;
   bool night = false;
+  bool custom = false;
+
   List<dateHistoryModel> dhv = [];
 
   fetchShedule() async {
@@ -108,6 +110,7 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
                               morning = true;
                               afternoon = false;
                               night = false;
+                              custom = false;
                               setState(() {});
                             },
                             child: Container(
@@ -132,6 +135,8 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
                               morning = false;
                               afternoon = true;
                               night = false;
+                              custom = false;
+
                               setState(() {});
                             },
                             child: Container(
@@ -158,6 +163,8 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
                               morning = false;
                               afternoon = false;
                               night = true;
+                              custom = false;
+
                               setState(() {});
                             },
                             child: Container(
@@ -170,6 +177,32 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
                                   "Night",
                                   style: TextStyle(
                                       color: night ? Colors.black : Colors.grey,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              morning = false;
+                              afternoon = false;
+                              night = false;
+                              custom = true;
+
+                              setState(() {});
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  color: custom ? Colors.grey : Colors.black),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  "Custom",
+                                  style: TextStyle(
+                                      color:
+                                          custom ? Colors.black : Colors.grey,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16),
                                 ),
@@ -216,7 +249,20 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
                                   msl: data,
                                 );
                               })
-                          : Container()
+                          : Container(),
+                      custom
+                          ? ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: provider.cus.length,
+                              itemBuilder: (ctx, i) {
+                                var data = provider.cus[i];
+                                return medicineTile(
+                                  msl: data,
+                                  isCustom: true,
+                                );
+                              })
+                          : SizedBox()
                     ],
                   ),
                 ),
@@ -228,94 +274,100 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
           children: [
             ActionButton(
               onPressed: () {
-                showAddList(context, null, false);
+                if (custom) {
+                  showAddList(context, null, false, true, provider.cus.length);
+                } else {
+                  showAddList(context, null, false, false, 0);
+                }
               },
               icon: const Icon(Icons.add),
             ),
-            ActionButton(
-              onPressed: () async {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                final values = await showCalendarDatePicker2Dialog(
-                  context: context,
-                  config: CalendarDatePicker2WithActionButtonsConfig(
-                    firstDayOfWeek: 1,
-                    calendarType: CalendarDatePicker2Type.range,
-                    selectedDayTextStyle: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w700),
-                    selectedDayHighlightColor: Colors.purple[800],
-                    centerAlignModePicker: true,
-                    customModePickerIcon: const SizedBox(),
+            custom
+                ? SizedBox()
+                : ActionButton(
+                    onPressed: () async {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      final values = await showCalendarDatePicker2Dialog(
+                        context: context,
+                        config: CalendarDatePicker2WithActionButtonsConfig(
+                          firstDayOfWeek: 1,
+                          calendarType: CalendarDatePicker2Type.range,
+                          selectedDayTextStyle: const TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w700),
+                          selectedDayHighlightColor: Colors.purple[800],
+                          centerAlignModePicker: true,
+                          customModePickerIcon: const SizedBox(),
+                        ),
+                        dialogSize: const Size(325, 400),
+                        borderRadius: BorderRadius.circular(15),
+                        value: _dates,
+                        dialogBackgroundColor: Colors.white,
+                      );
+                      if (values != null) {
+                        dhv.clear();
+
+                        _dates = values;
+                        var start = _dates.first;
+                        var end = _dates.last;
+                        for (var date = start;
+                            date!.isBefore(end!.add(const Duration(days: 1)));
+                            date = date.add(const Duration(days: 1))) {
+                          String? mor = prefs.getString("mor") ?? "08:00";
+                          String? aft = prefs.getString("aft") ?? "13:00";
+                          String? nig = prefs.getString("nig") ?? "20:00";
+                          debugPrint(mor.substring(0, 2));
+                          debugPrint(mor.substring(3, 5));
+                          if (provider.mor.isNotEmpty) {
+                            print(date);
+
+                            dhv.add(dateHistoryModel(
+                                date: date.add(Duration(
+                                    hours: int.parse(
+                                      mor.substring(0, 2),
+                                    ),
+                                    minutes: int.parse(mor.substring(3, 5)))),
+                                id: _dates.length.toString(),
+                                isTaken: false,
+                                time: "morning",
+                                medicine: provider.mor,
+                                type: "normal"));
+                          }
+                          if (provider.aft.isNotEmpty) {
+                            dhv.add(dateHistoryModel(
+                                date: date.add(Duration(
+                                    hours: int.parse(
+                                      aft.substring(0, 2),
+                                    ),
+                                    minutes: int.parse(aft.substring(3, 5)))),
+                                id: _dates.length.toString(),
+                                isTaken: false,
+                                time: "afternoon",
+                                medicine: provider.aft,
+                                type: "normal"));
+                          }
+                          if (provider.nig.isNotEmpty) {
+                            dhv.add(dateHistoryModel(
+                                date: date.add(Duration(
+                                    hours: int.parse(
+                                      nig.substring(0, 2),
+                                    ),
+                                    minutes: int.parse(nig.substring(3, 5)))),
+                                id: _dates.length.toString(),
+                                time: "night",
+                                isTaken: false,
+                                medicine: provider.nig,
+                                type: "normal"));
+                          }
+                        }
+                        DateHistoryService.clearAllHistories();
+
+                        DateHistoryService.saveDateHistories(dhv);
+                      }
+                      print(dhv.toList());
+                    },
+                    icon: const HeroIcon(HeroIcons.calendarDays),
                   ),
-                  dialogSize: const Size(325, 400),
-                  borderRadius: BorderRadius.circular(15),
-                  value: _dates,
-                  dialogBackgroundColor: Colors.white,
-                );
-                if (values != null) {
-                  dhv.clear();
-
-                  _dates = values;
-                  var start = _dates.first;
-                  var end = _dates.last;
-                  for (var date = start;
-                      date!.isBefore(end!.add(const Duration(days: 1)));
-                      date = date.add(const Duration(days: 1))) {
-                    String? mor = prefs.getString("mor") ?? "08:00";
-                    String? aft = prefs.getString("aft") ?? "13:00";
-                    String? nig = prefs.getString("nig") ?? "20:00";
-                    debugPrint(mor.substring(0, 2));
-                    debugPrint(mor.substring(3, 5));
-                    if (provider.mor.isNotEmpty) {
-                      print(date);
-
-                      dhv.add(dateHistoryModel(
-                        date: date.add(Duration(
-                            hours: int.parse(
-                              mor.substring(0, 2),
-                            ),
-                            minutes: int.parse(mor.substring(3, 5)))),
-                        id: _dates.length.toString(),
-                        isTaken: false,
-                        time: "morning",
-                        medicine: provider.mor,
-                      ));
-                    }
-                    if (provider.aft.isNotEmpty) {
-                      dhv.add(dateHistoryModel(
-                        date: date.add(Duration(
-                            hours: int.parse(
-                              aft.substring(0, 2),
-                            ),
-                            minutes: int.parse(aft.substring(3, 5)))),
-                        id: _dates.length.toString(),
-                        isTaken: false,
-                        time: "afternoon",
-                        medicine: provider.aft,
-                      ));
-                    }
-                    if (provider.nig.isNotEmpty) {
-                      dhv.add(dateHistoryModel(
-                        date: date.add(Duration(
-                            hours: int.parse(
-                              nig.substring(0, 2),
-                            ),
-                            minutes: int.parse(nig.substring(3, 5)))),
-                        id: _dates.length.toString(),
-                        time: "night",
-                        isTaken: false,
-                        medicine: provider.nig,
-                      ));
-                    }
-                  }
-                  DateHistoryService.clearAllHistories();
-
-                  DateHistoryService.saveDateHistories(dhv);
-                }
-                print(dhv.toList());
-              },
-              icon: const HeroIcon(HeroIcons.calendarDays),
-            ),
             ActionButton(
               onPressed: () {
                 Navigator.push(

@@ -30,7 +30,6 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
     mor = prefs.getString('mor') ?? "08:00";
     aft = prefs.getString('aft') ?? "13:00";
     nig = prefs.getString('nig') ?? "20:00";
-
     isLoading = false;
     setState(() {});
   }

@@ -5,11 +5,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
-
 import 'package:provider/provider.dart';
-
 import 'firebase_options.dart';
-import 'screens/dashboard/homepage.dart';
+import 'screens/auth/starting_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,13 +15,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(rp.ProviderScope(
-      child: MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (context) => medicineSheduleProvider(),
-    ),
-  ], child: const MyApp())));
+    child: MultiProvider(child: const MyApp(), providers: [
+      ChangeNotifierProvider(
+        create: (context) => medicineSheduleProvider(),
+      ),
+    ]),
+  ));
 }
 
 class SplashScreen extends StatelessWidget {
@@ -41,7 +39,7 @@ class SplashScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.black,
-      nextScreen: const Homepage(),
+      nextScreen: const Startingpage(),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.bottomToTop,
     );

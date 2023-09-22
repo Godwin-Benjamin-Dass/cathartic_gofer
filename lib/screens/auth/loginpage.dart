@@ -1,4 +1,4 @@
-import 'package:cathartic_gofer/screens/dashboard/homepage.dart';
+import 'package:cathartic_gofer/screens/auth/otp_verification_page.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -145,10 +145,10 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Homepage()
-                                      // OtpPage(
-                                      //     phone: _controller.text,
-                                      //     codeDigits: dialCodeDigits)
+                                      builder: (context) => 
+                                      OtpPage(
+                                          phone: _controller.text,
+                                          codeDigits: dialCodeDigits)
 
                                       ));
                             },

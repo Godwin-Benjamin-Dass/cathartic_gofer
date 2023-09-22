@@ -38,6 +38,7 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
           print('fcm token updated');
         }
       }
+      print(value);
     });
   }
 
@@ -62,7 +63,7 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getFCMToken();
+    //getFCMToken();
   }
 
   @override
@@ -297,6 +298,7 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => Homepage()));
+                                // print(fcmToken);
                                 // }
                               },
                               style: ElevatedButton.styleFrom(

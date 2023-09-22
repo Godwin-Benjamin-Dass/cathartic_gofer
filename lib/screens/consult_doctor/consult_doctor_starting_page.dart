@@ -1,3 +1,4 @@
+import 'package:cathartic_gofer/screens/consult_doctor/doctor_list.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -79,7 +80,10 @@ class ConsultDoctorStartingPage extends StatelessWidget {
             flex: 4,
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DoctorList()));
+            },
             splashColor: const Color(0xff0075FF),
             child: Container(
               decoration: BoxDecoration(

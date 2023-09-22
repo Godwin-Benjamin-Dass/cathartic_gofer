@@ -1,70 +1,173 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cathartic_gofer/screens/Track_Medic_Flow/notificationDetailScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
+
+import '../main.dart';
 
 class NotificationService {
-  //initialize notification
-  static Future initialize(
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
-      BuildContext context) async {
-    var androidIntialize = const AndroidInitializationSettings('logo');
-    var initializationSettings = InitializationSettings(
-      android: androidIntialize,
+  static Future<void> initializeNotification() async {
+    await AwesomeNotifications().initialize(
+        null,
+        [
+          NotificationChannel(
+              channelGroupKey: "alarm",
+              channelKey: "alarm",
+              channelName: "shedule Notification",
+              channelDescription: "basic test",
+              defaultColor: Colors.red,
+              ledColor: Colors.white,
+              importance: NotificationImportance.Max,
+              channelShowBadge: true,
+              onlyAlertOnce: true,
+              playSound: true,
+              criticalAlerts: true),
+          NotificationChannel(
+              channelGroupKey: "custom",
+              channelKey: "custom",
+              channelName: "custom Notification",
+              channelDescription: "basic test",
+              defaultColor: Colors.red,
+              ledColor: Colors.white,
+              importance: NotificationImportance.Max,
+              channelShowBadge: true,
+              onlyAlertOnce: true,
+              playSound: true,
+              criticalAlerts: true),
+          NotificationChannel(
+              channelGroupKey: "alarm",
+              channelKey: "alarm",
+              channelName: "shedule Notification",
+              channelDescription: "basic test",
+              defaultColor: Colors.red,
+              ledColor: Colors.white,
+              importance: NotificationImportance.Max,
+              channelShowBadge: true,
+              onlyAlertOnce: true,
+              playSound: true,
+              criticalAlerts: true),
+        ],
+        channelGroups: [
+          NotificationChannelGroup(
+              channelGroupKey: "alarm", channelGroupName: "group1"),
+          NotificationChannelGroup(
+              channelGroupKey: "snooze", channelGroupName: "group2"),
+          NotificationChannelGroup(
+              channelGroupKey: "custom", channelGroupName: "group3")
+        ],
+        debug: true);
+    await AwesomeNotifications().isNotificationAllowed().then((value) async {
+      if (!value) {
+        await AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+    await AwesomeNotifications().setListeners(
+      onActionReceivedMethod: onActionReceivedMethod,
+      onNotificationCreatedMethod: onNotificationCreatedMethod,
+      onNotificationDisplayedMethod: onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod: onDismissActionReceivedMethod,
     );
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (details) async {
-        debugPrint("$details------------------->");
-        NotificationResponse nr = details;
-        debugPrint(nr.payload == "" ? "hi" : "bye");
-        if (nr.payload != "") {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => notificationDetailScreen(
-                        payload: nr.payload!,
-                      )));
-        } else {
-          debugPrint("null");
-        }
-      },
-    );
-    tz.initializeTimeZones();
-    debugPrint("Notification Initialized=============>");
   }
 
-  /// Scheduled Notification
-  static Future scheduleNotification({
-    required int? id,
-    required String? title,
-    required String? body,
-    required String? payLoad,
-    required FlutterLocalNotificationsPlugin flnp,
-    required DateTime scheduledNotificationDateTime,
-  }) async {
-    print("sheduled");
-    AndroidNotificationDetails androidNotificationDetails =
-        const AndroidNotificationDetails("random", 'channelName',
-            playSound: true,
-            importance: Importance.max,
-            priority: Priority.high,
-            actions: [],
-            sound: RawResourceAndroidNotificationSound('notification'));
-    var not = NotificationDetails(android: androidNotificationDetails);
-    return flnp.zonedSchedule(
-        id!,
-        title,
-        body,
-        tz.TZDateTime.from(
-          scheduledNotificationDateTime,
-          tz.local,
+  static Future<void> onNotificationCreatedMethod(
+      ReceivedNotification receivedNotification) async {
+    debugPrint("onNotificationCreatedMethod");
+  }
+
+  static Future<void> onNotificationDisplayedMethod(
+      ReceivedNotification receivedNotification) async {
+    debugPrint("onNotificationDisplayedMethod");
+  }
+
+  static Future<void> onDismissActionReceivedMethod(
+      ReceivedNotification receivedNotification) async {
+    debugPrint("onDismissActionReceivedMethod");
+  }
+
+//use this to detect user taping on notification
+  static Future<void> onActionReceivedMethod(
+      ReceivedNotification receivedNotification) async {
+    debugPrint("onActionReceivedMethod");
+    final payload = receivedNotification.payload ?? {};
+    if (payload.isNotEmpty) {
+      MyApp.navigatorKey.currentState?.push(MaterialPageRoute(
+          builder: (_) => notificationDetailScreen(payload: payload)));
+    }
+  }
+
+  static Future<void> sheduleNotification(
+      {required int id,
+      required String title, //title of the notification
+      required String body,
+      required DateTime
+          scheduledDate, //date and time when you want your notification to be displayed
+      required payload}) async {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: id,
+          channelKey: 'alarm',
+          title: title,
+          wakeUpScreen: true,
+          category: NotificationCategory.Call,
+          notificationLayout: NotificationLayout.BigPicture,
+          bigPicture: 'asset://assets/images/delivery.jpeg',
+          payload: payload,
+          autoDismissible: false,
         ),
-        not,
-        androidAllowWhileIdle: true,
-        payload: payLoad,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime);
+        actionButtons: [NotificationActionButton(key: "alarm", label: "View")],
+        schedule: NotificationCalendar.fromDate(date: scheduledDate));
+  }
+
+  static Future<void> snoozeNotification(
+      {required int id,
+      required String title, //title of the notification
+      required String body,
+      //date and time when you want your notification to be displayed
+      required payload}) async {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: id,
+          channelKey: 'snooze',
+          title: title,
+          wakeUpScreen: true,
+          category: NotificationCategory.Alarm,
+          notificationLayout: NotificationLayout.BigPicture,
+          bigPicture: 'asset://assets/images/delivery.jpeg',
+          payload: payload,
+          autoDismissible: false,
+        ),
+        actionButtons: [NotificationActionButton(key: "snooze", label: "View")],
+        schedule: NotificationInterval(
+            interval: 300,
+            timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier(),
+            preciseAlarm: true));
+  }
+    static Future<void> customNotification(
+      {required int id,
+      required String title, //title of the notification
+      required String body,
+      //date and time when you want your notification to be displayed
+      required payload}) async {
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: id,
+          channelKey: 'custom',
+          title: title,
+          wakeUpScreen: true,
+          category: NotificationCategory.Alarm,
+          notificationLayout: NotificationLayout.BigPicture,
+          bigPicture: 'asset://assets/images/delivery.jpeg',
+          payload: payload,
+          autoDismissible: false,
+        ),
+        actionButtons: [NotificationActionButton(key: "snooze", label: "View")],
+        schedule: NotificationInterval(
+            interval: 300,
+            timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier(),
+            preciseAlarm: true));
+  }
+
+
+  static stopNotification() {
+    AwesomeNotifications().cancelSchedulesByChannelKey("snooze");
   }
 }

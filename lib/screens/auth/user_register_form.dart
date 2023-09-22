@@ -283,21 +283,21 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
                           width: 150,
                           child: ElevatedButton(
                               onPressed: () {
-                                if (_namecontroller.text != '' &&
-                                    _datecontroller != '' &&
-                                    _addresscontroller != '' &&
-                                    _bloodgrpcontroller != '' &&
-                                    _heightcontroller != '' &&
-                                    _weightcontroller != '' &&
-                                    _guardianNamecontroller != '' &&
-                                    _guardianMobileNumbercontroller != '') {
-                                  userBio();
+                                //   if (_namecontroller.text != '' &&
+                                //       _datecontroller != '' &&
+                                //       _addresscontroller != '' &&
+                                //       _bloodgrpcontroller != '' &&
+                                //       _heightcontroller != '' &&
+                                //       _weightcontroller != '' &&
+                                //       _guardianNamecontroller != '' &&
+                                //       _guardianMobileNumbercontroller != '') {
+                                //     userBio();
 
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Homepage()));
-                                }
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Homepage()));
+                                // }
                               },
                               style: ElevatedButton.styleFrom(
                                   elevation: 10,

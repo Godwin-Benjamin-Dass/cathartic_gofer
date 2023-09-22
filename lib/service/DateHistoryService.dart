@@ -1,12 +1,11 @@
 import 'dart:convert';
 
+import 'package:cathartic_gofer/models/dateHistoryModel.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/dateHistoryModel.dart';
-
 class DateHistoryService {
-  static const String _keyPrefix = 'date_history_';
+  static const String _keyPrefix = 'date_history';
   static const String _dateListKey = 'date_history_list';
 
   static Future<void> saveDateHistory(dateHistoryModel history) async {

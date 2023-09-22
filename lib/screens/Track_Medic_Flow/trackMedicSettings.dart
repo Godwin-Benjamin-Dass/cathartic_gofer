@@ -1,10 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cathartic_gofer/service/notificationService.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../main.dart';
 import '../../models/dateHistoryModel.dart';
 import '../../service/DateHistoryService.dart';
 

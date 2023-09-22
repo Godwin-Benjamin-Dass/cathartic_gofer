@@ -13,7 +13,7 @@ class TextwithPoppinsSize22FwBold extends StatelessWidget {
     return Text(
       text,
       style: GoogleFonts.poppins(
-          fontSize: 22, fontWeight: FontWeight.w800, color: Colors.black),
+          fontSize: 21, fontWeight: FontWeight.w800, color: Colors.black),
     );
   }
 }

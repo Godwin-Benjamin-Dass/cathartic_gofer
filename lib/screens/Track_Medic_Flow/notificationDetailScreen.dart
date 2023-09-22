@@ -2,16 +2,17 @@ import 'dart:convert';
 
 import 'package:cathartic_gofer/models/dateHistoryModel.dart';
 import 'package:cathartic_gofer/service/DateHistoryService.dart';
+import 'package:cathartic_gofer/service/notificationService.dart';
 import 'package:flutter/material.dart';
 
 class notificationDetailScreen extends StatelessWidget {
   const notificationDetailScreen({super.key, required this.payload});
-  final String payload;
+  final Map<String, String?> payload;
 
   @override
   Widget build(BuildContext context) {
-    var data = jsonDecode(payload);
-    dateHistoryModel dhm = dateHistoryModel.fromJson(data);
+    var data = jsonDecode(payload["data"]!);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -48,7 +49,7 @@ class notificationDetailScreen extends StatelessWidget {
                       text: 'Date : ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    TextSpan(text: dhm.date.toString().substring(0, 10)),
+                    TextSpan(text: data["date"].toString().substring(0, 10)),
                   ],
                 ),
               ),
@@ -62,7 +63,7 @@ class notificationDetailScreen extends StatelessWidget {
                       text: 'Time : ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    TextSpan(text: dhm.date.toString().substring(11, 16)),
+                    TextSpan(text: data["date"].toString().substring(11, 16)),
                   ],
                 ),
               ),
@@ -76,7 +77,7 @@ class notificationDetailScreen extends StatelessWidget {
                       text: 'When : ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    TextSpan(text: dhm.time),
+                    TextSpan(text: data["time"]),
                   ],
                 ),
               ),
@@ -90,7 +91,7 @@ class notificationDetailScreen extends StatelessWidget {
                       text: 'Status : ',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    TextSpan(text: dhm.isTaken! ? "Taken" : "Never took"),
+                    TextSpan(text: data["isTaken"] ? "Taken" : "Never took"),
                   ],
                 ),
               ),
@@ -106,15 +107,16 @@ class notificationDetailScreen extends StatelessWidget {
               ),
               ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: dhm.medicine!.length,
+                  itemCount: data["medicine"].length,
                   shrinkWrap: true,
                   itemBuilder: (ctx, idx) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: Card(
                         child: ListTile(
-                          title: Text(dhm.medicine![idx]["medicine"]),
-                          subtitle: Text(dhm.medicine![idx]["intakeMethod"]),
+                          title: Text(data["medicine"]![idx]["medicine"]),
+                          subtitle:
+                              Text(data["medicine"]![idx]["intakeMethod"]),
                         ),
                       ),
                     );
@@ -124,17 +126,32 @@ class notificationDetailScreen extends StatelessWidget {
               ),
               Row(
                 children: [
-                  ElevatedButton(onPressed: () {}, child: const Text("Snooze")),
+                  ElevatedButton(
+                      onPressed: () {
+                        NotificationService.snoozeNotification(
+                                id: 0,
+                                title: "snoozed notification",
+                                body: "Please take your medicine",
+                                payload: payload)
+                            .then((value) {
+                          Navigator.pop(context);
+                        });
+                      },
+                      child: const Text("Snooze")),
                   const Spacer(),
                   ElevatedButton(
                       onPressed: () {
+                        print(payload["data"]);
+                        var data = jsonDecode(payload["data"]!);
+                        print(data["id"]);
                         DateHistoryService.updateDateHistory(dateHistoryModel(
-                          date: dhm.date,
-                          id: dhm.id,
+                          date: DateTime.parse(data["date"]),
+                          id: data["id"],
                           isTaken: true,
-                          medicine: dhm.medicine,
-                          time: dhm.time,
+                          medicine: data["medicine"],
+                          time: data["time"],
                         )).then((value) {
+                          NotificationService.stopNotification();
                           Navigator.pop(context);
                         });
                       },

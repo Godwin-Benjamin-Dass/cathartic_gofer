@@ -29,6 +29,11 @@ class _dateHistoryState extends State<dateHistory> {
     fetchShedule();
   }
 
+  int calculateDaysDifference(DateTime startTimestamp, DateTime endTimestamp) {
+    final difference = endTimestamp.difference(startTimestamp);
+    return difference.inDays;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,6 +126,58 @@ class _dateHistoryState extends State<dateHistory> {
                     width: 8,
                   ),
                   const Text("remaining dates"),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              const Text(
+                "Time Line",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 15),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  const Text(
+                    "Dates: ",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  dhm.isNotEmpty
+                      ? Text(dhm.first.date.toString().substring(0, 10) +
+                          " -> " +
+                          dhm.last.date.toString().substring(0, 10))
+                      : SizedBox(),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  const Text(
+                    "No Of days: ",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  dhm.isNotEmpty
+                      ? Text(calculateDaysDifference(
+                                  dhm.last.date!, dhm.last.date!) ==
+                              0
+                          ? "1"
+                          : calculateDaysDifference(
+                                  dhm.last.date!, dhm.last.date!)
+                              .toString())
+                      : SizedBox(),
                 ],
               ),
               const SizedBox(

@@ -1,23 +1,19 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cathartic_gofer/provider/medicineSheduleProvider.dart';
+import 'package:cathartic_gofer/service/notificationService.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
 
 import 'package:provider/provider.dart';
-import 'package:workmanager/workmanager.dart';
 
 import 'firebase_options.dart';
 import 'screens/dashboard/homepage.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
 void main() async {
-  call() {}
   WidgetsFlutterBinding.ensureInitialized();
-  Workmanager().initialize(isInDebugMode: true, call);
+  NotificationService.initializeNotification();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -54,7 +50,7 @@ class SplashScreen extends StatelessWidget {
 
 class SplashScreen1 extends StatelessWidget {
   const SplashScreen1({Key? key}) : super(key: key);
-
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
@@ -71,10 +67,12 @@ class SplashScreen1 extends StatelessWidget {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       home: const SplashScreen1(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

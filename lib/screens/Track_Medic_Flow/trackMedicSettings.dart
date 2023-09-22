@@ -1,10 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cathartic_gofer/provider/medicineSheduleProvider.dart';
 import 'package:cathartic_gofer/service/notificationService.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../main.dart';
 import '../../models/dateHistoryModel.dart';
 import '../../service/DateHistoryService.dart';
 
@@ -29,7 +30,7 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
     mor = prefs.getString('mor') ?? "08:00";
     aft = prefs.getString('aft') ?? "13:00";
     nig = prefs.getString('nig') ?? "20:00";
-    NotificationService.initialize(flutterLocalNotificationsPlugin, context);
+
     isLoading = false;
     setState(() {});
   }
@@ -104,6 +105,24 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Reset everything : ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      Spacer(),
+                      ElevatedButton(
+                          onPressed: () {
+                            Provider.of<medicineSheduleProvider>(context,
+                                    listen: false)
+                                .clearShedule();
+                            setState(() {});
+                          },
+                          child: Text("Reset"))
+                    ],
+                  ),
                   Row(
                     children: [
                       const Text(
@@ -227,14 +246,14 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                           prefs.setString('nig', nig!);
                           fetchAndSetData(mor!, aft!, nig!).then((value) {
                             for (int i = 0; i < dhm.length; i++) {
-                              print("hi");
-                              NotificationService.scheduleNotification(
+                              NotificationService.sheduleNotification(
                                   id: i,
                                   title: "your reminder for: ${dhm[i].time!}",
                                   body: "Click to see the medicines",
-                                  payLoad: dateHistoryModelToJson(dhm[i]),
-                                  flnp: flutterLocalNotificationsPlugin,
-                                  scheduledNotificationDateTime: dhm[i].date!);
+                                  payload: {
+                                    "data": dateHistoryModelToJson(dhm[i])
+                                  },
+                                  scheduledDate: dhm[i].date!);
                             }
                           });
                         }

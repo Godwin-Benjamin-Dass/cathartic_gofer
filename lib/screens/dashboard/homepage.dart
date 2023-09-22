@@ -28,10 +28,11 @@ class _HomepageState extends State<Homepage> {
   }
 
   List imgList = [
+    "assets/images/n1.webp",
     "assets/images/covid.png",
-    "assets/images/news.jpeg",
-    "assets/images/news.jpeg",
-    "assets/images/news.jpeg"
+    "assets/images/n3.jpg",
+    "assets/images/n2.webp",
+    "assets/images/n4.jpg",
   ];
   int index = 0;
   @override
@@ -163,6 +164,7 @@ class _HomepageState extends State<Homepage> {
                     .map((item) => Image.asset(
                           item,
                           fit: BoxFit.cover,
+                          width: 300,
                         ))
                     .toList(),
                 options: CarouselOptions(

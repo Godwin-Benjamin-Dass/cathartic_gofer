@@ -1,13 +1,18 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:cathartic_gofer/provider/medicineSheduleProvider.dart';
-import 'package:cathartic_gofer/service/notificationService.dart';
+import 'package:cathartic_gofer/pharmacist/dashboard/home.dart';
+import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
+import 'package:cathartic_gofer/user/screens/auth/starting_page.dart';
+import 'package:cathartic_gofer/user/screens/auth/user_register_form.dart';
+import 'package:cathartic_gofer/user/screens/chatBot/chat_bot_controller.dart';
+import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
+import 'package:cathartic_gofer/doctor/auth/doctor_register_form.dart';
+import 'package:cathartic_gofer/pharmacist/auth/pharmacist_register_form.dart';
+import 'package:cathartic_gofer/user/service/notificationService.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'screens/auth/starting_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +44,7 @@ class SplashScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.black,
-      nextScreen: const Startingpage(),
+      nextScreen: const PharmacistHome(),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.bottomToTop,
     );

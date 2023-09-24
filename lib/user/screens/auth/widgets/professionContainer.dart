@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfessionContainer extends StatelessWidget {
   const ProfessionContainer({
@@ -21,17 +22,16 @@ class ProfessionContainer extends StatelessWidget {
       onTap: ontap,
       child: Container(
         width: width * 0.4,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                  blurRadius: 4,
-                  offset: Offset(0, 3),
-                  color: select == true
-                      ? Color.fromARGB(255, 85, 168, 250)
-                      : Color.fromARGB(255, 208, 204, 204))
-            ],
-            borderRadius: BorderRadius.circular(15)),
+        decoration: BoxDecoration(boxShadow: [
+          select == true
+              ? BoxShadow(
+                  blurRadius: 5, color: Colors.white, offset: Offset(-5, 0))
+              : BoxShadow(),
+          select == true
+              ? BoxShadow(
+                  blurRadius: 5, color: Colors.white, offset: Offset(5, 0))
+              : BoxShadow()
+        ], color: Colors.white, borderRadius: BorderRadius.circular(15)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

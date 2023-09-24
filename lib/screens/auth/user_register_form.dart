@@ -1,10 +1,11 @@
-import 'package:cathartic_gofer/models/userModel.dart';
-import 'package:cathartic_gofer/screens/auth/otp_verification_page.dart';
-import 'package:cathartic_gofer/service/firebaseService.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../user/models/userModel.dart';
+import '../../user/screens/auth/otp_verification_page.dart';
+import '../../user/service/firebaseService.dart';
 
 class UserRegisterForm extends StatefulWidget {
   const UserRegisterForm({super.key, required this.phNo});

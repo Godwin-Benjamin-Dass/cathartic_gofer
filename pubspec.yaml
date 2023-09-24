@@ -61,10 +61,11 @@ dependencies:
   firebase_auth: ^4.10.0
   pinput: ^3.0.1
   firebase_messaging:
-  firebase_storage: ^11.2.7
+  firebase_storage:
   file_picker: ^5.5.0
 
 
+  csc_picker: ^0.2.7
 
 dev_dependencies:
   flutter_test:
@@ -93,6 +94,7 @@ flutter:
     - assets/
   #   - images/a_dot_ham.jpeg
 
+    - assets/Jsondata/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

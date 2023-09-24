@@ -24,14 +24,6 @@
     "C": "Normal mirror",
     "D": "Plane mirror",
     "answer": "Concave mirror"
-  },{
-    "id":3,
-    "question": "Tamiflu is front line drug against",
-    "A": "AIDS",
-    "B": "Bird Flu",
-    "C": "Swine Flu",
-    "D": "Cancer",
-    "answer": "Bird Flu"
   },
   {
     "id":4,
@@ -49,6 +41,15 @@
     "C": "Typhoid",
     "D": "Filariasis",
     "answer": "Tetanus"
+  },
+  {
+    "id":6,
+    "question": "Tamiflu is front line drug against",
+    "A": "AIDS",
+    "B": "Bird Flu",
+    "C": "Swine Flu",
+    "D": "Cancer",
+    "answer": "Bird Flu"
   }
   
   

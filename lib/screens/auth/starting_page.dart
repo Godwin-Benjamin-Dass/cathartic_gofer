@@ -1,5 +1,4 @@
 import 'package:cathartic_gofer/screens/auth/loginpage.dart';
-import 'package:cathartic_gofer/screens/auth/user_type.dart';
 import 'package:flutter/material.dart';
 
 class Startingpage extends StatelessWidget {
@@ -64,34 +63,34 @@ class Startingpage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Don’t have an account? ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 15,
-                              color: Colors.white),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => UserType()));
-                          },
-                          child: Text(
-                            "Create account",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 15,
-                              color: Color(0xff8DE6EA),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Text(
+                    //       "Don’t have an account? ",
+                    //       style: TextStyle(
+                    //           fontWeight: FontWeight.w400,
+                    //           fontSize: 15,
+                    //           color: Colors.white),
+                    //     ),
+                    //     InkWell(
+                    //       onTap: () {
+                    //         Navigator.push(
+                    //             context,
+                    //             MaterialPageRoute(
+                    //                 builder: (context) => UserType()));
+                    //       },
+                    //       child: Text(
+                    //         "Create account",
+                    //         style: TextStyle(
+                    //           fontWeight: FontWeight.w900,
+                    //           fontSize: 15,
+                    //           color: Color(0xff8DE6EA),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // )
                   ],
                 ),
               ),

@@ -1,5 +1,9 @@
+import 'package:cathartic_gofer/models/userModel.dart';
 import 'package:cathartic_gofer/screens/auth/loginpage.dart';
 import 'package:cathartic_gofer/screens/dashboard/homepage.dart';
+import 'package:cathartic_gofer/screens/doctorFlow/doctorHomePage.dart';
+import 'package:cathartic_gofer/screens/vendorFlow/vendorHomePage.dart';
+import 'package:cathartic_gofer/service/firebaseService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
@@ -100,12 +104,26 @@ class _OtpPageState extends State<OtpPage> {
                     await FirebaseAuth.instance
                         .signInWithCredential(PhoneAuthProvider.credential(
                             verificationId: VerificationCode!, smsCode: pin))
-                        .then((value) {
+                        .then((value) async {
                       if (value.user != null) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Homepage()));
+                        UserModel? uml;
+                        uml = await firebaseService.getDataFromFirestore();
+                        if (uml.userType == "user") {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Homepage()));
+                        } else if (uml.userType == "doctor") {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => doctorHomePage()));
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => vendorHomePage()));
+                        }
                       }
                     });
                   } catch (e) {

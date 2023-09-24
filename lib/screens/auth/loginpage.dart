@@ -1,4 +1,6 @@
-import 'package:cathartic_gofer/screens/dashboard/homepage.dart';
+import 'package:cathartic_gofer/screens/auth/otp_verification_page.dart';
+import 'package:cathartic_gofer/screens/auth/user_type.dart';
+import 'package:cathartic_gofer/service/firebaseService.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +15,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String dialCodeDigits = "+91";
   TextEditingController _controller = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -140,30 +143,56 @@ class _LoginPageState extends State<LoginPage> {
                       child: SizedBox(
                         height: 40,
                         width: 150,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Homepage()
-                                      // OtpPage(
-                                      //     phone: _controller.text,
-                                      //     codeDigits: dialCodeDigits)
+                        child: isLoading
+                            ? GestureDetector(
+                                onTap: () {
+                                  isLoading = false;
+                                  setState(() {});
+                                },
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ))
+                            : ElevatedButton(
+                                onPressed: () async {
+                                  isLoading = true;
+                                  setState(() {});
+                                  if (await firebaseService.checkUser(
+                                      "${dialCodeDigits}${_controller.text}")) {
+                                    print("exist");
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => OtpPage(
+                                                  phone: _controller.text,
+                                                  codeDigits: dialCodeDigits,
+                                                )));
+                                  } else {
+                                    print("did not exist");
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => UserType(
+                                                  Phno: dialCodeDigits +
+                                                      _controller.text,
+                                                )));
+                                  }
 
-                                      ));
-                            },
-                            style: ElevatedButton.styleFrom(
-                                elevation: 10,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                backgroundColor: Colors.white),
-                            child: Text(
-                              "Send OTP",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 17,
-                                  color: Color(0xff358FEA)),
-                            )),
+                                  isLoading = false;
+                                  setState(() {});
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 10,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    backgroundColor: Colors.white),
+                                child: Text(
+                                  "Send OTP",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 17,
+                                      color: Color(0xff358FEA)),
+                                )),
                       ),
                     ),
                   ],

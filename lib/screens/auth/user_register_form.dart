@@ -1,12 +1,14 @@
-import 'package:cathartic_gofer/screens/dashboard/homepage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cathartic_gofer/models/userModel.dart';
+import 'package:cathartic_gofer/screens/auth/otp_verification_page.dart';
+import 'package:cathartic_gofer/service/firebaseService.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class UserRegisterForm extends StatefulWidget {
-  const UserRegisterForm({super.key});
+  const UserRegisterForm({super.key, required this.phNo});
+  final String phNo;
 
   @override
   State<UserRegisterForm> createState() => _UserRegisterFormState();
@@ -15,6 +17,7 @@ class UserRegisterForm extends StatefulWidget {
 class _UserRegisterFormState extends State<UserRegisterForm> {
   TextEditingController _datecontroller = TextEditingController();
   TextEditingController _namecontroller = TextEditingController();
+  TextEditingController _emailcontroller = TextEditingController();
 
   TextEditingController _addresscontroller = TextEditingController();
 
@@ -30,31 +33,12 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
     await FirebaseMessaging.instance.getToken().then((value) async {
       if (value != null) {
         fcmToken = value.toString();
-        // Map<String, dynamic> data = {
-        //   'device_fcm': value,
-        // };
-        //  await UserService.updateUserData(data, context);
+
         if (kDebugMode) {
           print('fcm token updated');
+          print(fcmToken);
         }
       }
-    });
-  }
-
-  userBio() {
-    final _CollectionReference =
-        FirebaseFirestore.instance.collection("UserBio").doc("+919384300417");
-    return _CollectionReference.set({
-      "id": _CollectionReference.id,
-      "Name": _namecontroller.text,
-      "Blood_Group": _bloodgrpcontroller.text,
-      "DOB": _datecontroller.text,
-      "Address": _addresscontroller.text,
-      "Height": _heightcontroller.text,
-      "Weight": _weightcontroller.text,
-      "Guardian_Name": _guardianNamecontroller.text,
-      "Guardian_Mobile_Number": _guardianMobileNumbercontroller.text,
-      "fcm_token": fcmToken
     });
   }
 
@@ -65,6 +49,7 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
     getFCMToken();
   }
 
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,6 +125,23 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
                             labelText: '  Full Name',
                             prefixIcon: Icon(
                               Icons.person,
+                              color: Color.fromARGB(255, 101, 166, 231),
+                              size: 30,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(right: 15, top: 30, left: 15),
+                        child: TextFormField(
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w600),
+                          controller: _emailcontroller,
+                          decoration: InputDecoration(
+                            labelText: '  email',
+                            prefixIcon: Icon(
+                              Icons.mail,
                               color: Color.fromARGB(255, 101, 166, 231),
                               size: 30,
                             ),
@@ -281,36 +283,75 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
                         child: SizedBox(
                           height: 40,
                           width: 150,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                //   if (_namecontroller.text != '' &&
-                                //       _datecontroller != '' &&
-                                //       _addresscontroller != '' &&
-                                //       _bloodgrpcontroller != '' &&
-                                //       _heightcontroller != '' &&
-                                //       _weightcontroller != '' &&
-                                //       _guardianNamecontroller != '' &&
-                                //       _guardianMobileNumbercontroller != '') {
-                                //     userBio();
-
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Homepage()));
-                                // }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 10,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  backgroundColor: Colors.white),
-                              child: Text(
-                                "Continue",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 17,
-                                    color: Color(0xff358FEA)),
-                              )),
+                          child: isLoading
+                              ? GestureDetector(
+                                  onTap: () {
+                                    isLoading = false;
+                                    setState(() {});
+                                  },
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
+                              : ElevatedButton(
+                                  onPressed: () {
+                                    print(widget.phNo.substring(0, 3));
+                                    print(widget.phNo.substring(3));
+                                    isLoading = true;
+                                    setState(() {});
+                                    firebaseService
+                                        .uploadUserDetails(
+                                            UserModel(
+                                                name: _namecontroller.text,
+                                                email: _emailcontroller.text,
+                                                address:
+                                                    _addresscontroller.text,
+                                                dob: _datecontroller.text,
+                                                gender: "Male",
+                                                bloodGroup:
+                                                    _bloodgrpcontroller.text,
+                                                weight: _weightcontroller.text,
+                                                height: _heightcontroller.text,
+                                                guardianName:
+                                                    _guardianNamecontroller
+                                                        .text,
+                                                guardianPhno:
+                                                    _guardianMobileNumbercontroller
+                                                        .text,
+                                                userType: "user",
+                                                isUser: true,
+                                                isDoctor: false,
+                                                isVendor: false),
+                                            fcmToken,
+                                            widget.phNo,
+                                            null,
+                                            null)
+                                        .then((value) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => OtpPage(
+                                                  phone:
+                                                      widget.phNo.substring(3),
+                                                  codeDigits: (widget.phNo
+                                                      .substring(0, 3)))));
+                                    });
+                                    isLoading = false;
+                                    setState(() {});
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      elevation: 10,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      backgroundColor: Colors.white),
+                                  child: Text(
+                                    "Continue",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 17,
+                                        color: Color(0xff358FEA)),
+                                  )),
                         ),
                       )
                     ],

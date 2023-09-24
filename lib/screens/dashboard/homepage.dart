@@ -8,6 +8,7 @@ import 'package:cathartic_gofer/screens/dashboard/widgets/black_divider.dart';
 import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_20_bold.dart';
 import 'package:cathartic_gofer/screens/dashboard/widgets/text_with_poppins_22_bold.dart';
 import 'package:cathartic_gofer/screens/searchFlow/searchScreen.dart';
+import 'package:cathartic_gofer/service/firebaseService.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-    // NotificationService.postData();
+    firebaseService.updateFcm();
   }
 
   List imgList = [

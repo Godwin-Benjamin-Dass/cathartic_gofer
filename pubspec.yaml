@@ -61,6 +61,8 @@ dependencies:
   firebase_auth: ^4.10.0
   pinput: ^3.0.1
   firebase_messaging:
+  firebase_storage: ^11.2.7
+  file_picker: ^5.5.0
 
 
 

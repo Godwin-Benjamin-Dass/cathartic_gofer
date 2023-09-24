@@ -7,8 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'doctorRegisterForm.dart';
+
 class UserType extends ConsumerWidget {
-  const UserType({super.key});
+  const UserType({
+    super.key,
+    required this.Phno,
+  });
+  final String Phno;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -94,7 +100,25 @@ class UserType extends ConsumerWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => UserRegisterForm()));
+                            builder: (context) => UserRegisterForm(
+                                  phNo: Phno,
+                                )));
+                  }
+                  if (ref.watch(doctorProvider) == true) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => doctorRegisterForm(
+                                  phno: Phno,
+                                )));
+                  }
+                  if (ref.watch(pharmacistProvider) == true) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UserRegisterForm(
+                                  phNo: Phno,
+                                )));
                   }
                 },
                 style: ElevatedButton.styleFrom(

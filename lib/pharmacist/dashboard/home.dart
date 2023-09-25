@@ -7,7 +7,7 @@ class PharmacistHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [Image.asset("bg.png")],
+        children: [Image.asset("assets/images/bg.png")],
       ),
     );
   }

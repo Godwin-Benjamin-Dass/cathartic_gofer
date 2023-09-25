@@ -44,7 +44,7 @@ class SplashScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.black,
-      nextScreen: const PharmacistHome(),
+      nextScreen: const Startingpage(),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.bottomToTop,
     );

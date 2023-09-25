@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 
+import 'package:cathartic_gofer/pharmacist/auth/pharmacist_register_form.dart';
 import 'package:cathartic_gofer/user/provider/register_and_login_controller.dart';
 import 'package:cathartic_gofer/user/screens/auth/controller/user_type_controller.dart';
 import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
@@ -8,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../doctor/auth/doctor_register_form.dart';
 import '../../../screens/auth/user_register_form.dart';
-import 'doctorRegisterForm.dart';
 
 class UserType extends ConsumerWidget {
   const UserType({
@@ -114,15 +115,15 @@ class UserType extends ConsumerWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => doctorRegisterForm(
-                                  phno: Phno,
+                            builder: (context) => DoctorRegistrationForm(
+                                  phNo: Phno,
                                 )));
                   }
                   if (ref.watch(pharmacistProvider) == true) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => UserRegisterForm(
+                            builder: (context) => PharmacistRegisterForm(
                                   phNo: Phno,
                                 )));
                   }

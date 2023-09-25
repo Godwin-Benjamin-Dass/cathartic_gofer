@@ -41,11 +41,14 @@ class firebaseService {
       "gst_no": usm.gstNo,
       "pan_no": usm.panNo,
       "shop_address": usm.shopAddress,
+      "doc_expericence": usm.docExperience,
       "shop_img": usm.shopImg,
       "shop_permit": usm.shopPermit,
       "userType": usm.userType,
       "date_created": DateTime.now(),
-      "fcm_token": fcm
+      "fcm_token": fcm,
+      "status": "waiting",
+      "timing": usm.timing
     });
   }
 
@@ -56,7 +59,7 @@ class firebaseService {
     return downloadUrl;
   }
 
-  static Future<bool> checkUser(no) async {
+  static Future<bool> checkUser(String? no) async {
     final CollectionReference collection =
         FirebaseFirestore.instance.collection('UserBio');
 
@@ -76,10 +79,11 @@ class firebaseService {
 
     final DocumentSnapshot document = await collection
         .doc(FirebaseAuth.instance.currentUser!.phoneNumber)
-        .get(); // Replace with your document ID
+        .get();
 
     // Convert the Firestore document data to a JSON Map
     var data = document.data() as Map<String, dynamic>;
+
     return UserModel.fromJson(data);
   }
 
@@ -93,5 +97,34 @@ class firebaseService {
         .update({'fcm_token': fcmToken})
         .then((value) => print("Token Updated"))
         .catchError((error) => print("Failed to update user: $error"));
+  }
+
+  static Future<bool> checkUserVerified() async {
+    UserModel ums = await firebaseService.getDataFromFirestore();
+    if (ums.status == "verified") {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<List<UserModel>> fetchDoctor() async {
+    List<UserModel> um = [];
+    final QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('UserBio').get();
+    for (var documentSnapshot in querySnapshot.docs) {
+      if (documentSnapshot.exists) {
+        final user = documentSnapshot.data() as Map<String, dynamic>;
+
+        final doctor = UserModel.fromJson(user);
+
+        print(doctor.userType);
+        if (doctor.userType == "doctor" && doctor.status == "verified") {
+          um.add(doctor);
+          print(doctor.name);
+          print(doctor);
+        }
+      }
+    }
+    return um;
   }
 }

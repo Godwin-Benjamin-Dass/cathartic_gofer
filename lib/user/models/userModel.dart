@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   // User Information
   String? name;
@@ -8,6 +10,7 @@ class UserModel {
   String? bloodGroup;
   String? weight;
   String? height;
+  String? status;
 
   // Guardian Information
   String? guardianName;
@@ -29,93 +32,97 @@ class UserModel {
   String? shopAddress;
   String? shopImg;
   String? shopPermit;
+  String? timing;
 
   // User Type
   String? userType;
 
   // Date Created
-  DateTime? dateCreated;
+  Timestamp? dateCreated;
 
   // Flags for User Type
   bool? isUser;
   bool? isDoctor;
   bool? isVendor;
 
-  UserModel({
-    // User Information
-    this.name,
-    this.email,
-    this.address,
-    this.dob,
-    this.gender,
-    this.bloodGroup,
-    this.weight,
-    this.height,
+  UserModel(
+      {
+      // User Information
+      this.name,
+      this.email,
+      this.address,
+      this.dob,
+      this.gender,
+      this.bloodGroup,
+      this.weight,
+      this.height,
 
-    // Guardian Information
-    this.guardianName,
-    this.guardianPhno,
+      // Guardian Information
+      this.guardianName,
+      this.guardianPhno,
 
-    // Doctor Information
-    this.regNo,
-    this.yearReg,
-    this.medicalCouncil,
-    this.specialization,
-    this.docCertificate,
-    this.docExperience,
-    this.hospitalAddress,
+      // Doctor Information
+      this.regNo,
+      this.yearReg,
+      this.medicalCouncil,
+      this.specialization,
+      this.docCertificate,
+      this.docExperience,
+      this.hospitalAddress,
 
-    // Vendor Information
-    this.shopName,
-    this.gstNo,
-    this.panNo,
-    this.shopAddress,
-    this.shopImg,
-    this.shopPermit,
+      // Vendor Information
+      this.shopName,
+      this.gstNo,
+      this.panNo,
+      this.shopAddress,
+      this.shopImg,
+      this.shopPermit,
+      this.timing,
 
-    // User Type
-    this.userType,
+      // User Type
+      this.userType,
 
-    // Date Created
-    this.dateCreated,
+      // Date Created
+      this.dateCreated,
 
-    // Flags for User Type
-    this.isUser,
-    this.isDoctor,
-    this.isVendor,
-  });
+      // Flags for User Type
+      this.isUser,
+      this.isDoctor,
+      this.isVendor,
+      this.status});
   // Factory method to create a UserModel from JSON data
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      name: json['name'],
-      email: json['email'],
-      address: json['address'],
-      dob: json['dob'],
-      gender: json['gender'],
-      bloodGroup: json['bloodGroup'],
-      weight: json['weight'],
-      height: json['height'],
-      guardianName: json['guardian_name'],
-      guardianPhno: json['guardian_Phno'],
-      regNo: json['reg_no'],
-      yearReg: json['year_reg'],
-      medicalCouncil: json['medical_council'],
-      specialization: json['specialization'],
-      docCertificate: json['doc_certificate'],
-      docExperience: json['doc_experience'],
-      hospitalAddress: json['hospital_address'],
-      shopName: json['shop_name'],
-      gstNo: json['gst_no'],
-      panNo: json['pan_no'],
-      shopAddress: json['shop_address'],
-      shopImg: json['shop_img'],
-      shopPermit: json['shop_permit'],
-      userType: json['userType'],
-      dateCreated: json['date_created'],
-      isUser: json['isUser'],
-      isDoctor: json['isDoctor'],
-      isVendor: json['isVendor'],
-    );
+        name: json['name'],
+        email: json['email'],
+        address: json['address'],
+        dob: json['dob'],
+        gender: json['gender'],
+        bloodGroup: json['bloodGroup'],
+        weight: json['weight'],
+        height: json['height'],
+        guardianName: json['guardian_name'],
+        guardianPhno: json['guardian_Phno'],
+        regNo: json['reg_no'],
+        yearReg: json['year_reg'],
+        medicalCouncil: json['medical_council'],
+        specialization: json['specialization'],
+        docCertificate: json['doc_certificate'],
+        docExperience: json['doc_experience'],
+        hospitalAddress: json['hospital_address'],
+        shopName: json['shop_name'],
+        gstNo: json['gst_no'],
+        panNo: json['pan_no'],
+        shopAddress: json['shop_address'],
+        shopImg: json['shop_img'],
+        shopPermit: json['shop_permit'],
+        userType: json['userType'],
+        dateCreated: json['date_created'],
+        isUser: json['isUser'],
+        isDoctor: json['isDoctor'],
+        isVendor: json['isVendor'],
+        status: json['status'],
+        timing: json['timing']);
   }
 
   // Method to convert a UserModel to JSON data
@@ -149,6 +156,8 @@ class UserModel {
       'isUser': isUser,
       'isDoctor': isDoctor,
       'isVendor': isVendor,
+      'status': status,
+      'timing': timing
     };
   }
 }

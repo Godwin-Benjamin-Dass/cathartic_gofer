@@ -76,7 +76,7 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFF0075FF),
         elevation: 0,
         automaticallyImplyLeading: false,
         leading: IconButton(
@@ -85,17 +85,28 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
             },
             icon: const Icon(
               Icons.arrow_back_ios,
-              size: 20,
-              color: Color(0xFF0075FF),
+              size: 22,
+              color: Colors.white,
             )),
         centerTitle: true,
         title: const Text(
           "Alarm Settings",
           style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF1E1E1E)),
+              fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Provider.of<medicineSheduleProvider>(context, listen: false)
+                    .clearShedule();
+                setState(() {});
+              },
+              icon: Icon(
+                Icons.restore_outlined,
+                color: Colors.white,
+                size: 24,
+              ))
+        ],
       ),
       body: isLoading
           ? const Center(
@@ -107,34 +118,23 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        "Reset everything : ",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
-                      ),
-                      Spacer(),
-                      ElevatedButton(
-                          onPressed: () {
-                            Provider.of<medicineSheduleProvider>(context,
-                                    listen: false)
-                                .clearShedule();
-                            firebaseService.TrackActivity(
-                                "user have reseted the track medics.");
-                            setState(() {});
-                          },
-                          child: Text("Reset"))
-                    ],
-                  ),
-                  Row(
-                    children: [
                       const Text(
-                        "Select time for morning : ",
+                        "Default time for morning : ",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15),
                       ),
-                      Text(mor!),
+                      Text(
+                        mor!,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, color: Colors.grey),
+                      ),
                       const Spacer(),
                       ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF0075FF),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
                           onPressed: () async {
                             Future<TimeOfDay?> selectedTime = showTimePicker(
                               initialTime: TimeOfDay.now(),
@@ -167,13 +167,22 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                   Row(
                     children: [
                       const Text(
-                        "Select time for Afternoon : ",
+                        "Default time for Afternoon : ",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15),
                       ),
-                      Text(aft!),
+                      Text(
+                        aft!,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, color: Colors.grey),
+                      ),
                       const Spacer(),
                       ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF0075FF),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
                           onPressed: () async {
                             isChanged = true;
                             firebaseService.TrackActivity(
@@ -206,13 +215,22 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                   Row(
                     children: [
                       const Text(
-                        "Select time for Night : ",
+                        "Default time for Night : ",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15),
                       ),
-                      Text(nig!),
+                      Text(
+                        nig!,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, color: Colors.grey),
+                      ),
                       const Spacer(),
                       ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF0075FF),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              )),
                           onPressed: () async {
                             isChanged = true;
 
@@ -241,37 +259,60 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 50,
                   ),
-                  ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
-                              isChanged ? Colors.blue : Colors.grey)),
-                      onPressed: () async {
-                        if (isChanged) {
-                          final SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          prefs.setString('mor', mor!);
-                          prefs.setString('aft', aft!);
-                          prefs.setString('nig', nig!);
-                          fetchAndSetData(mor!, aft!, nig!).then((value) {
-                            firebaseService.TrackActivity(
-                                "user have resetted the time of medicine morning:${mor}, afternoon:${aft}, night:${nig}");
+                  SizedBox(
+                    height: 40,
+                    width: 170,
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          if (isChanged) {
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setString('mor', mor!);
+                            prefs.setString('aft', aft!);
+                            prefs.setString('nig', nig!);
+                            fetchAndSetData(mor!, aft!, nig!).then((value) {
+                              for (int i = 0; i < dhm.length; i++) {
+                                NotificationService.sheduleNotification(
+                                    id: i,
+                                    title: "your reminder for: ${dhm[i].time!}",
+                                    body: "Click to see the medicines",
+                                    payload: {
+                                      "data": dateHistoryModelToJson(dhm[i])
+                                    },
+                                    scheduledDate: dhm[i].date!);
+                              }
+                            });
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            elevation: 10,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            backgroundColor: Colors.white),
+                        child: Text(
+                          "Save Changes",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 17,
+                            color: isChanged ? Color(0xFF0075FF) : Colors.grey,
+                          ),
+                        )),
+                  )
+                  // ElevatedButton(  style: ElevatedButton.styleFrom(
+                  //             backgroundColor: isChanged ? Colors.blue : Colors.grey,
+                  //             shape: RoundedRectangleBorder(
+                  //               borderRadius: BorderRadius.circular(10),
+                  //             )),
+                  //     style: ButtonStyle(
+                  //         backgroundColor: MaterialStatePropertyAll(
+                  //             isChanged ? Colors.blue : Colors.grey)),
+                  //     onPressed: () async {
 
-                            for (int i = 0; i < dhm.length; i++) {
-                              NotificationService.sheduleNotification(
-                                  id: i,
-                                  title: "your reminder for: ${dhm[i].time!}",
-                                  body: "Click to see the medicines",
-                                  payload: {
-                                    "data": dateHistoryModelToJson(dhm[i])
-                                  },
-                                  scheduledDate: dhm[i].date!);
-                            }
-                          });
-                        }
-                      },
-                      child: const Text("Save Changes"))
+                  //     },
+                  //     child: const Text("Save Changes"))
                 ],
               ),
             ),

@@ -31,9 +31,13 @@ class _ChatBotControllerState extends State<ChatBotController> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_rounded)),
+            icon: const Icon(
+              Icons.arrow_circle_left_outlined,
+              size: 28,
+              color: Colors.white,
+            )),
         title: Text(
           'How can I help you',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

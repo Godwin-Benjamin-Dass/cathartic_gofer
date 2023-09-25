@@ -1,5 +1,6 @@
 import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/consult_doctor/chat_page.dart';
+import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
 import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,7 +51,6 @@ class _DoctorListState extends State<DoctorList> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: isLoading
@@ -59,9 +59,46 @@ class _DoctorListState extends State<DoctorList> {
             )
           : Stack(
               children: [
-                Container(
-                  height: height,
-                  width: width,
+                Stack(
+                  children: [
+                    Container(
+                      height: 110,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Color(0xff0075FF),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(70),
+                              bottomRight: Radius.circular(70))),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      left: width * 0.05,
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Homepage()),
+                                (route) => false);
+                          },
+                          icon: const Icon(
+                            Icons.arrow_circle_left_outlined,
+                            size: 28,
+                            color: Colors.white,
+                          )),
+                    ),
+                    Positioned(
+                      bottom: 20,
+                      left: width * 0.35,
+                      child: Text(
+                        "Doctor's List",
+                        style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ],
                 ),
                 Positioned(
                   top: MediaQuery.of(context).size.height * 0.5,

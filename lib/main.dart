@@ -1,7 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cathartic_gofer/doctor/doctorWaitingPage.dart';
 import 'package:cathartic_gofer/pharmacist/dashboard/pharmacistWaitingPage.dart';
-import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
 import 'package:cathartic_gofer/user/screens/auth/starting_page.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';

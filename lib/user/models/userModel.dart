@@ -11,6 +11,7 @@ class UserModel {
   String? weight;
   String? height;
   String? status;
+  String? phoneNo;
 
   // Guardian Information
   String? guardianName;
@@ -44,6 +45,7 @@ class UserModel {
   bool? isUser;
   bool? isDoctor;
   bool? isVendor;
+  String? fcm_token;
 
   UserModel(
       {
@@ -56,6 +58,7 @@ class UserModel {
       this.bloodGroup,
       this.weight,
       this.height,
+      this.phoneNo,
 
       // Guardian Information
       this.guardianName,
@@ -89,7 +92,8 @@ class UserModel {
       this.isUser,
       this.isDoctor,
       this.isVendor,
-      this.status});
+      this.status,
+      this.fcm_token});
   // Factory method to create a UserModel from JSON data
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
@@ -122,7 +126,9 @@ class UserModel {
         isDoctor: json['isDoctor'],
         isVendor: json['isVendor'],
         status: json['status'],
-        timing: json['timing']);
+        timing: json['timing'],
+        phoneNo: json["phoneNo"],
+        fcm_token: json["fcm_token"]);
   }
 
   // Method to convert a UserModel to JSON data
@@ -157,7 +163,9 @@ class UserModel {
       'isDoctor': isDoctor,
       'isVendor': isVendor,
       'status': status,
-      'timing': timing
+      'timing': timing,
+      'phoneNo': phoneNo,
+      'fcm_token': fcm_token
     };
   }
 }

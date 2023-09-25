@@ -107,6 +107,25 @@ class firebaseService {
     return false;
   }
 
+  static Future<List<UserModel>> fetchVendor() async {
+    List<UserModel> um = [];
+    final QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('UserBio').get();
+    for (var documentSnapshot in querySnapshot.docs) {
+      if (documentSnapshot.exists) {
+        final user = documentSnapshot.data() as Map<String, dynamic>;
+
+        final vendor = UserModel.fromJson(user);
+
+        if (vendor.userType == "vendor" && vendor.status == "verified") {
+          um.add(vendor);
+          print(vendor.name);
+        }
+      }
+    }
+    return um;
+  }
+
   static Future<List<UserModel>> fetchDoctor() async {
     List<UserModel> um = [];
     final QuerySnapshot querySnapshot =
@@ -118,7 +137,7 @@ class firebaseService {
         final doctor = UserModel.fromJson(user);
 
         print(doctor.userType);
-        if (doctor.userType == "doctor" && doctor.status == "verified") {
+        if (doctor.userType == "vendor" && doctor.status == "verified") {
           um.add(doctor);
           print(doctor.name);
           print(doctor);
@@ -128,9 +147,28 @@ class firebaseService {
     return um;
   }
 
+  static Future placeOrder(File prescription, String addInfo) async {
+    String url = await firebaseService.uploadFile(prescription,
+        "recipts_" + prescription.path.toString().length.toString());
+    final _ref = FirebaseFirestore.instance
+        .collection("vendor")
+        .doc(FirebaseAuth.instance.currentUser!.phoneNumber)
+        .collection('orders')
+        .doc();
+    _ref.set({
+      "order_id": _ref.id,
+      "prescription": url,
+      "addInfo": addInfo,
+      "status": "placed",
+      "remakrs": null,
+      "estimate": null
+    });
+    print("order placed");
+  }
+
   static TrackActivity(String activity) {
     FirebaseFirestore.instance
-        .collection("traker")
+        .collection("tracker")
         .doc(FirebaseAuth.instance.currentUser!.phoneNumber)
         .collection('history')
         .add({

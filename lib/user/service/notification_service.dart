@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class NotificationService {
-  static Future<void> postData(title, body, token) async {
-    final url = Uri.parse('https://message-3pso.onrender.com/send');
+  static Future<void> postData(String title, String body, String token) async {
+    final url =
+        Uri.parse('https://message-3pso.onrender.com/api/notification/send');
     final Map<String, dynamic> data = {
       "title": title,
       "body": body,
@@ -19,10 +20,10 @@ class NotificationService {
     );
 
     if (response.statusCode == 200) {
-      print('Response: ${response.body}');
+      print('Response: ${response.statusCode}');
     } else {
       print('Failed to make POST request. Status code: ${response.statusCode}');
-      print('Response: ${response.body}');
+      print('Response: ${response}');
     }
   }
 }

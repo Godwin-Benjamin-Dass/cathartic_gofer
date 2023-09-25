@@ -3,6 +3,7 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:cathartic_gofer/user/models/dateHistoryModel.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
+import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/TrackMedicWidgets/add_medicine.dart';
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/TrackMedicWidgets/popUp.dart';
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/dateHistory.dart';
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/trackMedicSettings.dart';
@@ -55,9 +56,11 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFF0075FF),
         elevation: 0,
         automaticallyImplyLeading: false,
         leading: IconButton(
@@ -65,17 +68,15 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
               Navigator.pop(context);
             },
             icon: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-              color: Color(0xFF0075FF),
+              Icons.arrow_circle_left_outlined,
+              size: 28,
+              color: Colors.white,
             )),
         centerTitle: true,
         title: const Text(
           "Track Medic",
           style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF1E1E1E)),
+              fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white),
         ),
         actions: [
           IconButton(
@@ -87,7 +88,8 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
               },
               icon: const HeroIcon(
                 HeroIcons.cog8Tooth,
-                color: Colors.black,
+                color: Colors.white,
+                size: 22,
               ))
         ],
       ),
@@ -96,290 +98,367 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
               child: CircularProgressIndicator(),
             )
           : Consumer<medicineSheduleProvider>(
-              builder: (context, provider, child) => Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              morning = true;
-                              afternoon = false;
-                              night = false;
-                              custom = false;
-                              setState(() {});
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  color: morning ? Colors.grey : Colors.black),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  "Morning",
-                                  style: TextStyle(
-                                      color:
-                                          morning ? Colors.black : Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
+              builder: (context, provider, child) => SingleChildScrollView(
+                child: Stack(
+                  children: [
+                    Container(
+                      height: height,
+                      width: width,
+                    ),
+                    Positioned(
+                      top: MediaQuery.of(context).size.height * 0.4,
+                      left: MediaQuery.of(context).size.width * 0.4,
+                      child: Center(
+                        child: Image.asset(
+                          "assets/images/logo_blur.png",
+                          height: 90,
+                          width: 90,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 50,
+                          color: Color(0xFF0075FF),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  morning = true;
+                                  afternoon = false;
+                                  night = false;
+                                  custom = false;
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  width: width * 0.33,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(16),
+                                          topRight: Radius.circular(16)),
+                                      color: morning
+                                          ? Colors.white
+                                          : Color(0xFF0075FF)),
+                                  child: Center(
+                                    child: Text(
+                                      "Morning",
+                                      style: TextStyle(
+                                          color: morning
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              morning = false;
-                              afternoon = true;
-                              night = false;
-                              custom = false;
+                              InkWell(
+                                onTap: () {
+                                  morning = false;
+                                  afternoon = true;
+                                  night = false;
+                                  custom = false;
 
-                              setState(() {});
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  color:
-                                      afternoon ? Colors.grey : Colors.black),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  "Afternoon",
-                                  style: TextStyle(
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  width: width * 0.33,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(16),
+                                          topRight: Radius.circular(16)),
                                       color: afternoon
-                                          ? Colors.black
-                                          : Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
+                                          ? Colors.white
+                                          : Color(0xFF0075FF)),
+                                  child: Center(
+                                    child: Text(
+                                      "Afternoon",
+                                      style: TextStyle(
+                                          color: afternoon
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              morning = false;
-                              afternoon = false;
-                              night = true;
-                              custom = false;
+                              InkWell(
+                                onTap: () {
+                                  morning = false;
+                                  afternoon = false;
+                                  night = true;
+                                  custom = false;
 
-                              setState(() {});
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  color: night ? Colors.grey : Colors.black),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  "Night",
-                                  style: TextStyle(
-                                      color: night ? Colors.black : Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  width: width * 0.33,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(16),
+                                        topRight: Radius.circular(16)),
+                                    color: night
+                                        ? Colors.white
+                                        : Color(0xFF0075FF),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "Night",
+                                      style: TextStyle(
+                                          color: night
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                          InkWell(
-                            onTap: () {
-                              morning = false;
-                              afternoon = false;
-                              night = false;
-                              custom = true;
-
-                              setState(() {});
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  color: custom ? Colors.grey : Colors.black),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  "Custom",
-                                  style: TextStyle(
-                                      color:
-                                          custom ? Colors.black : Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      morning
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: provider.mor.length,
-                              itemBuilder: (ctx, i) {
-                                var data = provider.mor[i];
-                                return medicineTile(
-                                  msl: data,
-                                );
-                              })
-                          : Container(),
-                      afternoon
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: provider.aft.length,
-                              itemBuilder: (ctx, i) {
-                                var data = provider.aft[i];
-                                return medicineTile(
-                                  msl: data,
-                                );
-                              })
-                          : Container(),
-                      night
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: provider.nig.length,
-                              itemBuilder: (ctx, i) {
-                                var data = provider.nig[i];
-                                return medicineTile(
-                                  msl: data,
-                                );
-                              })
-                          : Container(),
-                      custom
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: provider.cus.length,
-                              itemBuilder: (ctx, i) {
-                                var data = provider.cus[i];
-                                return medicineTile(
-                                  msl: data,
-                                  isCustom: true,
-                                );
-                              })
-                          : SizedBox()
-                    ],
-                  ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        morning
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: provider.mor.length,
+                                itemBuilder: (ctx, i) {
+                                  var data = provider.mor[i];
+                                  return medicineTile(
+                                    msl: data,
+                                  );
+                                })
+                            : Container(),
+                        afternoon
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: provider.aft.length,
+                                itemBuilder: (ctx, i) {
+                                  var data = provider.aft[i];
+                                  return medicineTile(
+                                    msl: data,
+                                  );
+                                })
+                            : Container(),
+                        night
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: provider.nig.length,
+                                itemBuilder: (ctx, i) {
+                                  var data = provider.nig[i];
+                                  return medicineTile(
+                                    msl: data,
+                                  );
+                                })
+                            : Container(),
+                        custom
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: provider.cus.length,
+                                itemBuilder: (ctx, i) {
+                                  var data = provider.cus[i];
+                                  return medicineTile(
+                                    msl: data,
+                                    isCustom: true,
+                                  );
+                                })
+                            : SizedBox()
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
-      floatingActionButton: Consumer<medicineSheduleProvider>(
-        builder: (context, provider, child) => ExpandableFab(
-          distance: 112,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(left: 20, bottom: 30, right: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ActionButton(
-              onPressed: () {
-                if (custom) {
-                  showAddList(context, null, false, true, provider.cus.length);
-                } else {
-                  showAddList(context, null, false, false, 0);
-                }
-              },
-              icon: const Icon(Icons.add),
-            ),
-            custom
-                ? SizedBox()
-                : ActionButton(
-                    onPressed: () async {
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      final values = await showCalendarDatePicker2Dialog(
-                        context: context,
-                        config: CalendarDatePicker2WithActionButtonsConfig(
-                          firstDayOfWeek: 1,
-                          calendarType: CalendarDatePicker2Type.range,
-                          selectedDayTextStyle: const TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.w700),
-                          selectedDayHighlightColor: Colors.purple[800],
-                          centerAlignModePicker: true,
-                          customModePickerIcon: const SizedBox(),
-                        ),
-                        dialogSize: const Size(325, 400),
-                        borderRadius: BorderRadius.circular(15),
-                        value: _dates,
-                        dialogBackgroundColor: Colors.white,
-                      );
-                      if (values != null) {
-                        dhv.clear();
-
-                        _dates = values;
-                        var start = _dates.first;
-                        var end = _dates.last;
-                        for (var date = start;
-                            date!.isBefore(end!.add(const Duration(days: 1)));
-                            date = date.add(const Duration(days: 1))) {
-                          String? mor = prefs.getString("mor") ?? "08:00";
-                          String? aft = prefs.getString("aft") ?? "13:00";
-                          String? nig = prefs.getString("nig") ?? "20:00";
-                          debugPrint(mor.substring(0, 2));
-                          debugPrint(mor.substring(3, 5));
-                          if (provider.mor.isNotEmpty) {
-                            print(date);
-
-                            dhv.add(dateHistoryModel(
-                                date: date.add(Duration(
-                                    hours: int.parse(
-                                      mor.substring(0, 2),
-                                    ),
-                                    minutes: int.parse(mor.substring(3, 5)))),
-                                id: _dates.length.toString(),
-                                isTaken: false,
-                                time: "morning",
-                                medicine: provider.mor,
-                                type: "normal"));
-                          }
-                          if (provider.aft.isNotEmpty) {
-                            dhv.add(dateHistoryModel(
-                                date: date.add(Duration(
-                                    hours: int.parse(
-                                      aft.substring(0, 2),
-                                    ),
-                                    minutes: int.parse(aft.substring(3, 5)))),
-                                id: _dates.length.toString(),
-                                isTaken: false,
-                                time: "afternoon",
-                                medicine: provider.aft,
-                                type: "normal"));
-                          }
-                          if (provider.nig.isNotEmpty) {
-                            dhv.add(dateHistoryModel(
-                                date: date.add(Duration(
-                                    hours: int.parse(
-                                      nig.substring(0, 2),
-                                    ),
-                                    minutes: int.parse(nig.substring(3, 5)))),
-                                id: _dates.length.toString(),
-                                time: "night",
-                                isTaken: false,
-                                medicine: provider.nig,
-                                type: "normal"));
-                          }
-                        }
-                        DateHistoryService.clearAllHistories();
-
-                        DateHistoryService.saveDateHistories(dhv);
-                      }
-                      print(dhv.toList());
-                    },
-                    icon: const HeroIcon(HeroIcons.calendarDays),
-                  ),
-            ActionButton(
-              onPressed: () {
+            GestureDetector(
+              onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const dateHistory()));
               },
-              icon: const HeroIcon(HeroIcons.clipboardDocumentCheck),
+              child: Container(
+                height: 60,
+                width: 180,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Schedule",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Icon(
+                        Icons.access_alarms_rounded,
+                        color: Colors.white,
+                        size: 20,
+                      )
+                    ],
+                  ),
+                ),
+                decoration: BoxDecoration(
+                    color: Color(0xFF0075FF),
+                    borderRadius: BorderRadius.circular(30)),
+              ),
             ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddMedicine()));
+              },
+              child: Container(
+                height: 60,
+                width: 60,
+                child: Center(
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: Color(0xFF0075FF)),
+              ),
+            )
           ],
         ),
       ),
+      // floatingActionButton: Consumer<medicineSheduleProvider>(
+      //   builder: (context, provider, child) => ExpandableFab(
+      //     distance: 112,
+      //     children: [
+      //       ActionButton(
+      //         onPressed: () {
+      //           if (custom) {
+      //             showAddList(context, null, false, true, provider.cus.length);
+      //           } else {
+      //             showAddList(context, null, false, false, 0);
+      //           }
+      //         },
+      //         icon: const Icon(Icons.add),
+      //       ),
+      //       custom
+      //           ? SizedBox()
+      //           : ActionButton(
+      //               onPressed: () async {
+      //                 final SharedPreferences prefs =
+      //                     await SharedPreferences.getInstance();
+      //                 final values = await showCalendarDatePicker2Dialog(
+      //                   context: context,
+      //                   config: CalendarDatePicker2WithActionButtonsConfig(
+      //                     firstDayOfWeek: 1,
+      //                     calendarType: CalendarDatePicker2Type.range,
+      //                     selectedDayTextStyle: const TextStyle(
+      //                         color: Colors.white, fontWeight: FontWeight.w700),
+      //                     selectedDayHighlightColor: Colors.purple[800],
+      //                     centerAlignModePicker: true,
+      //                     customModePickerIcon: const SizedBox(),
+      //                   ),
+      //                   dialogSize: const Size(325, 400),
+      //                   borderRadius: BorderRadius.circular(15),
+      //                   value: _dates,
+      //                   dialogBackgroundColor: Colors.white,
+      //                 );
+      //                 if (values != null) {
+      //                   dhv.clear();
+
+      //                   _dates = values;
+      //                   var start = _dates.first;
+      //                   var end = _dates.last;
+      //                   for (var date = start;
+      //                       date!.isBefore(end!.add(const Duration(days: 1)));
+      //                       date = date.add(const Duration(days: 1))) {
+      //                     String? mor = prefs.getString("mor") ?? "08:00";
+      //                     String? aft = prefs.getString("aft") ?? "13:00";
+      //                     String? nig = prefs.getString("nig") ?? "20:00";
+      //                     debugPrint(mor.substring(0, 2));
+      //                     debugPrint(mor.substring(3, 5));
+      //                     if (provider.mor.isNotEmpty) {
+      //                       print(date);
+
+      //                       dhv.add(dateHistoryModel(
+      //                           date: date.add(Duration(
+      //                               hours: int.parse(
+      //                                 mor.substring(0, 2),
+      //                               ),
+      //                               minutes: int.parse(mor.substring(3, 5)))),
+      //                           id: _dates.length.toString(),
+      //                           isTaken: false,
+      //                           time: "morning",
+      //                           medicine: provider.mor,
+      //                           type: "normal"));
+      //                     }
+      //                     if (provider.aft.isNotEmpty) {
+      //                       dhv.add(dateHistoryModel(
+      //                           date: date.add(Duration(
+      //                               hours: int.parse(
+      //                                 aft.substring(0, 2),
+      //                               ),
+      //                               minutes: int.parse(aft.substring(3, 5)))),
+      //                           id: _dates.length.toString(),
+      //                           isTaken: false,
+      //                           time: "afternoon",
+      //                           medicine: provider.aft,
+      //                           type: "normal"));
+      //                     }
+      //                     if (provider.nig.isNotEmpty) {
+      //                       dhv.add(dateHistoryModel(
+      //                           date: date.add(Duration(
+      //                               hours: int.parse(
+      //                                 nig.substring(0, 2),
+      //                               ),
+      //                               minutes: int.parse(nig.substring(3, 5)))),
+      //                           id: _dates.length.toString(),
+      //                           time: "night",
+      //                           isTaken: false,
+      //                           medicine: provider.nig,
+      //                           type: "normal"));
+      //                     }
+      //                   }
+      //                   DateHistoryService.clearAllHistories();
+
+      //                   DateHistoryService.saveDateHistories(dhv);
+      //                 }
+      //                 print(dhv.toList());
+      //               },
+      //               icon: const HeroIcon(HeroIcons.calendarDays),
+      //             ),
+      //       ActionButton(
+      //         onPressed: () {
+      //           Navigator.push(
+      //               context,
+      //               MaterialPageRoute(
+      //                   builder: (context) => const dateHistory()));
+      //         },
+      //         icon: const HeroIcon(HeroIcons.clipboardDocumentCheck),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

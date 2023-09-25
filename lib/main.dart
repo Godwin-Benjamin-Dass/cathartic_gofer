@@ -1,12 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:cathartic_gofer/pharmacist/dashboard/home.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
-import 'package:cathartic_gofer/user/screens/auth/starting_page.dart';
-import 'package:cathartic_gofer/user/screens/auth/user_register_form.dart';
-import 'package:cathartic_gofer/user/screens/chatBot/chat_bot_controller.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
-import 'package:cathartic_gofer/doctor/auth/doctor_register_form.dart';
-import 'package:cathartic_gofer/pharmacist/auth/pharmacist_register_form.dart';
 import 'package:cathartic_gofer/user/service/notificationService.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +38,7 @@ class SplashScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.black,
-      nextScreen: const Startingpage(),
+      nextScreen: Homepage(),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.bottomToTop,
     );

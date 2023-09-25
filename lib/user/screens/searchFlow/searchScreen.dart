@@ -38,7 +38,7 @@ class _searchScreenState extends State<searchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xFF0075FF),
           elevation: 0,
           automaticallyImplyLeading: false,
           leading: IconButton(
@@ -46,17 +46,15 @@ class _searchScreenState extends State<searchScreen> {
                 Navigator.pop(context);
               },
               icon: const Icon(
-                Icons.arrow_back_ios,
-                size: 20,
-                color: Color(0xFF0075FF),
+                Icons.arrow_circle_left_outlined,
+                size: 28,
+                color: Colors.white,
               )),
           centerTitle: true,
           title: const Text(
             "Search",
             style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF1E1E1E)),
+                fontSize: 19, fontWeight: FontWeight.w700, color: Colors.white),
           ),
         ),
         body: isLoading
@@ -65,43 +63,51 @@ class _searchScreenState extends State<searchScreen> {
               )
             : Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: TypeAheadField<MedicineModel>(
-                  textFieldConfiguration: TextFieldConfiguration(
-                      decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    fillColor: const Color(0xffD9D9D9),
-                    filled: true,
-                    prefixIcon:
-                        const Icon(Icons.search, color: Color(0xff9B9B9B)),
-                    hintText: "Search",
-                    hintStyle: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xff9B9B9B)),
-                  )),
-                  suggestionsCallback: (pattern) async {
-                    return medic
-                        .where((item) => item.name!
-                            .toLowerCase()
-                            .contains(pattern.toLowerCase()))
-                        .toList();
-                  },
-                  itemBuilder: (context, suggestion) {
-                    return ListTile(
-                      title: Text(suggestion.name!),
-                    );
-                  },
-                  onSuggestionSelected: (suggestion) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                viewMedicineScreen(medic: suggestion)));
-                    // Handle suggestion selection
-                  },
+                child: SizedBox(
+                  height: 50,
+                  child: TypeAheadField<MedicineModel>(
+                    textFieldConfiguration: TextFieldConfiguration(
+                        decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      fillColor: const Color(0xffD9D9D9),
+                      filled: true,
+                      prefixIcon:
+                          const Icon(Icons.search, color: Color(0xff9B9B9B)),
+                      hintText: "Search",
+                      contentPadding: EdgeInsets.zero,
+                      hintStyle: GoogleFonts.poppins(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xff9B9B9B)),
+                    )),
+                    suggestionsCallback: (pattern) async {
+                      return medic
+                          .where((item) => item.name!
+                              .toLowerCase()
+                              .contains(pattern.toLowerCase()))
+                          .toList();
+                    },
+                    itemBuilder: (context, suggestion) {
+                      return ListTile(
+                        title: Text(
+                          suggestion.name!,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 14),
+                        ),
+                      );
+                    },
+                    onSuggestionSelected: (suggestion) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  viewMedicineScreen(medic: suggestion)));
+                      // Handle suggestion selection
+                    },
+                  ),
                 ),
               ));
   }

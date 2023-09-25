@@ -12,7 +12,7 @@ class viewMedicineScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color(0xFF0075FF),
         elevation: 0,
         automaticallyImplyLeading: false,
         leading: IconButton(
@@ -20,17 +20,15 @@ class viewMedicineScreen extends StatelessWidget {
               Navigator.pop(context);
             },
             icon: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-              color: Color(0xFF1E1E1E),
+              Icons.arrow_circle_left_outlined,
+              size: 28,
+              color: Colors.white,
             )),
         centerTitle: true,
         title: Text(
           medic.name!,
           style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF1E1E1E)),
+              fontSize: 19, fontWeight: FontWeight.w600, color: Colors.white),
         ),
       ),
       body: Padding(
@@ -90,32 +88,48 @@ class viewMedicineScreen extends StatelessWidget {
                       color: Colors.black54),
                 ),
               ),
-              const Text(
-                "Uses:",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF0075FF)),
+              Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.grey.shade200),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Uses:",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF0075FF)),
+                            ),
+                            Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: ListView.builder(
+                                    itemCount: medic.uses!.length,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemBuilder: (ctx, i) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 4.0),
+                                        child: Text(
+                                          "\u2022 ${medic.uses![i]}",
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.black54),
+                                        ),
+                                      );
+                                    })),
+                          ]))),
+              SizedBox(
+                height: 10,
               ),
-              Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: ListView.builder(
-                      itemCount: medic.uses!.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (ctx, i) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Text(
-                            "\u2022 ${medic.uses![i]}",
-                            style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black54),
-                          ),
-                        );
-                      })),
-              const Text(
+              Text(
                 "Brand names:",
                 style: TextStyle(
                     fontSize: 20,

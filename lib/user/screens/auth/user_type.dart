@@ -3,9 +3,11 @@
 import 'dart:ui';
 
 import 'package:cathartic_gofer/pharmacist/auth/pharmacist_register_form.dart';
+import 'package:cathartic_gofer/screens/auth/user_register_form.dart';
 import 'package:cathartic_gofer/user/provider/register_and_login_controller.dart';
 import 'package:cathartic_gofer/user/screens/auth/controller/user_type_controller.dart';
 import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
+import 'package:cathartic_gofer/user/screens/auth/user_register_form.dart';
 import 'package:cathartic_gofer/user/screens/auth/widgets/professionContainer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,17 +52,34 @@ class UserType extends ConsumerWidget {
                   SizedBox(
                     height: 40,
                   ),
-                  Center(
-                      child: ProfessionContainer(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ProfessionContainer(
                           select: ref.watch(userProvider),
                           ontap: () {
                             ref.read(userProvider.notifier).toggle();
                             ref.read(doctorProvider.notifier).state = false;
                             ref.read(pharmacistProvider.notifier).state = false;
+                            ref.read(guardianProvider.notifier).state = false;
                           },
                           width: width,
                           img: "assets/images/patient.jpg",
-                          text: "User")),
+                          text: "User"),
+                      ProfessionContainer(
+                          select: ref.watch(guardianProvider),
+                          ontap: () {
+                            ref.read(guardianProvider.notifier).toggle();
+                            ref.read(doctorProvider.notifier).state = false;
+                            ref.read(pharmacistProvider.notifier).state = false;
+                            ref.read(userProvider.notifier).state = false;
+                            ;
+                          },
+                          width: width,
+                          img: "assets/images/guardian.jpg",
+                          text: "Guardian"),
+                    ],
+                  ),
                   SizedBox(
                     height: height * 0.35,
                   ),
@@ -73,6 +92,7 @@ class UserType extends ConsumerWidget {
                             ref.read(userProvider.notifier).state = false;
                             ref.read(pharmacistProvider.notifier).state = false;
                             ref.read(doctorProvider.notifier).toggle();
+                            ref.read(guardianProvider.notifier).state = false;
                           },
                           width: width,
                           text: "Doctor",
@@ -83,6 +103,7 @@ class UserType extends ConsumerWidget {
                             ref.read(doctorProvider.notifier).state = false;
                             ref.read(userProvider.notifier).state = false;
                             ref.read(pharmacistProvider.notifier).toggle();
+                            ref.read(guardianProvider.notifier).state = false;
                           },
                           width: width,
                           text: "Pharmacist",
@@ -94,7 +115,8 @@ class UserType extends ConsumerWidget {
                   ),
                   ref.read(doctorProvider) == true ||
                           ref.read(userProvider) == true ||
-                          ref.read(pharmacistProvider) == true
+                          ref.read(pharmacistProvider) == true ||
+                          ref.read(guardianProvider) == true
                       ? SizedBox(
                           height: 40,
                           width: 150,
@@ -104,7 +126,10 @@ class UserType extends ConsumerWidget {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => LoginPage()));
+                                          builder: (context) =>
+                                              UserRegisterForm(
+                                                phno: Phno,
+                                              )));
                                   ref.read(registerProvider.notifier).state =
                                       "register";
                                 } else if (ref.watch(doctorProvider) == true) {

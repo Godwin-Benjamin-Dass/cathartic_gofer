@@ -1,4 +1,7 @@
+import 'package:cathartic_gofer/user/models/userModel.dart';
+import 'package:cathartic_gofer/user/screens/auth/otp_verification_page.dart';
 import 'package:cathartic_gofer/user/screens/auth/widgets/custom_textfield.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -7,7 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class UserRegisterForm extends StatefulWidget {
-  const UserRegisterForm({super.key});
+  const UserRegisterForm({super.key, required this.phno});
+  final String phno;
 
   @override
   State<UserRegisterForm> createState() => _UserRegisterFormState();
@@ -18,6 +22,7 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
   TextEditingController _namecontroller = TextEditingController();
 
   TextEditingController _addresscontroller = TextEditingController();
+  TextEditingController _emailcontroller = TextEditingController();
 
   TextEditingController _bloodgrpcontroller = TextEditingController();
   TextEditingController _heightcontroller = TextEditingController();
@@ -676,6 +681,17 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
                           color: Colors.white,
                         )),
                     SizedBox(
+                      height: 33,
+                    ),
+                    CustomTextField(
+                        controller: _emailcontroller,
+                        hinttext: "email",
+                        prefixIcon: Icon(
+                          Icons.mail,
+                          size: 24,
+                          color: Colors.white,
+                        )),
+                    SizedBox(
                       height: 60,
                     ),
                     SizedBox(
@@ -686,7 +702,41 @@ class _UserRegisterFormState extends State<UserRegisterForm> {
                                 backgroundColor: Color(0xff0075FF),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5))),
-                            onPressed: () {},
+                            onPressed: () {
+                              firebaseService
+                                  .uploadUserDetails(
+                                      UserModel(
+                                          name: _namecontroller.text,
+                                          email: _emailcontroller.text,
+                                          address: _addresscontroller.text,
+                                          dob: _datecontroller.text,
+                                          gender: "Male",
+                                          bloodGroup: _bloodgrpcontroller.text,
+                                          weight: _weightcontroller.text,
+                                          height: _heightcontroller.text,
+                                          guardianName:
+                                              _guardianNamecontroller.text,
+                                          guardianPhno:
+                                              _guardianMobileNumbercontroller
+                                                  .text,
+                                          userType: "user",
+                                          isUser: true,
+                                          isDoctor: false,
+                                          isVendor: false),
+                                      fcmToken,
+                                      widget.phno,
+                                      null,
+                                      null)
+                                  .then((value) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => OtpPage(
+                                            phone: widget.phno.substring(3),
+                                            codeDigits: (widget.phno
+                                                .substring(0, 3)))));
+                              });
+                            },
                             child: Text(
                               "Register",
                               style: TextStyle(

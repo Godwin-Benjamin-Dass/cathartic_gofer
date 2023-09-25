@@ -134,6 +134,7 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                           .signInWithCredential(PhoneAuthProvider.credential(
                               verificationId: VerificationCode!, smsCode: pin))
                           .then((value) {
+                        print(value);
                         pageNavigator();
                       });
                     } catch (e) {

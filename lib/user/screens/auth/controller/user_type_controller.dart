@@ -15,3 +15,6 @@ final doctorProvider =
 
 final pharmacistProvider =
     StateNotifierProvider<BoolNotifier, bool>((ref) => BoolNotifier());
+
+final guardianProvider =
+    StateNotifierProvider<BoolNotifier, bool>((ref) => BoolNotifier());

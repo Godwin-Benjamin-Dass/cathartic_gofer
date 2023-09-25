@@ -1,5 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cathartic_gofer/doctor/doctorWaitingPage.dart';
+import 'package:cathartic_gofer/guardian/guardian_homepage.dart';
 import 'package:cathartic_gofer/pharmacist/dashboard/pharmacistWaitingPage.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
 import 'package:cathartic_gofer/user/screens/auth/starting_page.dart';
@@ -43,9 +44,12 @@ class SplashScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.black,
-      nextScreen: FirebaseAuth.instance.currentUser == null
-          ? Startingpage()
-          : navigatingPage(),
+      nextScreen:
+          //  FirebaseAuth.instance.currentUser == null
+          // ? Startingpage()
+
+          GuardianHomePage(),
+      // : navigatingPage(),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.bottomToTop,
     );

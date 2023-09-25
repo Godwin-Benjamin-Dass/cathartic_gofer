@@ -7,6 +7,7 @@ import 'package:cathartic_gofer/user/screens/consult_doctor/consult_doctor_start
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/black_divider.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/text_with_poppins_20_bold.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/text_with_poppins_22_bold.dart';
+import 'package:cathartic_gofer/user/screens/pharmacy/pharmacy_details.dart';
 import 'package:cathartic_gofer/user/screens/searchFlow/searchScreen.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 // import 'dart:convert';
@@ -542,12 +543,21 @@ class _HomepageState extends State<Homepage> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    MedicalHospitalConatiner(
-                        address: "No.121,avadi main road,sennerrkuppam,Chennai",
-                        distance: "300 m",
-                        img: "assets/images/m2.png",
-                        name: "Medzine",
-                        rating: "5.0"),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PharmacyDetails()));
+                      },
+                      child: MedicalHospitalConatiner(
+                          address:
+                              "No.121,avadi main road,sennerrkuppam,Chennai",
+                          distance: "300 m",
+                          img: "assets/images/Pharmacy.jpg",
+                          name: "Medzine",
+                          rating: "5.0"),
+                    ),
                     MedicalHospitalConatiner(
                         address: "No.4,Karaiyanchavadi,sennerrkuppam,Chennai",
                         distance: "450 m",

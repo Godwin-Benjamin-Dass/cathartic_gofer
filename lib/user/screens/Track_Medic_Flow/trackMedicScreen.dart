@@ -1,17 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:cathartic_gofer/user/models/dateHistoryModel.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/TrackMedicWidgets/add_medicine.dart';
-import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/TrackMedicWidgets/popUp.dart';
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/dateHistory.dart';
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/trackMedicSettings.dart';
 import 'package:cathartic_gofer/user/service/DateHistoryService.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../service/dateService.dart';
 import '../../service/medicineSheduleService.dart';
@@ -81,6 +79,7 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
         actions: [
           IconButton(
               onPressed: () {
+                firebaseService.TrackActivity("opened settings in track medic");
                 Navigator.push(
                     context,
                     MaterialPageRoute(

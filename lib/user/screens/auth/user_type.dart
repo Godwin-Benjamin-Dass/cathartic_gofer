@@ -2,18 +2,23 @@
 
 import 'dart:ui';
 
+import 'package:cathartic_gofer/pharmacist/auth/pharmacist_register_form.dart';
 import 'package:cathartic_gofer/user/provider/register_and_login_controller.dart';
 import 'package:cathartic_gofer/user/screens/auth/controller/user_type_controller.dart';
 import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
 import 'package:cathartic_gofer/user/screens/auth/widgets/professionContainer.dart';
-import 'package:cathartic_gofer/doctor/auth/doctor_register_form.dart';
-import 'package:cathartic_gofer/pharmacist/auth/pharmacist_register_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../doctor/auth/doctor_register_form.dart';
+
 class UserType extends ConsumerWidget {
-  const UserType({super.key});
+  const UserType({
+    super.key,
+    required this.Phno,
+  });
+  final String Phno;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -107,7 +112,9 @@ class UserType extends ConsumerWidget {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              DoctorRegistrationForm()));
+                                              DoctorRegistrationForm(
+                                                phNo: Phno,
+                                              )));
                                   ref.read(registerProvider.notifier).state =
                                       "register";
                                 } else if (ref.watch(pharmacistProvider) ==
@@ -116,7 +123,9 @@ class UserType extends ConsumerWidget {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              PharmacistRegisterForm()));
+                                              PharmacistRegisterForm(
+                                                phNo: Phno,
+                                              )));
                                   ref.read(registerProvider.notifier).state =
                                       "register";
                                 }

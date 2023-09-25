@@ -1,6 +1,8 @@
-import 'package:cathartic_gofer/user/provider/register_and_login_controller.dart';
-import 'package:cathartic_gofer/user/screens/auth/user_register_form.dart';
+import 'package:cathartic_gofer/doctor/doctorWaitingPage.dart';
+import 'package:cathartic_gofer/pharmacist/dashboard/pharmacistWaitingPage.dart';
+import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,6 +32,23 @@ class _OtpPageState extends ConsumerState<OtpPage> {
     // TODO: implement initState
     super.initState();
     verifyPhonenumber();
+  }
+
+  UserModel? uml;
+  void pageNavigator() async {
+    uml = await firebaseService.getDataFromFirestore().then((value) {
+      print(value.userType);
+      if (value.userType == "user") {
+        return Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Homepage()));
+      } else if (value.userType == "doctor") {
+        return Navigator.push(context,
+            MaterialPageRoute(builder: (context) => doctorWaitingPage()));
+      } else {
+        return Navigator.push(context,
+            MaterialPageRoute(builder: (context) => pharmacistWaitingPage()));
+      }
+    });
   }
 
   verifyPhonenumber() async {
@@ -115,19 +134,7 @@ class _OtpPageState extends ConsumerState<OtpPage> {
                           .signInWithCredential(PhoneAuthProvider.credential(
                               verificationId: VerificationCode!, smsCode: pin))
                           .then((value) {
-                        if (value.user != null &&
-                            ref.read(registerProvider) == "register") {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => UserRegisterForm()));
-                        } else if (value.user != null &&
-                            ref.read(registerProvider) == "") {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Homepage()));
-                        }
+                        pageNavigator();
                       });
                     } catch (e) {
                       FocusScope.of(context).unfocus();

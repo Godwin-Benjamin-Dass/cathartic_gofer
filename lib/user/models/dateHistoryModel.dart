@@ -4,6 +4,8 @@ dateHistoryModel dateHistoryModelFromJson(String str) =>
     dateHistoryModel.fromJson(json.decode(str));
 String dateHistoryModelToJson(dateHistoryModel data) =>
     json.encode(data.toJson());
+Map<dynamic, dynamic> dateHistoryModelToMap(dateHistoryModel data) =>
+    data.toMap();
 
 class dateHistoryModel {
   String? id;
@@ -15,6 +17,18 @@ class dateHistoryModel {
   dateHistoryModel(
       {this.id, this.date, this.isTaken, this.medicine, this.time, this.type});
   Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'date': date!.toIso8601String(),
+      'isTaken': isTaken,
+      'time': time,
+      'type': type,
+      "medicine":
+          medicine == null ? [] : List<dynamic>.from(medicine!.map((x) => x)),
+    };
+  }
+
+  Map<dynamic, dynamic> toMap() {
     return {
       'id': id,
       'date': date!.toIso8601String(),

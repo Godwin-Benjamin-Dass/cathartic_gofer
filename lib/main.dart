@@ -1,8 +1,12 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:cathartic_gofer/guardian/guardian_homepage.dart';
+import 'package:cathartic_gofer/doctor/doctorWaitingPage.dart';
+import 'package:cathartic_gofer/pharmacist/dashboard/pharmacistWaitingPage.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
+import 'package:cathartic_gofer/user/screens/auth/starting_page.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:cathartic_gofer/user/service/notificationService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
@@ -39,7 +43,9 @@ class SplashScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.black,
-      nextScreen: Homepage(),
+      nextScreen: FirebaseAuth.instance.currentUser == null
+          ? Startingpage()
+          : navigatingPage(),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.bottomToTop,
     );
@@ -49,6 +55,7 @@ class SplashScreen extends StatelessWidget {
 class SplashScreen1 extends StatelessWidget {
   const SplashScreen1({Key? key}) : super(key: key);
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
@@ -75,6 +82,53 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: "Work Sans",
+      ),
+    );
+  }
+}
+
+class navigatingPage extends StatefulWidget {
+  const navigatingPage({super.key});
+
+  @override
+  State<navigatingPage> createState() => _navigatingPageState();
+}
+
+class _navigatingPageState extends State<navigatingPage> {
+  @override
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    pageNavigator();
+  }
+
+  void pageNavigator() async {
+    firebaseService.getDataFromFirestore().then((value) {
+      print(value.userType);
+      if (value.userType == "user") {
+        return Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => Homepage()),
+            (route) => false);
+      } else if (value.userType == "doctor") {
+        return Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => doctorWaitingPage()),
+            (route) => false);
+      } else {
+        return Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => pharmacistWaitingPage()),
+            (route) => false);
+      }
+    });
+  }
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }

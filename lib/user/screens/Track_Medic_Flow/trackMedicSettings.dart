@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:cathartic_gofer/user/service/notificationService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -141,6 +142,9 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                             );
                             TimeOfDay tod;
                             if (await selectedTime != null) {
+                              firebaseService.TrackActivity(
+                                  "user changed the morning alarm time");
+
                               isChanged = true;
                               tod = (await selectedTime)!;
                               print(tod);
@@ -181,6 +185,8 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                               )),
                           onPressed: () async {
                             isChanged = true;
+                            firebaseService.TrackActivity(
+                                "user changed the afernoon time");
 
                             Future<TimeOfDay?> selectedTime = showTimePicker(
                               initialTime: TimeOfDay.now(),
@@ -234,6 +240,9 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                             );
                             TimeOfDay tod;
                             if (await selectedTime != null) {
+                              firebaseService.TrackActivity(
+                                  "user changed the night time");
+
                               tod = (await selectedTime)!;
                               print(tod);
                               nig = tod.hour.toString().length == 1

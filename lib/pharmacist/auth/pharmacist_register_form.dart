@@ -1,10 +1,19 @@
+import 'dart:io';
+
+import 'package:cathartic_gofer/pharmacist/dashboard/pharmacistWaitingPage.dart';
+import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/auth/widgets/custom_textfield.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:csc_picker/csc_picker.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PharmacistRegisterForm extends StatefulWidget {
-  const PharmacistRegisterForm({super.key});
+  const PharmacistRegisterForm({super.key, required this.phNo});
+  final String phNo;
 
   @override
   State<PharmacistRegisterForm> createState() => _PharmacistRegisterFormState();
@@ -13,15 +22,61 @@ class PharmacistRegisterForm extends StatefulWidget {
 class _PharmacistRegisterFormState extends State<PharmacistRegisterForm> {
   TextEditingController _shopNamecontroller = TextEditingController();
   TextEditingController _namecontroller = TextEditingController();
-  TextEditingController _yearOfRegcontroller = TextEditingController();
-  TextEditingController _contactcontroller = TextEditingController();
+  // TextEditingController _yearOfRegcontroller = TextEditingController();
+  // TextEditingController _contactcontroller = TextEditingController();
   TextEditingController _GSTcontroller = TextEditingController();
   TextEditingController _pancontroller = TextEditingController();
   TextEditingController _emailcontroller = TextEditingController();
   TextEditingController _addresscontroller = TextEditingController();
-  // String? countryValue;
-  // String? stateValue;
-  // String? cityValue;
+  String startTime = "start time";
+  String endTime = "end time";
+  String? countryValue;
+  String? stateValue;
+  String? cityValue;
+  String fcmToken = "";
+  bool isLoading = false;
+  getFCMToken() async {
+    // await PushNotification.initialize(context);
+    await FirebaseMessaging.instance.getToken().then((value) async {
+      if (value != null) {
+        fcmToken = value.toString();
+        // Map<String, dynamic> data = {
+        //   'device_fcm': value,
+        // };
+        //  await UserService.updateUserData(data, context);
+        if (kDebugMode) {
+          print('fcm token updated');
+        }
+      }
+      print(value);
+    });
+  }
+
+  File? _shopCertificate;
+  Future<void> _openFilePicker() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      setState(() {
+        _shopCertificate = File(
+            result.files.single.path!); // Store the selected file as a File
+      });
+      print(_shopCertificate);
+    }
+  }
+
+  File? _shopImage;
+  Future<void> _openShopPicker() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      setState(() {
+        _shopImage = File(
+            result.files.single.path!); // Store the selected file as a File
+      });
+      print(_shopImage);
+    }
+  }
 
   String gender = "Male";
   @override
@@ -173,129 +228,223 @@ class _PharmacistRegisterFormState extends State<PharmacistRegisterForm> {
                     SizedBox(
                       height: 20,
                     ),
-                    CustomTextField(
-                        controller: _shopNamecontroller,
-                        hinttext: "Shop Name",
-                        prefixIcon: Image.asset(
-                          "assets/images/shop.png",
-                          height: 24,
-                          width: 24,
-                        )),
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            TimeOfDay? value = await showTimePicker(
+                                context: context, initialTime: TimeOfDay.now());
+                            if (value != null) {
+                              startTime = "${value.hour}:${value.minute}";
+                              setState(() {});
+                            }
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Color(0xff0075FF),
+                            ),
+                            child: Text(
+                              startTime,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            height: 42,
+                            width: MediaQuery.of(context).size.width / 2 - 40,
+                          ),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () async {
+                            TimeOfDay? value = await showTimePicker(
+                                context: context, initialTime: TimeOfDay.now());
+                            if (value != null) {
+                              endTime = "${value.hour}:${value.minute}";
+                              print(endTime);
+                              setState(() {});
+                            }
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Color(0xff0075FF),
+                            ),
+                            child: Text(
+                              endTime,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            height: 42,
+                            width: MediaQuery.of(context).size.width / 2 - 40,
+                          ),
+                        )
+                      ],
+                    ),
                     SizedBox(
                       height: 20,
                     ),
-                    CustomTextField(
-                        controller: _yearOfRegcontroller,
-                        hinttext: "Year of Registration",
-                        prefixIcon: Icon(
-                          Icons.calendar_today_outlined,
-                          size: 24,
-                          color: Colors.white,
-                        )),
+
+                    Text(
+                      "Upload your Shop Image:",
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: _openShopPicker,
+                      child: Container(
+                        height: 100,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.cloud_upload_sharp,
+                                color: Color(0xff0075FF),
+                              ),
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Text(
+                                _shopImage == null
+                                    ? "Browse Files"
+                                    : _shopImage!.path,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xff0075FF)),
+                              )
+                            ],
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Color(0xffCCE3FF)),
+                      ),
+                    ),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    // CustomTextField(
+                    //     controller: _yearOfRegcontroller,
+                    //     hinttext: "Year of Registration",
+                    //     prefixIcon: Icon(
+                    //       Icons.calendar_today_outlined,
+                    //       size: 24,
+                    //       color: Colors.white,
+                    //     )),
                     SizedBox(
                       height: 20,
                     ),
-                    CustomTextField(
-                        controller: _contactcontroller,
-                        hinttext: "Contact Number",
-                        prefixIcon: Icon(
-                          Icons.call_outlined,
-                          size: 24,
-                          color: Colors.white,
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 10,
-                        bottom: 10,
-                        top: 40,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset("assets/images/gender.png"),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Gender:",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 12),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 30, bottom: 25, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Radio(
-                                  activeColor: Color(0xff0075FF),
-                                  value: "Male",
-                                  groupValue: gender,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      gender = value.toString();
-                                    });
-                                  }),
-                              Text(
-                                "Male",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12),
-                              )
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Radio(
-                                  activeColor: Color(0xff0075FF),
-                                  value: "Female",
-                                  groupValue: gender,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      gender = value.toString();
-                                    });
-                                  }),
-                              Text(
-                                "Female",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12),
-                              )
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Radio(
-                                  activeColor: Color(0xff0075FF),
-                                  value: "Other",
-                                  groupValue: gender,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      gender = value.toString();
-                                    });
-                                  }),
-                              Text(
-                                "Other",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+
+                    // CustomTextField(
+                    //     controller: _contactcontroller,
+                    //     hinttext: "Contact Number",
+                    //     prefixIcon: Icon(
+                    //       Icons.call_outlined,
+                    //       size: 24,
+                    //       color: Colors.white,
+                    //     )),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(
+                    //     left: 10,
+                    //     bottom: 10,
+                    //     top: 40,
+                    //   ),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: [
+                    //       Image.asset("assets/images/gender.png"),
+                    //       SizedBox(
+                    //         width: 10,
+                    //       ),
+                    //       Text(
+                    //         "Gender:",
+                    //         style: TextStyle(
+                    //             fontWeight: FontWeight.w600, fontSize: 12),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(
+                    //       left: 30, bottom: 25, right: 10),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.start,
+                    //         children: [
+                    //           Radio(
+                    //               activeColor: Color(0xff0075FF),
+                    //               value: "Male",
+                    //               groupValue: gender,
+                    //               onChanged: (value) {
+                    //                 setState(() {
+                    //                   gender = value.toString();
+                    //                 });
+                    //               }),
+                    //           Text(
+                    //             "Male",
+                    //             style: TextStyle(
+                    //                 color: Colors.black,
+                    //                 fontWeight: FontWeight.w500,
+                    //                 fontSize: 12),
+                    //           )
+                    //         ],
+                    //       ),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.start,
+                    //         children: [
+                    //           Radio(
+                    //               activeColor: Color(0xff0075FF),
+                    //               value: "Female",
+                    //               groupValue: gender,
+                    //               onChanged: (value) {
+                    //                 setState(() {
+                    //                   gender = value.toString();
+                    //                 });
+                    //               }),
+                    //           Text(
+                    //             "Female",
+                    //             style: TextStyle(
+                    //                 color: Colors.black,
+                    //                 fontWeight: FontWeight.w500,
+                    //                 fontSize: 12),
+                    //           )
+                    //         ],
+                    //       ),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.start,
+                    //         children: [
+                    //           Radio(
+                    //               activeColor: Color(0xff0075FF),
+                    //               value: "Other",
+                    //               groupValue: gender,
+                    //               onChanged: (value) {
+                    //                 setState(() {
+                    //                   gender = value.toString();
+                    //                 });
+                    //               }),
+                    //           Text(
+                    //             "Other",
+                    //             style: TextStyle(
+                    //                 color: Colors.black,
+                    //                 fontWeight: FontWeight.w500,
+                    //                 fontSize: 12),
+                    //           )
+                    //         ],
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 20,
                     ),
@@ -372,9 +521,18 @@ class _PharmacistRegisterFormState extends State<PharmacistRegisterForm> {
                           ),
                           dropdownDialogRadius: 10.0,
                           searchBarRadius: 10.0,
-                          onCountryChanged: (Country) {},
-                          onStateChanged: (state) {},
-                          onCityChanged: (city) {},
+                          onCountryChanged: (Country) {
+                            countryValue = Country;
+                            // _address = _address + Country;
+                          },
+                          onStateChanged: (state) {
+                            stateValue = state;
+                            // _address += state!;
+                          },
+                          onCityChanged: (city) {
+                            cityValue = city;
+                            // _address += city!;
+                          },
                         ),
                       ),
                     ),
@@ -390,25 +548,110 @@ class _PharmacistRegisterFormState extends State<PharmacistRegisterForm> {
                           color: Colors.white,
                         )),
                     SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Upload your Medical Certification Certificate:",
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    InkWell(
+                      onTap: _openFilePicker,
+                      child: Container(
+                        height: 100,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.cloud_upload_sharp,
+                                color: Color(0xff0075FF),
+                              ),
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Text(
+                                _shopCertificate == null
+                                    ? "Browse Files"
+                                    : _shopCertificate!.path,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xff0075FF)),
+                              )
+                            ],
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Color(0xffCCE3FF)),
+                      ),
+                    ),
+                    SizedBox(
                       height: 40,
                     ),
                     Center(
-                      child: SizedBox(
-                          height: 48,
-                          width: 116,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xff0075FF),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5))),
-                              onPressed: () {},
-                              child: Text(
-                                "Register",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white),
-                              ))),
+                      child: isLoading
+                          ? CircularProgressIndicator()
+                          : SizedBox(
+                              height: 48,
+                              width: 116,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Color(0xff0075FF),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5))),
+                                  onPressed: () {
+                                    isLoading = true;
+                                    setState(() {});
+                                    firebaseService
+                                        .uploadUserDetails(
+                                            UserModel(
+                                                name: _namecontroller.text,
+                                                shopName:
+                                                    _shopNamecontroller.text,
+                                                gstNo: _GSTcontroller.text,
+                                                panNo: _pancontroller.text,
+                                                email: _emailcontroller.text,
+                                                address: countryValue! +
+                                                    " " +
+                                                    stateValue! +
+                                                    " " +
+                                                    cityValue! +
+                                                    " " +
+                                                    _addresscontroller.text,
+                                                timing:
+                                                    startTime + "-" + endTime,
+                                                userType: "vendor",
+                                                isDoctor: false,
+                                                isVendor: true,
+                                                isUser: false),
+                                            fcmToken,
+                                            widget.phNo,
+                                            _shopImage,
+                                            _shopCertificate)
+                                        .then((value) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  pharmacistWaitingPage()));
+                                    });
+                                    isLoading = false;
+                                    setState(() {});
+                                  },
+                                  child: Text(
+                                    "Register",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white),
+                                  ))),
                     ),
                     SizedBox(
                       height: 30,

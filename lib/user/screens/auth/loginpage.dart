@@ -1,7 +1,8 @@
 import 'package:cathartic_gofer/user/screens/auth/otp_verification_page.dart';
+import 'package:cathartic_gofer/user/screens/auth/user_type.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../../service/firebaseService.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,9 +14,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String dialCodeDigits = "+91";
   TextEditingController _controller = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
+    // final height = MediaQuery.of(context).size.height;
     // return Scaffold(
     //   backgroundColor: Color(0xff358FEA),
     //   body: Stack(
@@ -254,14 +256,26 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(30)),
                       backgroundColor: Color(0xff0075FF),
                     ),
-                    onPressed: () {
-                      
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => OtpPage(
-                                  phone: _controller.text,
-                                  codeDigits: dialCodeDigits)));
+                    onPressed: () async {
+                      if (await firebaseService
+                          .checkUser("${dialCodeDigits}${_controller.text}")) {
+                        print("exist");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OtpPage(
+                                      phone: _controller.text,
+                                      codeDigits: dialCodeDigits,
+                                    )));
+                      } else {
+                        print("did not exist");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UserType(
+                                      Phno: dialCodeDigits + _controller.text,
+                                    )));
+                      }
                     },
                     child: Text(
                       "Verify",

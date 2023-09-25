@@ -1,5 +1,4 @@
 import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
-import 'package:cathartic_gofer/user/screens/auth/user_type.dart';
 import 'package:flutter/material.dart';
 
 class Startingpage extends StatelessWidget {
@@ -63,7 +62,7 @@ class Startingpage extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => UserType()));
+                          MaterialPageRoute(builder: (context) => LoginPage()));
                     },
                     child: Text(
                       "Continue",

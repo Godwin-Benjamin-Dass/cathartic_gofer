@@ -1,9 +1,12 @@
+import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/pharmacy/booking_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PharmacyDetails extends StatelessWidget {
-  const PharmacyDetails({super.key});
+  const PharmacyDetails({super.key, required this.pharma});
+  final UserModel pharma;
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +22,8 @@ class PharmacyDetails extends StatelessWidget {
               width: width,
             ),
             Center(
-              child: Image.asset(
-                "assets/images/Pharmacy.jpg",
+              child: Image.network(
+                pharma.shopImg!,
                 height: height * 0.5,
                 width: width,
                 fit: BoxFit.cover,
@@ -64,7 +67,7 @@ class PharmacyDetails extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Health Hub",
+                                pharma.shopName!,
                                 style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w700, fontSize: 27),
                               ),
@@ -72,7 +75,7 @@ class PharmacyDetails extends StatelessWidget {
                                 height: 5,
                               ),
                               Text(
-                                "Sennerkuppam, Chennai",
+                                pharma.address!,
                                 style: TextStyle(
                                     fontWeight: FontWeight.w800, fontSize: 18),
                               ),
@@ -80,7 +83,7 @@ class PharmacyDetails extends StatelessWidget {
                                 height: 8,
                               ),
                               Text(
-                                "9.00 am - 10.00 pm",
+                                pharma.timing!,
                                 style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
@@ -117,7 +120,10 @@ class PharmacyDetails extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20)),
                                 backgroundColor: Color(0xffB3D6FF)),
-                            onPressed: () {},
+                            onPressed: () {
+                              launchUrl(Uri.parse(
+                                  "https://www.google.com/maps/search/?api=1&query=1200%20${pharma.address}"));
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -146,7 +152,9 @@ class PharmacyDetails extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20)),
                                 backgroundColor: Color(0xffB3D6FF)),
-                            onPressed: () {},
+                            onPressed: () {
+                              launch("tel://${pharma.phoneNo}");
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -217,7 +225,9 @@ class PharmacyDetails extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MedicineBookingPage()));
+                        builder: (context) => MedicineBookingPage(
+                              pharma: pharma,
+                            )));
               },
               child: Text(
                 "Book Medicine",

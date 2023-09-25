@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/BMI/bmi_homepage.dart';
 import 'package:cathartic_gofer/user/screens/Quiz/quiz_page.dart';
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/trackMedicScreen.dart';
@@ -10,10 +11,9 @@ import 'package:cathartic_gofer/user/screens/dashboard/widgets/text_with_poppins
 import 'package:cathartic_gofer/user/screens/pharmacy/pharmacy_details.dart';
 import 'package:cathartic_gofer/user/screens/searchFlow/searchScreen.dart';
 import 'package:dots_indicator/dots_indicator.dart';
-// import 'dart:convert';
-// import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../service/firebaseService.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -26,11 +26,14 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-
-    // NotificationService.postData();
-    // fetchUsers();
+    firebaseService.updateFcm();
+    fetchShops();
   }
 
+  List<UserModel> medicalShops = [];
+  fetchShops() async {
+    medicalShops = await firebaseService.fetchVendor();
+  }
   // List<dynamic> data = [];
   // List<dynamic> img = [];
 
@@ -152,6 +155,7 @@ class _HomepageState extends State<Homepage> {
                 height: 55,
                 child: TextField(
                   onTap: () {
+                    firebaseService.TrackActivity("opened search");
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -248,6 +252,7 @@ class _HomepageState extends State<Homepage> {
                 children: [
                   InkWell(
                     onTap: () {
+                      firebaseService.TrackActivity("opened track medic flow");
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -283,6 +288,8 @@ class _HomepageState extends State<Homepage> {
                   ),
                   InkWell(
                     onTap: () {
+                      firebaseService.TrackActivity(
+                          "opened tell us your problem");
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -335,6 +342,7 @@ class _HomepageState extends State<Homepage> {
                 children: [
                   GestureDetector(
                     onTap: () {
+                      firebaseService.TrackActivity("opened consult doctor");
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -371,6 +379,7 @@ class _HomepageState extends State<Homepage> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      firebaseService.TrackActivity("opened the quiz");
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -419,6 +428,7 @@ class _HomepageState extends State<Homepage> {
               padding: const EdgeInsets.only(left: 35, right: 35),
               child: GestureDetector(
                 onTap: () {
+                  firebaseService.TrackActivity("opened bmi page");
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -537,43 +547,66 @@ class _HomepageState extends State<Homepage> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PharmacyDetails()));
-                      },
-                      child: MedicalHospitalConatiner(
-                          address:
-                              "No.121,avadi main road,sennerrkuppam,Chennai",
-                          distance: "300 m",
-                          img: "assets/images/Pharmacy.jpg",
-                          name: "Medzine",
-                          rating: "5.0"),
-                    ),
-                    MedicalHospitalConatiner(
-                        address: "No.4,Karaiyanchavadi,sennerrkuppam,Chennai",
-                        distance: "450 m",
-                        img: "assets/images/m1.png",
-                        name: "Kumar Medical",
-                        rating: "4.7"),
-                    MedicalHospitalConatiner(
-                        address: "No.44,avadi main road,sennerrkuppam,Chennai",
-                        distance: "800 m",
-                        img: "assets/images/m3.jpeg",
-                        name: "Daniel",
-                        rating: "4.8"),
-                  ],
-                ),
-              ),
+            SizedBox(
+              height: 250,
+              child: ListView.builder(
+                  itemCount: medicalShops.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (ctx, i) {
+                    var data = medicalShops[i];
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PharmacyDetails(
+                                              pharma: data,
+                                            )));
+                              },
+                              child: MedicalConatiner(
+                                  address: data.address!,
+                                  distance: "300 m",
+                                  img: data.shopImg!,
+                                  name: data.shopName!,
+                                  rating: "3.2"),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
             ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 20),
+            //   child: SingleChildScrollView(
+            //     scrollDirection: Axis.horizontal,
+            //     child: Row(
+            //       children: [
+            //         GestureDetector(
+            //           onTap: () {
+            //             Navigator.push(
+            //                 context,
+            //                 MaterialPageRoute(
+            //                     builder: (context) => const PharmacyDetails()));
+            //           },
+            //           child: MedicalHospitalConatiner(
+            //               address:
+            //                   "No.121,avadi main road,sennerrkuppam,Chennai",
+            //               distance: "300 m",
+            //               img: "assets/images/Pharmacy.jpg",
+            //               name: "Medzine",
+            //               rating: "5.0"),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.only(left: 20, top: 40, bottom: 20),
               child: Row(
@@ -661,6 +694,124 @@ class MedicalHospitalConatiner extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
+                  img,
+                  fit: BoxFit.cover,
+                  height: 110,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                name,
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(
+                  Icons.location_on,
+                  color: Colors.blue,
+                  size: 16,
+                ),
+                SizedBox(
+                  width: 125,
+                  child: Text(
+                    address,
+                    style: TextStyle(
+                        height: 2,
+                        letterSpacing: 0.2,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 5, right: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star,
+                        size: 14,
+                        color: Colors.amber,
+                      ),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                        rating,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    distance,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xffB8B3B3)),
+                  )
+                ],
+              ),
+            )
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+class MedicalConatiner extends StatelessWidget {
+  const MedicalConatiner({
+    super.key,
+    required this.name,
+    required this.address,
+    required this.img,
+    required this.rating,
+    required this.distance,
+  });
+  final String name, address, img, rating, distance;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 30, top: 10, bottom: 10),
+      child: Container(
+        width: 170,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Color(0xffFFFFFF),
+          boxShadow: const [
+            BoxShadow(
+                blurRadius: 4,
+                offset: Offset(0, 3),
+                color: Color.fromARGB(255, 208, 204, 204))
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(
                   img,
                   fit: BoxFit.cover,
                   height: 110,

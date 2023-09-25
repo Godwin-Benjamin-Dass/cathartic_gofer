@@ -1,9 +1,18 @@
+import 'dart:io';
+
+import 'package:cathartic_gofer/user/models/userModel.dart';
+import 'package:cathartic_gofer/user/screens/auth/otp_verification_page.dart';
 import 'package:cathartic_gofer/user/screens/auth/widgets/custom_textfield.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../user/service/firebaseService.dart';
 
 class DoctorRegistrationForm extends StatefulWidget {
-  const DoctorRegistrationForm({super.key});
+  const DoctorRegistrationForm({super.key, required this.phNo});
+  final String phNo;
 
   @override
   State<DoctorRegistrationForm> createState() => _DoctorRegistrationFormState();
@@ -17,7 +26,40 @@ class _DoctorRegistrationFormState extends State<DoctorRegistrationForm> {
   TextEditingController _specializationcontroller = TextEditingController();
   TextEditingController _experiencecontroller = TextEditingController();
   TextEditingController _emailcontroller = TextEditingController();
+  TextEditingController _addresscontroller = TextEditingController();
+
   String gender = "Male";
+  String fcmToken = "";
+  getFCMToken() async {
+    // await PushNotification.initialize(context);
+    await FirebaseMessaging.instance.getToken().then((value) async {
+      if (value != null) {
+        fcmToken = value.toString();
+        // Map<String, dynamic> data = {
+        //   'device_fcm': value,
+        // };
+        //  await UserService.updateUserData(data, context);
+        if (kDebugMode) {
+          print('fcm token updated');
+        }
+      }
+      print(value);
+    });
+  }
+
+  File? _docCertificate;
+  Future<void> _openFilePicker() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      setState(() {
+        _docCertificate = File(
+            result.files.single.path!); // Store the selected file as a File
+      });
+      print(_docCertificate);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -323,6 +365,16 @@ class _DoctorRegistrationFormState extends State<DoctorRegistrationForm> {
                     SizedBox(
                       height: 33,
                     ),
+                    CustomTextField(
+                        controller: _addresscontroller,
+                        hinttext: "Address",
+                        prefixIcon: Icon(
+                          Icons.location_city,
+                          color: Colors.white,
+                        )),
+                    SizedBox(
+                      height: 33,
+                    ),
                     Text(
                       "Upload your Medical Certification Certificate:",
                       style:
@@ -331,33 +383,38 @@ class _DoctorRegistrationFormState extends State<DoctorRegistrationForm> {
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      height: 100,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.cloud_upload_sharp,
-                              color: Color(0xff0075FF),
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "Browse Files",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xff0075FF)),
-                            )
-                          ],
+                    InkWell(
+                      onTap: _openFilePicker,
+                      child: Container(
+                        height: 100,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.cloud_upload_sharp,
+                                color: Color(0xff0075FF),
+                              ),
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Text(
+                                _docCertificate == null
+                                    ? "Browse Files"
+                                    : _docCertificate!.path,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xff0075FF)),
+                              )
+                            ],
+                          ),
                         ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Color(0xffCCE3FF)),
                       ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Color(0xffCCE3FF)),
                     ),
                     SizedBox(
                       height: 40,
@@ -371,7 +428,42 @@ class _DoctorRegistrationFormState extends State<DoctorRegistrationForm> {
                                   backgroundColor: Color(0xff0075FF),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5))),
-                              onPressed: () {},
+                              onPressed: () {
+                                firebaseService
+                                    .uploadUserDetails(
+                                        UserModel(
+                                            name: _namecontroller.text,
+                                            email: _emailcontroller.text,
+                                            gender: gender,
+                                            regNo: _regNumbercontroller.text,
+                                            yearReg: _yearOfRegcontroller.text,
+                                            medicalCouncil:
+                                                _medicalCouncilcontroller.text,
+                                            specialization:
+                                                _specializationcontroller.text,
+                                            docExperience:
+                                                _experiencecontroller.text,
+                                            hospitalAddress:
+                                                _addresscontroller.text,
+                                            userType: "doctor",
+                                            isDoctor: true,
+                                            isUser: false,
+                                            isVendor: false),
+                                        fcmToken,
+                                        widget.phNo,
+                                        _docCertificate,
+                                        null)
+                                    .then((value) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => OtpPage(
+                                                codeDigits:
+                                                    widget.phNo.substring(0, 3),
+                                                phone: widget.phNo.substring(3),
+                                              )));
+                                });
+                              },
                               child: Text(
                                 "Register",
                                 style: TextStyle(

@@ -1,9 +1,35 @@
+import 'dart:io';
+
+import 'package:cathartic_gofer/user/models/userModel.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
+import 'package:cathartic_gofer/user/service/notification_service.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MedicineBookingPage extends StatelessWidget {
-  MedicineBookingPage({super.key});
+class MedicineBookingPage extends StatefulWidget {
+  const MedicineBookingPage({super.key, required this.pharma});
+  final UserModel pharma;
+
+  @override
+  State<MedicineBookingPage> createState() => _MedicineBookingPageState();
+}
+
+class _MedicineBookingPageState extends State<MedicineBookingPage> {
   TextEditingController additionalInfoController = TextEditingController();
+  File? _prescriptionPicker;
+  Future<void> _openShopPicker() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      setState(() {
+        _prescriptionPicker = File(
+            result.files.single.path!); // Store the selected file as a File
+      });
+      print(_prescriptionPicker);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +61,9 @@ class MedicineBookingPage extends StatelessWidget {
             ),
             SafeArea(
                 child: Padding(
-                    padding: const EdgeInsets.only(top: 25, left: 130),
+                    padding: const EdgeInsets.only(top: 25, left: 120),
                     child: Text(
-                      "Health Hub",
+                      widget.pharma.shopName!,
                       style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w700,
                           fontSize: 24,
@@ -63,7 +89,7 @@ class MedicineBookingPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 20),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: _openShopPicker,
                       child: Container(
                         height: 100,
                         child: Center(
@@ -79,7 +105,9 @@ class MedicineBookingPage extends StatelessWidget {
                                 height: 2,
                               ),
                               Text(
-                                "Browse Files",
+                                _prescriptionPicker == null
+                                    ? "Browse Files"
+                                    : _prescriptionPicker!.path.toString(),
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
@@ -142,7 +170,19 @@ class MedicineBookingPage extends StatelessWidget {
               height: 40,
               width: 150,
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    firebaseService
+                        .placeOrder(
+                            _prescriptionPicker!, additionalInfoController.text)
+                        .then((value) {
+                      print(widget.pharma.fcm_token);
+                      NotificationService.postData(
+                          "hi ${widget.pharma.shopName}",
+                          "you have an new order",
+                          widget.pharma.fcm_token!);
+                      Navigator.pop(context);
+                    });
+                  },
                   style: ElevatedButton.styleFrom(
                       elevation: 10,
                       shape: RoundedRectangleBorder(

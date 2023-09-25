@@ -98,25 +98,25 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
               child: CircularProgressIndicator(),
             )
           : Consumer<medicineSheduleProvider>(
-              builder: (context, provider, child) => SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    Container(
-                      height: height,
-                      width: width,
-                    ),
-                    Positioned(
-                      top: MediaQuery.of(context).size.height * 0.4,
-                      left: MediaQuery.of(context).size.width * 0.4,
-                      child: Center(
-                        child: Image.asset(
-                          "assets/images/logo_blur.png",
-                          height: 90,
-                          width: 90,
-                        ),
+              builder: (context, provider, child) => Stack(
+                children: [
+                  Container(
+                    height: height,
+                    width: width,
+                  ),
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * 0.4,
+                    left: MediaQuery.of(context).size.width * 0.4,
+                    child: Center(
+                      child: Image.asset(
+                        "assets/images/logo_blur.png",
+                        height: 90,
+                        width: 90,
                       ),
                     ),
-                    Column(
+                  ),
+                  SingleChildScrollView(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
@@ -278,8 +278,8 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
                             : SizedBox()
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
       bottomNavigationBar: Padding(

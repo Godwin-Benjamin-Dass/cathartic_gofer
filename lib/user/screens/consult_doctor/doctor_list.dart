@@ -1,4 +1,5 @@
 import 'package:cathartic_gofer/user/screens/consult_doctor/chat_page.dart';
+import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -41,6 +42,23 @@ class DoctorList extends StatelessWidget {
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(70),
                               bottomRight: Radius.circular(70))),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      left: width * 0.05,
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Homepage()),
+                                (route) => false);
+                          },
+                          icon: const Icon(
+                            Icons.arrow_circle_left_outlined,
+                            size: 28,
+                            color: Colors.white,
+                          )),
                     ),
                     Positioned(
                       bottom: 20,

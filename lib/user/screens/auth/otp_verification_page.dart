@@ -86,106 +86,92 @@ class _OtpPageState extends ConsumerState<OtpPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       key: _scaffolkey,
-      // appBar: AppBar(
-      //   title: Text(
-      //     'OTP Verification',
-      //     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
-      //   ),
-      //   automaticallyImplyLeading: false,
-      //   centerTitle: true,
-      // ),
-      body: SingleChildScrollView(
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          SizedBox(
-            height: 40,
-          ),
-          Image.asset(
-            "assets/images/otp.jpg",
-            height: 300,
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  verifyPhonenumber();
-                },
-                child: Text(
-                  "Verify: ${widget.codeDigits} ${widget.phone}",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(
+                  "assets/images/white_bg.png",
                 ),
-              ),
+                fit: BoxFit.cover)),
+        child: SingleChildScrollView(
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            SizedBox(
+              height: 40,
             ),
-          ),
-          Padding(
-              padding: EdgeInsets.only(
-                left: 30,
-                right: 30,
-                top: 40,
-              ),
-              child: Pinput(
-                closeKeyboardWhenCompleted: false,
-                length: 6,
-                focusNode: _pinotpfocusnode,
-                controller: _pinotpcontroller,
-                pinAnimationType: PinAnimationType.fade,
-                onSubmitted: (pin) async {
-                  try {
-                    await FirebaseAuth.instance
-                        .signInWithCredential(PhoneAuthProvider.credential(
-                            verificationId: VerificationCode!, smsCode: pin))
-                        .then((value) {
-                      pageNavigator();
-                      // if (value.user != null &&
-                      //     ref.read(registerProvider) == "register") {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => UserRegisterForm()));
-                      // } else if (value.user != null &&
-                      //     ref.read(registerProvider) == "") {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => Homepage()));
-                      // }
-                    });
-                  } catch (e) {
-                    FocusScope.of(context).unfocus();
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Invalid OTP"),
-                      duration: Duration(seconds: 3),
-                    ));
-                  }
-                },
-                defaultPinTheme: PinTheme(
-                  width: 50,
-                  height: 50,
-                  textStyle: TextStyle(
-                      fontSize: 20,
-                      color: Color.fromRGBO(30, 60, 87, 1),
-                      fontWeight: FontWeight.w600),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Color.fromARGB(255, 122, 181, 248), width: 2),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
+            Image.asset(
+              "assets/images/otp.jpg",
+              height: 300,
+            ),
+            SizedBox(
+              height: 28,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SizedBox(
+                  child: Text(
+                "Thanks for registering with us. Please enter the 6 digit code sent to this number ${widget.codeDigits} ${widget.phone}.",
+                style: TextStyle(
+                    fontWeight: FontWeight.w600, fontSize: 14, height: 1.5),
               )),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: TextButton(
-                    onPressed: () {
-                      verifyPhonenumber();
-                    },
-                    child: Text("Resend ?")),
-              )
-            ],
-          )
-        ]),
+            ),
+            Padding(
+                padding: EdgeInsets.only(
+                  left: 30,
+                  right: 30,
+                  top: 40,
+                ),
+                child: Pinput(
+                  closeKeyboardWhenCompleted: false,
+                  length: 6,
+                  focusNode: _pinotpfocusnode,
+                  controller: _pinotpcontroller,
+                  pinAnimationType: PinAnimationType.fade,
+                  onSubmitted: (pin) async {
+                    try {
+                      await FirebaseAuth.instance
+                          .signInWithCredential(PhoneAuthProvider.credential(
+                              verificationId: VerificationCode!, smsCode: pin))
+                          .then((value) {
+                        pageNavigator();
+                      });
+                    } catch (e) {
+                      FocusScope.of(context).unfocus();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Invalid OTP"),
+                        duration: Duration(seconds: 3),
+                      ));
+                    }
+                  },
+                  defaultPinTheme: PinTheme(
+                    width: 50,
+                    height: 50,
+                    textStyle: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600),
+                    decoration: BoxDecoration(
+                      color: Color(0xff0075FF),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: TextButton(
+                      onPressed: () {
+                        verifyPhonenumber();
+                      },
+                      child: Text("Resend ?")),
+                )
+              ],
+            )
+          ]),
+        ),
       ),
     );
   }

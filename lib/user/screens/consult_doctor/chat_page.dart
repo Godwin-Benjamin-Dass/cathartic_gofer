@@ -1,8 +1,56 @@
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
+import 'package:cathartic_gofer/user/service/notification_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ChatPage extends StatelessWidget {
-  const ChatPage({super.key, required this.name, required this.img});
-  final String name, img;
+class ChatPage extends StatefulWidget {
+  const ChatPage(
+      {super.key,
+      required this.name,
+      required this.img,
+      required this.chatRoomId});
+  final String name, img, chatRoomId;
+
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  String email = "";
+  getUserDetails() {
+    firebaseService.getDataFromFirestore().then((value) {
+      email = value.email!;
+    });
+  }
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void onSendMessage() async {
+    if (message.text.isNotEmpty) {
+      Map<String, dynamic> messages = {
+        "sentBy": _auth.currentUser!.phoneNumber,
+        "message": message.text,
+        "type": "text",
+        "time": DateTime.now().millisecondsSinceEpoch,
+      };
+      NotificationService.postData(
+          "Got a new message", message.text, "token"); //pending
+
+      message.clear();
+
+      await _firestore
+          .collection('chatroom')
+          .doc(widget.chatRoomId)
+          .collection('chats')
+          .add(messages);
+    } else {
+      print("Enter Some Text");
+    }
+  }
+
+  TextEditingController message = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +77,7 @@ class ChatPage extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(100),
                 child: Image.asset(
-                  img,
+                  widget.img,
                   fit: BoxFit.cover,
                   height: 40,
                   width: 40,
@@ -39,7 +87,7 @@ class ChatPage extends StatelessWidget {
                 width: 8,
               ),
               Text(
-                name,
+                widget.name,
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
@@ -82,105 +130,262 @@ class ChatPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16, top: 40),
-                    child: Container(
-                      height: 49,
-                      width: 180,
-                      decoration: BoxDecoration(
-                        color: Color(0x300075FF),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(25),
-                          bottomRight: Radius.circular(25),
-                          topLeft: Radius.circular(25),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            "Good Morning Doctor",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 12),
-                          ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 3),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection("chatroom")
+                      .doc(widget.chatRoomId)
+                      .collection("chats")
+                      .orderBy('time')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return ListView.builder(
+                        physics: ScrollPhysics(),
+                        itemCount: snapshot.data!.docs.length,
+                        shrinkWrap: true,
+                        primary: true,
+                        itemBuilder: (context, i) {
+                          QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                          return ListTile(
+                            title: Column(
+                              crossAxisAlignment:
+                                  _auth.currentUser!.phoneNumber == x['sentBy']
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "1:16 pm",
-                                  style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 15),
-                                  child: Icon(
-                                    Icons.done_all_rounded,
-                                    color: Color(0xff12CD46),
-                                    size: 18,
-                                  ),
-                                )
+                                _auth.currentUser!.phoneNumber == x['sentBy']
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 16, top: 5),
+                                        child: Container(
+                                          width: 180,
+                                          decoration: BoxDecoration(
+                                            color: Color(0x300075FF),
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(25),
+                                              bottomRight: Radius.circular(25),
+                                              topLeft: Radius.circular(25),
+                                            ),
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 8.0),
+                                                child: Text(
+                                                  x["message"],
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 12),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 3,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 3),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      DateTime.fromMillisecondsSinceEpoch(
+                                                              x["time"])
+                                                          .toString()
+                                                          .substring(11, 19),
+                                                      style: TextStyle(
+                                                          fontSize: 10,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 15),
+                                                      child: Icon(
+                                                        Icons.done_all_rounded,
+                                                        color:
+                                                            Color(0xff12CD46),
+                                                        size: 18,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 16, top: 40),
+                                        child: Container(
+                                          height: 49,
+                                          width: 180,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffD9D9D9),
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(25),
+                                              bottomRight: Radius.circular(25),
+                                              topRight: Radius.circular(25),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15, top: 10),
+                                                child: Text(
+                                                  x["message"],
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 12),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 3,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    DateTime.fromMillisecondsSinceEpoch(
+                                                            x["time"])
+                                                        .toString()
+                                                        .substring(11, 19),
+                                                    style: TextStyle(
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 14,
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                // Text(
+                                //   x['User2'],
+                                //   style: TextStyle(fontSize: 8),
+                                // )
                               ],
                             ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, top: 40),
-                child: Container(
-                  height: 49,
-                  width: 180,
-                  decoration: BoxDecoration(
-                    color: Color(0xffD9D9D9),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25),
-                      topRight: Radius.circular(25),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15, top: 10),
-                        child: Text(
-                          "Good Morning",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 12),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            "1:24 pm",
-                            style: TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            width: 14,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
+                          );
+                        });
+                  }),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     Padding(
+              //       padding: const EdgeInsets.only(right: 16, top: 40),
+              //       child: Container(
+              //         height: 49,
+              //         width: 180,
+              //         decoration: BoxDecoration(
+              //           color: Color(0x300075FF),
+              //           borderRadius: BorderRadius.only(
+              //             bottomLeft: Radius.circular(25),
+              //             bottomRight: Radius.circular(25),hi
+              //             topLeft: Radius.circular(25),
+              //           ),
+              //         ),
+              //         child: Column(
+              //           mainAxisAlignment: MainAxisAlignment.end,
+              //           children: [
+              //             Text(
+              //               "Good Morning Doctor",
+              //               style: TextStyle(
+              //                   fontWeight: FontWeight.w600, fontSize: 12),
+              //             ),
+              //             SizedBox(
+              //               height: 3,
+              //             ),
+              //             Padding(
+              //               padding: const EdgeInsets.only(bottom: 3),
+              //               child: Row(
+              //                 mainAxisAlignment: MainAxisAlignment.end,
+              //                 children: [
+              //                   Text(
+              //                     "1:16 pm",
+              //                     style: TextStyle(
+              //                         fontSize: 10,
+              //                         fontWeight: FontWeight.w600),
+              //                   ),
+              //                   Padding(
+              //                     padding: const EdgeInsets.only(right: 15),
+              //                     child: Icon(
+              //                       Icons.done_all_rounded,
+              //                       color: Color(0xff12CD46),
+              //                       size: 18,
+              //                     ),
+              //                   )
+              //                 ],
+              //               ),
+              //             )
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 16, top: 40),
+              //   child: Container(
+              //     height: 49,
+              //     width: 180,
+              //     decoration: BoxDecoration(
+              //       color: Color(0xffD9D9D9),
+              //       borderRadius: BorderRadius.only(
+              //         bottomLeft: Radius.circular(25),
+              //         bottomRight: Radius.circular(25),
+              //         topRight: Radius.circular(25),
+              //       ),
+              //     ),
+              //     child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Padding(
+              //           padding: const EdgeInsets.only(left: 15, top: 10),
+              //           child: Text(
+              //             "Good Morning",
+              //             style: TextStyle(
+              //                 fontWeight: FontWeight.w600, fontSize: 12),
+              //           ),
+              //         ),
+              //         SizedBox(
+              //           height: 3,
+              //         ),
+              //         Row(
+              //           mainAxisAlignment: MainAxisAlignment.end,
+              //           children: [
+              //             Text(
+              //               "1:24 pm",
+              //               style: TextStyle(
+              //                   fontSize: 10, fontWeight: FontWeight.w600),
+              //             ),
+              //             SizedBox(
+              //               width: 14,
+              //             ),
+              //           ],
+              //         )
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         )
@@ -200,6 +405,7 @@ class ChatPage extends StatelessWidget {
                   child: SizedBox(
                     height: 66,
                     child: TextField(
+                      controller: message,
                       style: TextStyle(
                           fontSize: 13,
                           color: Colors.black,
@@ -267,19 +473,26 @@ class ChatPage extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10),
-                  child: Container(
-                    height: 55,
-                    width: 55,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(22),
-                      color: Color(0xff0075FF),
+                  child: InkWell(
+                    onTap: () {
+                      if (message.text != "") {
+                        onSendMessage();
+                      }
+                    },
+                    child: Container(
+                      height: 55,
+                      width: 55,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        color: Color(0xff0075FF),
+                      ),
+                      child: Center(
+                          child: Image.asset(
+                        "assets/images/send.png",
+                        height: 24,
+                        width: 24,
+                      )),
                     ),
-                    child: Center(
-                        child: Image.asset(
-                      "assets/images/send.png",
-                      height: 24,
-                      width: 24,
-                    )),
                   ),
                 )
               ],

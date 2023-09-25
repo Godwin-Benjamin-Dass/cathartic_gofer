@@ -2,6 +2,7 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:cathartic_gofer/user/models/dateHistoryModel.dart';
 import 'package:cathartic_gofer/user/models/medicineSheduleModel.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -325,6 +326,8 @@ showAddList(BuildContext context, medicineSheduleModel? msl, bool isfromEdit,
                                 onPressed: () {
                                   if (name.text != "") {
                                     if (isfromEdit) {
+                                      firebaseService.TrackActivity(
+                                          "edited the medicine");
                                       provider.editMedicine(
                                           msl!.id!,
                                           medicineSheduleModel(
@@ -377,6 +380,8 @@ showAddList(BuildContext context, medicineSheduleModel? msl, bool isfromEdit,
 
                                       Navigator.pop(context);
                                     } else {
+                                      firebaseService.TrackActivity(
+                                          "opened added new medicine ${name}");
                                       provider.addMedicine(medicineSheduleModel(
                                           id: provider.msl.length,
                                           intakeMethod: typeDDV,

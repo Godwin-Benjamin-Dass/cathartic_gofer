@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cathartic_gofer/user/models/dateHistoryModel.dart';
 import 'package:cathartic_gofer/user/service/DateHistoryService.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:cathartic_gofer/user/service/notificationService.dart';
 import 'package:flutter/material.dart';
 
@@ -128,6 +129,8 @@ class notificationDetailScreen extends StatelessWidget {
                 children: [
                   ElevatedButton(
                       onPressed: () {
+                        firebaseService.TrackActivity(
+                            "user snoozed the alarm of time ${data["time"]} ");
                         NotificationService.snoozeNotification(
                                 id: 0,
                                 title: "snoozed notification",
@@ -151,6 +154,9 @@ class notificationDetailScreen extends StatelessWidget {
                           medicine: data["medicine"],
                           time: data["time"],
                         )).then((value) {
+                          firebaseService.TrackActivity(
+                              "user took the medicine");
+
                           NotificationService.stopNotification();
                           Navigator.pop(context);
                         });

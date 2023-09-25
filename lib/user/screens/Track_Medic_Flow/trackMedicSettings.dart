@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:cathartic_gofer/user/service/notificationService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -117,6 +118,8 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                             Provider.of<medicineSheduleProvider>(context,
                                     listen: false)
                                 .clearShedule();
+                            firebaseService.TrackActivity(
+                                "user have reseted the track medics.");
                             setState(() {});
                           },
                           child: Text("Reset"))
@@ -139,6 +142,9 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                             );
                             TimeOfDay tod;
                             if (await selectedTime != null) {
+                              firebaseService.TrackActivity(
+                                  "user changed the morning alarm time");
+
                               isChanged = true;
                               tod = (await selectedTime)!;
                               print(tod);
@@ -170,6 +176,8 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                       ElevatedButton(
                           onPressed: () async {
                             isChanged = true;
+                            firebaseService.TrackActivity(
+                                "user changed the afernoon time");
 
                             Future<TimeOfDay?> selectedTime = showTimePicker(
                               initialTime: TimeOfDay.now(),
@@ -214,6 +222,9 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                             );
                             TimeOfDay tod;
                             if (await selectedTime != null) {
+                              firebaseService.TrackActivity(
+                                  "user changed the night time");
+
                               tod = (await selectedTime)!;
                               print(tod);
                               nig = tod.hour.toString().length == 1
@@ -244,6 +255,9 @@ class _trackMedicSettingsState extends State<trackMedicSettings> {
                           prefs.setString('aft', aft!);
                           prefs.setString('nig', nig!);
                           fetchAndSetData(mor!, aft!, nig!).then((value) {
+                            firebaseService.TrackActivity(
+                                "user have resetted the time of medicine morning:${mor}, afternoon:${aft}, night:${nig}");
+
                             for (int i = 0; i < dhm.length; i++) {
                               NotificationService.sheduleNotification(
                                   id: i,

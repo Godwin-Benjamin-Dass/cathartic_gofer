@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:cathartic_gofer/user/models/dateHistoryModel.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
@@ -7,6 +9,9 @@ import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/TrackMedicWidgets/
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/dateHistory.dart';
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/trackMedicSettings.dart';
 import 'package:cathartic_gofer/user/service/DateHistoryService.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +52,8 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
     setState(() {});
   }
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     super.initState();
@@ -80,6 +87,7 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
         actions: [
           IconButton(
               onPressed: () {
+                firebaseService.TrackActivity("opened settings in track medic");
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -306,7 +314,8 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
                       );
                       if (values != null) {
                         dhv.clear();
-
+                        firebaseService.TrackActivity(
+                            "dates have been changed to");
                         _dates = values;
                         var start = _dates.first;
                         var end = _dates.last;
@@ -363,6 +372,24 @@ class _TrackMedicScreenState extends State<TrackMedicScreen> {
                         DateHistoryService.clearAllHistories();
 
                         DateHistoryService.saveDateHistories(dhv);
+
+                        for (int i = 0; i < dhv.length; i++) {
+                          print(dateHistoryModelToJson((dhv[0])));
+                          Map<String, dynamic> data =
+                              jsonDecode(dateHistoryModelToJson((dhv[i])));
+                          print(data);
+                          final _CollectionReference = FirebaseFirestore
+                              .instance
+                              .collection("shedules")
+                              .doc(_auth.currentUser!.phoneNumber)
+                              .collection('alarms')
+                              .doc();
+                          data.addAll({"docId": _CollectionReference.id});
+                          _CollectionReference.set(data);
+                          print(data);
+                        }
+
+                        print("added");
                       }
                       print(dhv.toList());
                     },

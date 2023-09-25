@@ -2,6 +2,7 @@
 
 import 'package:cathartic_gofer/user/models/medicineModel.dart';
 import 'package:cathartic_gofer/user/screens/searchFlow/viewMedicineScreen.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:cathartic_gofer/user/service/medicineService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -95,6 +96,8 @@ class _searchScreenState extends State<searchScreen> {
                     );
                   },
                   onSuggestionSelected: (suggestion) {
+                    firebaseService.TrackActivity(
+                        "searched for the medicine ${suggestion.name}");
                     Navigator.push(
                         context,
                         MaterialPageRoute(

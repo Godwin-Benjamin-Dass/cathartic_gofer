@@ -148,6 +148,7 @@ class _HomepageState extends State<Homepage> {
                 height: 55,
                 child: TextField(
                   onTap: () {
+                    firebaseService.TrackActivity("opened search");
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -244,6 +245,7 @@ class _HomepageState extends State<Homepage> {
                 children: [
                   InkWell(
                     onTap: () {
+                      firebaseService.TrackActivity("opened track medic flow");
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -279,6 +281,8 @@ class _HomepageState extends State<Homepage> {
                   ),
                   InkWell(
                     onTap: () {
+                      firebaseService.TrackActivity(
+                          "opened tell us your problem");
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -331,6 +335,7 @@ class _HomepageState extends State<Homepage> {
                 children: [
                   GestureDetector(
                     onTap: () {
+                      firebaseService.TrackActivity("opened consult doctor");
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -367,6 +372,7 @@ class _HomepageState extends State<Homepage> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      firebaseService.TrackActivity("opened the quiz");
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -415,6 +421,7 @@ class _HomepageState extends State<Homepage> {
               padding: const EdgeInsets.only(left: 35, right: 35),
               child: GestureDetector(
                 onTap: () {
+                  firebaseService.TrackActivity("opened bmi page");
                   Navigator.push(
                       context,
                       MaterialPageRoute(

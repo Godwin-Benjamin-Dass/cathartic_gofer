@@ -30,6 +30,23 @@ class _DoctorListState extends State<DoctorList> {
     getDoctor();
   }
 
+  Future<String> creatChatRoom(UserModel doc) async {
+    String chatRoomId = "";
+    firebaseService.TrackActivity(
+        "user started conversation with doctor:${doc.name}");
+
+    await firebaseService.getDataFromFirestore().then((value) {
+      if (doc.email!.toLowerCase().codeUnits[0] >=
+          value.email!.toLowerCase().codeUnits[0]) {
+        chatRoomId = doc.email!.toLowerCase().trim() + value.email!.trim();
+      } else {
+        chatRoomId = doc.email!.toLowerCase().trim() + value.email!.trim();
+      }
+    });
+    print(chatRoomId);
+    return chatRoomId;
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -86,7 +103,10 @@ class _DoctorListState extends State<DoctorList> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
-                            left: 30, right: 30, top: 15, bottom: 40),
+                          left: 30,
+                          right: 30,
+                          top: 15,
+                        ),
                         child: SizedBox(
                           height: 45,
                           child: TextField(
@@ -121,134 +141,28 @@ class _DoctorListState extends State<DoctorList> {
                             var doc = docList[i];
                             return DoctorContainer(
                               ontap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ChatPage(
-                                              img:
-                                                  "assets/images/male_doctor.jpg",
-                                              name: "Dr. Godwin Benjamin Dass",
-                                            )));
+                                creatChatRoom(doc).then((value) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ChatPage(
+                                                chatRoomId: value,
+                                                img:
+                                                    "assets/images/male_doctor.jpg",
+                                                name: "Dr. " + doc.name!,
+                                              )));
+                                });
                               },
-                              img: "assets/images/male_doctor.jpg",
+                              img: doc.gender == "Male"
+                                  ? "assets/images/male_doctor.jpg"
+                                  : "assets/images/doctor_img.jpg",
                               width: width,
-                              experiene: doc.docExperience!,
-                              name: doc.name!,
+                              experiene: doc.docExperience! + "-experience",
+                              name: "Dr. " + doc.name!,
                               rating: "4.7",
                               status: doc.specialization!,
                             );
                           }),
-
-                      // DoctorContainer(
-                      //   ontap: () {
-                      //     Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) => ChatPage(
-                      //                   img: "assets/images/doctor_img.png",
-                      //                   name: "Dr. Santhiya",
-                      //                 )));
-                      //   },
-                      //   img: "assets/images/doctor_img.png",
-                      //   width: width,
-                      //   experiene: "Exp: 3.7 Years",
-                      //   name: "Dr. Santhiya",
-                      //   rating: "4.5",
-                      //   status: "Emergency Medicine Specialists",
-                      // ),
-                      // DoctorContainer(
-                      //   ontap: () {
-                      //     Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) => ChatPage(
-                      //                   img: "assets/images/male_doctor.jpg",
-                      //                   name: "Dr. Daniel George",
-                      //                 )));
-                      //   },
-                      //   img: "assets/images/male_doctor.jpg",
-                      //   width: width,
-                      //   experiene: "Exp: 2 Years",
-                      //   name: "Dr. Daniel George",
-                      //   rating: "4.4",
-                      //   status: "General in RajuGandhi",
-                      // ),
-                      // DoctorContainer(
-                      //   ontap: () {
-                      //     Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) => ChatPage(
-                      //                   img: "assets/images/male_doctor.jpg",
-                      //                   name: "Dr. Elavarasar",
-                      //                 )));
-                      //   },
-                      //   img: "assets/images/male_doctor.jpg",
-                      //   width: width,
-                      //   experiene: "Exp: 1 Year",
-                      //   name: "Dr. Elavarasar",
-                      //   rating: "4.1",
-                      //   status: "Anesthesiologist in SIMS",
-                      // ),
-                      // DoctorContainer(
-                      //   ontap: () {
-                      //     Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) => ChatPage(
-                      //                   img: "assets/images/doctor_img.png",
-                      //                   name: "Dr. Renuka",
-                      //                 )));
-                      //   },
-                      //   img: "assets/images/doctor_img.png",
-                      //   width: width,
-                      //   experiene: "Exp: 3 Years",
-                      //   name: "Dr. Renuka",
-                      //   rating: "3.9",
-                      //   status: "Hematologists in Vijaya",
-                      // ),
-                      // DoctorContainer(
-                      //   ontap: () {
-                      //     Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) => ChatPage(
-                      //                   img: "assets/images/doctor_img.png",
-                      //                   name: "Dr. Ramya",
-                      //                 )));
-                      //   },
-                      //   img: "assets/images/doctor_img.png",
-                      //   width: width,
-                      //   experiene: "Exp: 1 Years",
-                      //   name: "Dr. Ramya",
-                      //   rating: "4.1",
-                      //   status: "Child Specialist in Apollo",
-                      // ),
-
-                      // DoctorContainer(
-                      //   img: "assets/images/doctor_img.png",
-                      //   width: width,
-                      //   experiene: "Exp: 2 Years",
-                      //   name: "Dr.S. Daniel George",
-                      //   rating: "4.5",
-                      //   status: "OP in RajuGandhi",
-                      // ),
-                      // DoctorContainer(
-                      //   width: width,
-                      //   img: "assets/images/doctor_img.png",
-                      //   experiene: "Exp: 2 Years",
-                      //   name: "Dr.S. Daniel George",
-                      //   rating: "4.5",
-                      //   status: "OP in RajuGandhi",
-                      // ),
-                      // DoctorContainer(
-                      //   img: "assets/images/doctor_img.png",
-                      //   width: width,
-                      //   experiene: "Exp: 2 Years",
-                      //   name: "Dr.S. Daniel George",
-                      //   rating: "4.5",
-                      //   status: "OP in RajuGandhi",
-                      // )
                     ],
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'package:cathartic_gofer/user/models/medicineSheduleModel.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/TrackMedicWidgets/popUp.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +30,9 @@ class medicineTile extends StatelessWidget {
                   showAddList(context, msl, true, isCustom, 0);
                 }
                 if (value == 1) {
+                  firebaseService.TrackActivity(
+                      "user removed the medcine: ${msl.medicine}");
+
                   Provider.of<medicineSheduleProvider>(context, listen: false)
                       .removeMedicine(msl.id!, msl.time!);
                 }

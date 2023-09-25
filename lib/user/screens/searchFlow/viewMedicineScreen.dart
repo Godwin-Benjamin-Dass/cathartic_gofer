@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, camel_case_types, no_leading_underscores_for_local_identifiers
 
 import 'package:cathartic_gofer/user/models/medicineModel.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -286,6 +287,8 @@ class viewMedicineScreen extends StatelessWidget {
   }
 
   Future<void> _launchUrl() async {
+    firebaseService.TrackActivity(
+        "browsed for the ${medic.name} in search page");
     final Uri _url =
         Uri.parse('https://www.google.co.in/search?q=${medic.name}');
 

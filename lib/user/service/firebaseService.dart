@@ -127,4 +127,16 @@ class firebaseService {
     }
     return um;
   }
+
+  static TrackActivity(String activity) {
+    FirebaseFirestore.instance
+        .collection("traker")
+        .doc(FirebaseAuth.instance.currentUser!.phoneNumber)
+        .collection('history')
+        .add({
+      "time": DateTime.now(),
+      "activity": activity,
+    });
+    print("activity tracked");
+  }
 }

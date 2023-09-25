@@ -24,6 +24,7 @@ class medicineSheduleProvider extends ChangeNotifier {
 
   void addMedicine(medicineSheduleModel msi) {
     _msl.add(msi);
+    print(msi);
     LocalStorage.addSchedule(msi);
     reLoadList();
   }

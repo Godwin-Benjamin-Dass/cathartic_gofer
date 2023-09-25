@@ -4,6 +4,8 @@ import 'package:cathartic_gofer/pharmacist/dashboard/pharmacistWaitingPage.dart'
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
 import 'package:cathartic_gofer/user/screens/auth/starting_page.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
+import 'package:cathartic_gofer/user/screens/flappy_bird/Resources/strings.dart';
+import 'package:cathartic_gofer/user/screens/flappy_bird/Routes/app_routes.dart';
 import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:cathartic_gofer/user/service/notificationService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,10 +14,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService.initializeNotification();
+  await Hive.initFlutter();
+  var box = await Hive.openBox('user');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -83,6 +89,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "Work Sans",
       ),
+      initialRoute: Str.home,
+      onGenerateRoute: AppRoute().generateRoute,
     );
   }
 }

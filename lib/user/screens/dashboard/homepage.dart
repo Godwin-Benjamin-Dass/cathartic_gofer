@@ -8,6 +8,8 @@ import 'package:cathartic_gofer/user/screens/consult_doctor/consult_doctor_start
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/black_divider.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/text_with_poppins_20_bold.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/text_with_poppins_22_bold.dart';
+import 'package:cathartic_gofer/user/screens/flappy_bird/Layouts/Pages/page_start_screen.dart';
+import 'package:cathartic_gofer/user/screens/flappy_bird/Layouts/Widgets/widget_cover.dart';
 import 'package:cathartic_gofer/user/screens/pharmacy/pharmacy_details.dart';
 import 'package:cathartic_gofer/user/screens/searchFlow/searchScreen.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -383,7 +385,7 @@ class _HomepageState extends State<Homepage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Quiz_PAge()));
+                              builder: (context) => const StartScreen()));
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -401,11 +403,15 @@ class _HomepageState extends State<Homepage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            "assets/images/Quiz.png",
+                          SizedBox(
+                            height: 100,
+                            child: Image.asset(
+                              "assets/pics/icon.png",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                           Text(
-                            "Play Quiz",
+                            "Flappy bird",
                             style: GoogleFonts.poppins(
                                 fontSize: 18,
                                 color: Colors.white,

@@ -52,7 +52,7 @@ class Startingpage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 60, right: 60),
               child: SizedBox(
-                height: 58,
+                height: 50,
                 width: double.infinity - 120,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(

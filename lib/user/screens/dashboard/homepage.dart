@@ -3,6 +3,7 @@ import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/BMI/bmi_homepage.dart';
 import 'package:cathartic_gofer/user/screens/Quiz/quiz_page.dart';
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/trackMedicScreen.dart';
+import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
 import 'package:cathartic_gofer/user/screens/chatBot/chat_bot_controller.dart';
 import 'package:cathartic_gofer/user/screens/consult_doctor/consult_doctor_starting_page.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/black_divider.dart';
@@ -13,6 +14,8 @@ import 'package:cathartic_gofer/user/screens/flappy_bird/Layouts/Widgets/widget_
 import 'package:cathartic_gofer/user/screens/pharmacy/pharmacy_details.dart';
 import 'package:cathartic_gofer/user/screens/searchFlow/searchScreen.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../service/firebaseService.dart';
@@ -101,9 +104,17 @@ class _HomepageState extends State<Homepage> {
                               Padding(
                                 padding: EdgeInsets.only(left: 16, right: 16),
                                 child: GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    FirebaseAuth.instance.signOut();
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()),
+                                        (route) => false);
+                                  },
                                   child: Icon(
-                                    Icons.menu,
+                                    Icons.logout,
+                                    size: 22,
                                     color: Colors.white,
                                   ),
                                 ),

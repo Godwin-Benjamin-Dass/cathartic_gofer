@@ -76,7 +76,7 @@ class firebaseService {
   static Future<UserModel> getDataFromFirestore() async {
     final CollectionReference collection = FirebaseFirestore.instance
         .collection('UserBio'); // Replace with your collection name
-
+    print("object");
     final DocumentSnapshot document = await collection
         .doc(FirebaseAuth.instance.currentUser!.phoneNumber)
         .get();

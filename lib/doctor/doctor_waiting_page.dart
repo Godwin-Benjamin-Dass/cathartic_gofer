@@ -1,4 +1,5 @@
 import 'package:cathartic_gofer/doctor/doctorDashboad.dart';
+import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
 import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,8 @@ class _DoctorWaitingPageState extends State<DoctorWaitingPage> {
     super.initState();
     checkUser();
   }
+
+  List<UserModel> chats = [];
 
   @override
   Widget build(BuildContext context) {

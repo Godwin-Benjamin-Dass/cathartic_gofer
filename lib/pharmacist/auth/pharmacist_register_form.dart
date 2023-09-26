@@ -33,17 +33,13 @@ class _PharmacistRegisterFormState extends State<PharmacistRegisterForm> {
   String? countryValue;
   String? stateValue;
   String? cityValue;
-  String fcmToken = "";
   bool isLoading = false;
+  String fcmToken = "";
   getFCMToken() async {
-    // await PushNotification.initialize(context);
     await FirebaseMessaging.instance.getToken().then((value) async {
       if (value != null) {
         fcmToken = value.toString();
-        // Map<String, dynamic> data = {
-        //   'device_fcm': value,
-        // };
-        //  await UserService.updateUserData(data, context);
+
         if (kDebugMode) {
           print('fcm token updated');
         }
@@ -76,6 +72,13 @@ class _PharmacistRegisterFormState extends State<PharmacistRegisterForm> {
       });
       print(_shopImage);
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getFCMToken();
   }
 
   String gender = "Male";

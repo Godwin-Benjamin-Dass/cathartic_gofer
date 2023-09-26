@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cathartic_gofer/pharmacist/dashboard/pharmacistWaitingPage.dart';
+import 'package:cathartic_gofer/pharmacist/pharmacistWaitingPage.dart';
 import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/auth/widgets/custom_textfield.dart';
 import 'package:cathartic_gofer/user/service/firebaseService.dart';

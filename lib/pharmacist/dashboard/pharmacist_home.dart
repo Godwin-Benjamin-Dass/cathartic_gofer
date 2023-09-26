@@ -1,4 +1,7 @@
+import 'package:cathartic_gofer/pharmacist/accepted_order_list.dart';
+import 'package:cathartic_gofer/pharmacist/cancelled_order_list.dart';
 import 'package:cathartic_gofer/pharmacist/order_waiting_list.dart';
+import 'package:cathartic_gofer/pharmacist/total_orders.dart';
 import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/black_divider.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/text_with_poppins_20_bold.dart';
@@ -147,117 +150,139 @@ class PharmacistHome extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 5,
-                            offset: Offset(0, 5),
-                            color: Color.fromARGB(255, 197, 199, 201)),
-                        BoxShadow(
-                            blurRadius: 5,
-                            offset: Offset(5, 0),
-                            color: Color.fromARGB(255, 197, 199, 201))
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, right: 15, top: 10, bottom: 10),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Accepted",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w700, fontSize: 19),
-                          ),
-                          Text(
-                            "12",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w800,
-                                color: Colors.black,
-                                fontSize: 35),
-                          )
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AcceptedOrderList()));
+                  },
+                  child: Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 5,
+                              offset: Offset(0, 5),
+                              color: Color.fromARGB(255, 197, 199, 201)),
+                          BoxShadow(
+                              blurRadius: 5,
+                              offset: Offset(5, 0),
+                              color: Color.fromARGB(255, 197, 199, 201))
                         ],
                       ),
-                    )),
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 5,
-                            offset: Offset(0, 5),
-                            color: Color.fromARGB(255, 197, 199, 201)),
-                        BoxShadow(
-                            blurRadius: 5,
-                            offset: Offset(5, 0),
-                            color: Color.fromARGB(255, 197, 199, 201))
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, right: 15, top: 10, bottom: 10),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Declined",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w700, fontSize: 19),
-                          ),
-                          Text(
-                            "3",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w800,
-                                color: Colors.black,
-                                fontSize: 35),
-                          )
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15, right: 15, top: 10, bottom: 10),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Accepted",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w700, fontSize: 19),
+                            ),
+                            Text(
+                              "12",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black,
+                                  fontSize: 35),
+                            )
+                          ],
+                        ),
+                      )),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CancelledOrders()));
+                  },
+                  child: Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 5,
+                              offset: Offset(0, 5),
+                              color: Color.fromARGB(255, 197, 199, 201)),
+                          BoxShadow(
+                              blurRadius: 5,
+                              offset: Offset(5, 0),
+                              color: Color.fromARGB(255, 197, 199, 201))
                         ],
                       ),
-                    )),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15, right: 15, top: 10, bottom: 10),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Declined",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w700, fontSize: 19),
+                            ),
+                            Text(
+                              "3",
+                              style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black,
+                                  fontSize: 35),
+                            )
+                          ],
+                        ),
+                      )),
+                ),
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(30),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                      blurRadius: 5,
-                      offset: Offset(0, 5),
-                      color: Color.fromARGB(255, 197, 199, 201)),
-                  BoxShadow(
-                      blurRadius: 5,
-                      offset: Offset(5, 0),
-                      color: Color.fromARGB(255, 197, 199, 201))
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 15, right: 15, top: 10, bottom: 10),
-                child: Column(
-                  children: [
-                    Text(
-                      "Total Number of Orders",
-                      style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w700, fontSize: 19),
-                    ),
-                    Text(
-                      "24",
-                      style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w800,
-                          color: Colors.black,
-                          fontSize: 35),
-                    )
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TotalOrders()));
+              },
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 5,
+                        offset: Offset(0, 5),
+                        color: Color.fromARGB(255, 197, 199, 201)),
+                    BoxShadow(
+                        blurRadius: 5,
+                        offset: Offset(5, 0),
+                        color: Color.fromARGB(255, 197, 199, 201))
                   ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 15, right: 15, top: 10, bottom: 10),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Total Number of Orders",
+                        style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w700, fontSize: 19),
+                      ),
+                      Text(
+                        "24",
+                        style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w800,
+                            color: Colors.black,
+                            fontSize: 35),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

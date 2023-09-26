@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class OrderWaitingList extends StatelessWidget {
-  const OrderWaitingList({super.key});
+class AcceptedOrderList extends StatelessWidget {
+  const AcceptedOrderList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class OrderWaitingList extends StatelessWidget {
             )),
         centerTitle: true,
         title: const Text(
-          "Waiting Orders",
+          "Accepted Orders",
           style: TextStyle(
               fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white),
         ),

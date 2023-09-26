@@ -1,8 +1,8 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cathartic_gofer/doctor/doctor_waiting_page.dart';
 import 'package:cathartic_gofer/guardian/guardian_homepage.dart';
-import 'package:cathartic_gofer/pharmacist/pharmacistWaitingPage.dart';
 import 'package:cathartic_gofer/pharmacist/dashboard/pharmacist_home.dart';
+import 'package:cathartic_gofer/pharmacist/pharmacistWaitingPage.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
 import 'package:cathartic_gofer/user/screens/auth/starting_page.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
@@ -22,6 +22,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService.initializeNotification();
   await Hive.initFlutter();
+  var box = await Hive.openBox('user');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -52,6 +53,7 @@ class SplashScreen extends StatelessWidget {
       nextScreen: FirebaseAuth.instance.currentUser == null
           ? Startingpage()
           : navigatingPage(),
+      // nextScreen: PharmacistHome(),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.bottomToTop,
     );

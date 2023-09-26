@@ -22,7 +22,10 @@ class CustomTextField extends StatelessWidget {
                   hinttext == "Weight" ||
                   hinttext == "Guardian Contact Number" ||
                   hinttext == "Registration Number" ||
-                  hinttext == "Year of Registration"||hinttext=="Experience"||hinttext=="Pan Number"||hinttext=="Contact Number"||hinttext=="GST Number"
+                  hinttext == "Year of Registration" ||
+                  hinttext == "Experience" ||
+                  hinttext == "Contact Number" ||
+                  hinttext == "GST Number"
               ? TextInputType.number
               : TextInputType.name,
           style: TextStyle(

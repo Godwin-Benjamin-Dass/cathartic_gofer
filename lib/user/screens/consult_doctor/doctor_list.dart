@@ -70,34 +70,18 @@ class _DoctorListState extends State<DoctorList> {
                               bottomLeft: Radius.circular(70),
                               bottomRight: Radius.circular(70))),
                     ),
-                    Positioned(
-                      bottom: 10,
-                      left: width * 0.05,
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Homepage()),
-                                (route) => false);
-                          },
-                          icon: const Icon(
-                            Icons.arrow_circle_left_outlined,
-                            size: 28,
-                            color: Colors.white,
-                          )),
-                    ),
-                    Positioned(
-                      bottom: 20,
-                      left: width * 0.35,
-                      child: Text(
-                        "Doctor's List",
-                        style: GoogleFonts.poppins(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white),
-                      ),
-                    ),
+
+                    // Positioned(
+                    //   bottom: 20,
+                    //   left: width * 0.35,
+                    //   child: Text(
+                    //     "Doctor's List",
+                    //     style: GoogleFonts.poppins(
+                    //         fontSize: 20,
+                    //         fontWeight: FontWeight.w700,
+                    //         color: Colors.white),
+                    //   ),
+                    // ),
                   ],
                 ),
                 Positioned(
@@ -126,10 +110,27 @@ class _DoctorListState extends State<DoctorList> {
                                     bottomRight: Radius.circular(70))),
                           ),
                           Positioned(
+                            bottom: 10,
+                            left: width * 0.05,
+                            child: IconButton(
+                                onPressed: () {
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Homepage()),
+                                      (route) => false);
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_circle_left_outlined,
+                                  size: 28,
+                                  color: Colors.white,
+                                )),
+                          ),
+                          Positioned(
                             bottom: 20,
-                            left: width * 0.35,
+                            left: width * 0.27,
                             child: Text(
-                              "Doctor's List",
+                              "Specialized Doctor's",
                               style: GoogleFonts.poppins(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w700,

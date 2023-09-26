@@ -139,7 +139,7 @@ class firebaseService {
         final doctor = UserModel.fromJson(user);
 
         print(doctor.userType);
-        if (doctor.userType == "vendor" && doctor.status == "verified") {
+        if (doctor.userType == "doctor" && doctor.status == "verified") {
           um.add(doctor);
           print(doctor.name);
           print(doctor);

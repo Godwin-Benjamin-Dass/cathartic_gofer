@@ -202,7 +202,7 @@ class notificationDetailScreen extends StatelessWidget {
                       Spacer(),
                       SizedBox(
                         height: 40,
-                        width: 150,
+                        width: 160,
                         child: ElevatedButton(
                             onPressed: () {
                               print(payload["data"]);

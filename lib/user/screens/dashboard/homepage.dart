@@ -28,7 +28,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-    
+
     firebaseService.updateFcm();
     fetchShops();
   }
@@ -413,9 +413,9 @@ class _HomepageState extends State<Homepage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(
-                            height: 100,
+                            height: 80,
                             child: Image.asset(
-                              "assets/pics/icon.png",
+                              "assets/images/fb.png",
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -688,7 +688,7 @@ class MedicalHospitalConatiner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 30, top: 10, bottom: 10),
+      padding: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
       child: Container(
         width: 170,
         decoration: BoxDecoration(
@@ -806,7 +806,7 @@ class MedicalConatiner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 30, top: 10, bottom: 10),
+      padding: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
       child: Container(
         width: 170,
         decoration: BoxDecoration(
@@ -830,6 +830,7 @@ class MedicalConatiner extends StatelessWidget {
                   img,
                   fit: BoxFit.cover,
                   height: 110,
+                  width: 170,
                 ),
               ),
             ),

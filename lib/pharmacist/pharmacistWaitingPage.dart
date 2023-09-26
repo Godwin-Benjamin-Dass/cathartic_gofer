@@ -1,4 +1,7 @@
+import 'package:cathartic_gofer/pharmacist/dashboard/pharmacist_home.dart';
 import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,6 +13,25 @@ class pharmacistWaitingPage extends StatefulWidget {
 }
 
 class _pharmacistWaitingPageState extends State<pharmacistWaitingPage> {
+  bool isLoading = false;
+  checkUser() async {
+    isLoading = true;
+    setState(() {});
+    if (await firebaseService.checkUserVerified()) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => PharmacistHome()));
+    }
+    isLoading = false;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +87,7 @@ class _pharmacistWaitingPageState extends State<pharmacistWaitingPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20))),
                     onPressed: () {
+                      FirebaseAuth.instance.signOut();
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => LoginPage()),
@@ -89,7 +112,9 @@ class _pharmacistWaitingPageState extends State<pharmacistWaitingPage> {
                         backgroundColor: Color(0xff4558FF),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20))),
-                    onPressed: () {},
+                    onPressed: () {
+                      checkUser();
+                    },
                     child: Text(
                       "Check Again",
                       style: TextStyle(

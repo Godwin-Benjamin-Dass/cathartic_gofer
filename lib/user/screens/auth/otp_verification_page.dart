@@ -1,4 +1,5 @@
 import 'package:cathartic_gofer/doctor/doctorWaitingPage.dart';
+import 'package:cathartic_gofer/doctor/doctor_waiting_page.dart';
 import 'package:cathartic_gofer/pharmacist/dashboard/pharmacistWaitingPage.dart';
 import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
@@ -43,7 +44,7 @@ class _OtpPageState extends ConsumerState<OtpPage> {
             context, MaterialPageRoute(builder: (context) => Homepage()));
       } else if (value.userType == "doctor") {
         return Navigator.push(context,
-            MaterialPageRoute(builder: (context) => doctorWaitingPage()));
+            MaterialPageRoute(builder: (context) => DoctorWaitingPage()));
       } else {
         return Navigator.push(context,
             MaterialPageRoute(builder: (context) => pharmacistWaitingPage()));

@@ -1,19 +1,41 @@
+import 'package:cathartic_gofer/doctor/doctorDashboad.dart';
 import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class pharmacistWaitingPage extends StatefulWidget {
-  const pharmacistWaitingPage({super.key});
+class DoctorWaitingPage extends StatefulWidget {
+  const DoctorWaitingPage({super.key});
 
   @override
-  State<pharmacistWaitingPage> createState() => _pharmacistWaitingPageState();
+  State<DoctorWaitingPage> createState() => _DoctorWaitingPageState();
 }
 
-class _pharmacistWaitingPageState extends State<pharmacistWaitingPage> {
+class _DoctorWaitingPageState extends State<DoctorWaitingPage> {
+   bool isLoading = false;
+  checkUser() async {
+    isLoading = true;
+    setState(() {});
+    if (await firebaseService.checkUserVerified()) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => DoctorHomepage()));
+    }
+    isLoading = false;
+    setState(() {});
+  }
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: isLoading
+            ? CircularProgressIndicator()
+            :  Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -42,7 +64,7 @@ class _pharmacistWaitingPageState extends State<pharmacistWaitingPage> {
             child: SizedBox(
                 width: double.infinity - 100,
                 child: Text(
-                  "Once your GST Number is Verified, then We will Notify You",
+                  "Once your Medical Registration is Verified, then We will Notify You",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       height: 1.5, fontSize: 14, fontWeight: FontWeight.w500),

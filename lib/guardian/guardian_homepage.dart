@@ -259,7 +259,7 @@ class _GuardianHomePageState extends ConsumerState<GuardianHomePage> {
                                       width: MediaQuery.of(context).size.width -
                                           180,
                                       child: SizedBox(
-                                        height: 200,
+                                        height: 100,
                                         child: ListView.builder(
                                             itemCount: mates.length,
                                             itemBuilder: (ctx, i) {

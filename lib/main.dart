@@ -1,5 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:cathartic_gofer/doctor/doctorWaitingPage.dart';
+import 'package:cathartic_gofer/doctor/doctor_waiting_page.dart';
 import 'package:cathartic_gofer/guardian/guardian_homepage.dart';
 import 'package:cathartic_gofer/pharmacist/dashboard/pharmacistWaitingPage.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
@@ -121,7 +121,7 @@ class _navigatingPageState extends State<navigatingPage> {
       } else if (value.userType == "doctor") {
         return Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => doctorWaitingPage()),
+            MaterialPageRoute(builder: (context) => DoctorWaitingPage()),
             (route) => false);
       } else if (value.userType == "vendor") {
         return Navigator.pushAndRemoveUntil(

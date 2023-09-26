@@ -11,11 +11,11 @@ import 'package:cathartic_gofer/user/screens/dashboard/widgets/text_with_poppins
 import 'package:cathartic_gofer/user/screens/flappy_bird/Layouts/Pages/page_start_screen.dart';
 import 'package:cathartic_gofer/user/screens/pharmacy/pharmacy_details.dart';
 import 'package:cathartic_gofer/user/screens/searchFlow/searchScreen.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../service/firebaseService.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -28,6 +28,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
+    
     firebaseService.updateFcm();
     fetchShops();
   }

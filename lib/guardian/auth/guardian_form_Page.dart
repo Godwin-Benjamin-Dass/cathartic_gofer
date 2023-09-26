@@ -36,6 +36,13 @@ class _guardian_form_pageState extends State<guardian_form_page> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getFCMToken();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(

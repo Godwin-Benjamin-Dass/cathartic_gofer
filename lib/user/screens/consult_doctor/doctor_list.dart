@@ -183,6 +183,7 @@ class _DoctorListState extends State<DoctorList> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ChatPage(
+                                                docNo: doc.phoneNo!,
                                                 chatRoomId: value,
                                                 img:
                                                     "assets/images/male_doctor.jpg",
@@ -192,12 +193,12 @@ class _DoctorListState extends State<DoctorList> {
                               },
                               img: doc.gender == "Male"
                                   ? "assets/images/male_doctor.jpg"
-                                  : "assets/images/doctor_img.jpg",
+                                  : "assets/images/doctor_img.png",
                               width: width,
                               experiene: doc.docExperience! + "-experience",
                               name: "Dr. " + doc.name!,
                               rating: "4.7",
-                              status: doc.specialization!,
+                              status: doc.specialization ?? "hi",
                             );
                           }),
                     ],

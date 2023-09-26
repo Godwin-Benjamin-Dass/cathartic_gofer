@@ -1,4 +1,5 @@
 import 'package:cathartic_gofer/doctor/doctorDashboad.dart';
+import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
 import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class DoctorWaitingPage extends StatefulWidget {
 }
 
 class _DoctorWaitingPageState extends State<DoctorWaitingPage> {
-   bool isLoading = false;
+  bool isLoading = false;
   checkUser() async {
     isLoading = true;
     setState(() {});
@@ -23,55 +24,62 @@ class _DoctorWaitingPageState extends State<DoctorWaitingPage> {
     isLoading = false;
     setState(() {});
   }
-   @override
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     checkUser();
   }
 
+  List<UserModel> chats = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-            ? CircularProgressIndicator()
-            :  Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 40,
-          ),
-          Center(
-            child: Image.asset(
-              "assets/images/stopwatch.png",
-              height: 200,
+          ? CircularProgressIndicator()
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 40,
+                ),
+                Center(
+                  child: Image.asset(
+                    "assets/images/stopwatch.png",
+                    height: 200,
+                  ),
+                ),
+                SizedBox(
+                  height: 60,
+                ),
+                Text(
+                  "Confirmation pending!",
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 22,
+                      color: Colors.black),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 25,
+                    right: 25,
+                  ),
+                  child: SizedBox(
+                      width: double.infinity - 100,
+                      child: Text(
+                        "Once your Medical Registration is Verified, then We will Notify You",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            height: 1.5,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                      )),
+                ),
+              ],
             ),
-          ),
-          SizedBox(
-            height: 60,
-          ),
-          Text(
-            "Confirmation pending!",
-            style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w800, fontSize: 22, color: Colors.black),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 25,
-              right: 25,
-            ),
-            child: SizedBox(
-                width: double.infinity - 100,
-                child: Text(
-                  "Once your Medical Registration is Verified, then We will Notify You",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      height: 1.5, fontSize: 14, fontWeight: FontWeight.w500),
-                )),
-          ),
-        ],
-      ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 10, left: 30, right: 30),
         child: Container(
@@ -111,7 +119,9 @@ class _DoctorWaitingPageState extends State<DoctorWaitingPage> {
                         backgroundColor: Color(0xff4558FF),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20))),
-                    onPressed: () {},
+                    onPressed: () {
+                      checkUser();
+                    },
                     child: Text(
                       "Check Again",
                       style: TextStyle(

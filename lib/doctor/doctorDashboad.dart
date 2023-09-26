@@ -1,4 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cathartic_gofer/doctor/chatLobby.dart';
+import 'package:cathartic_gofer/user/models/chatRoomModel.dart';
+import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/black_divider.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/text_with_poppins_20_bold.dart';
@@ -17,6 +20,9 @@ class DoctorHomepage extends StatefulWidget {
 }
 
 class _DoctorHomepageState extends State<DoctorHomepage> {
+  List<UserModel> requests = [];
+  List<chatRoomModel> crm = [];
+  bool isLoading = false;
   List imgList = [
     "assets/images/n1.webp",
     "assets/images/covid.png",
@@ -24,6 +30,67 @@ class _DoctorHomepageState extends State<DoctorHomepage> {
     "assets/images/n2.webp",
     "assets/images/n4.jpg",
   ];
+  showAlertDialog(BuildContext context, String id, String status) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Continue"),
+      onPressed: () {
+        firebaseService.updateStatusOfChatRoom(id, status).then((value) {
+          fetchrequests();
+          Navigator.pop(context);
+        });
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Accept"),
+      content: Text("Would you like to continue accepting this person?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    firebaseService.updateFcm();
+    fetchrequests();
+  }
+
+  fetchrequests() async {
+    isLoading = true;
+    setState(() {});
+    crm = await firebaseService.fetchPatientWaitList();
+    List<String> uid = [];
+    for (int i = 0; i < crm.length; i++) {
+      uid.add(crm[i].user!);
+    }
+    for (int i = 0; i < uid.length; i++) {
+      requests.add(await firebaseService.getUserByPhno(uid[i]));
+    }
+    print("fetched");
+    isLoading = false;
+    setState(() {});
+  }
+
   int index = 0;
   @override
   Widget build(BuildContext context) {
@@ -226,119 +293,79 @@ class _DoctorHomepageState extends State<DoctorHomepage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Card(
-                elevation: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            "assets/images/profileImg.png",
-                            fit: BoxFit.cover,
-                            height: 35,
-                            width: 35,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Dhina",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
+              isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : requests.isEmpty
+                      ? Center(
+                          child: Text("no new requests"),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: requests.length,
+                          itemBuilder: (ctx, i) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: InkWell(
+                                onTap: () {
+                                  showAlertDialog(
+                                      context, crm[i].chatRoomId!, "verified");
+                                },
+                                child: Card(
+                                  elevation: 2,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Image.asset(
+                                              "assets/images/profileImg.png",
+                                              fit: BoxFit.cover,
+                                              height: 35,
+                                              width: 35,
+                                            ),
+                                            SizedBox(
+                                              width: 15,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  requests[i].name!,
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Spacer(),
+                                            Text(
+                                              "10 mins ago",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 11,
+                                                  color: Colors.black87),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 6,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                              Text(
-                                "Age 45",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.grey,
-                                    fontSize: 11),
-                              )
-                            ],
-                          ),
-                          Spacer(),
-                          Text(
-                            "10 mins ago",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 11,
-                                color: Colors.black87),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 6,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Card(
-                elevation: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            "assets/images/profileImg.png",
-                            fit: BoxFit.cover,
-                            height: 35,
-                            width: 35,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Godwin",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              Text(
-                                "Age 59",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.grey,
-                                    fontSize: 11),
-                              )
-                            ],
-                          ),
-                          Spacer(),
-                          Text(
-                            "56 mins ago",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 11,
-                                color: Colors.black87),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 6,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                            );
+                          }),
               const Padding(
                 padding: EdgeInsets.only(left: 10, top: 40, bottom: 20),
                 child: BlackDivider(),
@@ -396,7 +423,10 @@ class _DoctorHomepageState extends State<DoctorHomepage> {
       ])),
       floatingActionButton: FloatingActionButton(
           backgroundColor: Color(0xff0075FF),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => chatLobby()));
+          },
           child: Image.asset(
             "assets/images/msg.png",
             height: 20,

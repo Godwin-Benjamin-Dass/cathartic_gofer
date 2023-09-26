@@ -3,10 +3,12 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  audioplayers_windows
   awesome_notifications
   firebase_auth
   firebase_core
   permission_handler_windows
+  share_plus
   smart_auth
   url_launcher_windows
 )

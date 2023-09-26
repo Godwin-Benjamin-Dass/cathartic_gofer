@@ -1,6 +1,6 @@
-import 'package:cathartic_gofer/doctor/doctorWaitingPage.dart';
 import 'package:cathartic_gofer/doctor/doctor_waiting_page.dart';
 import 'package:cathartic_gofer/pharmacist/pharmacistWaitingPage.dart';
+import 'package:cathartic_gofer/guardian/guardian_homepage.dart';
 import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
 import 'package:cathartic_gofer/user/service/firebaseService.dart';
@@ -45,9 +45,12 @@ class _OtpPageState extends ConsumerState<OtpPage> {
       } else if (value.userType == "doctor") {
         return Navigator.push(context,
             MaterialPageRoute(builder: (context) => DoctorWaitingPage()));
-      } else {
+      } else if (value.userType == "vendor") {
         return Navigator.push(context,
             MaterialPageRoute(builder: (context) => pharmacistWaitingPage()));
+      } else {
+        return Navigator.push(context,
+            MaterialPageRoute(builder: (context) => GuardianHomePage()));
       }
     });
   }

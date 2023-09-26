@@ -66,6 +66,11 @@ dependencies:
 
 
   csc_picker: ^0.2.7
+  hive_flutter: ^1.1.0
+  audioplayers: ^5.1.0
+  lottie: ^2.6.0
+  share_plus: ^7.1.0
+  rating_dialog: ^2.0.4
 
 dev_dependencies:
   flutter_test:
@@ -92,6 +97,8 @@ flutter:
   assets:
     - assets/images/
     - assets/
+    - assets/pics/
+    - assets/audio/
   #   - images/a_dot_ham.jpeg
 
     - assets/Jsondata/
@@ -111,8 +118,10 @@ flutter:
       fonts:
         - asset: assets/fonts/WorkSans-VariableFont_wght.ttf
   #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  # fonts:
+    - family: Magic4
+      fonts:
+        - asset: assets/fonts/DiloWorld-mLJLv.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

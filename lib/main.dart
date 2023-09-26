@@ -1,10 +1,13 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:cathartic_gofer/doctor/doctorDashboad.dart';
 import 'package:cathartic_gofer/doctor/doctorWaitingPage.dart';
 import 'package:cathartic_gofer/guardian/guardian_homepage.dart';
 import 'package:cathartic_gofer/pharmacist/dashboard/pharmacistWaitingPage.dart';
+import 'package:cathartic_gofer/pharmacist/dashboard/pharmacist_home.dart';
 import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
 import 'package:cathartic_gofer/user/screens/auth/starting_page.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
+import 'package:cathartic_gofer/doctor/doctor_waiting_page.dart';
 import 'package:cathartic_gofer/user/service/firebaseService.dart';
 import 'package:cathartic_gofer/user/service/notificationService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,7 +51,7 @@ class SplashScreen extends StatelessWidget {
           //  FirebaseAuth.instance.currentUser == null
           // ? Startingpage()
 
-          GuardianHomePage(),
+          PharmacistHome(),
       // : navigatingPage(),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.bottomToTop,
@@ -118,7 +121,7 @@ class _navigatingPageState extends State<navigatingPage> {
       } else if (value.userType == "doctor") {
         return Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => doctorWaitingPage()),
+            MaterialPageRoute(builder: (context) => DoctorWaitingPage()),
             (route) => false);
       } else {
         return Navigator.pushAndRemoveUntil(

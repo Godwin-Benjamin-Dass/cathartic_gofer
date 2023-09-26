@@ -107,7 +107,7 @@ class _GuardianHomePageState extends ConsumerState<GuardianHomePage> {
                         const Padding(
                           padding: EdgeInsets.only(left: 8.0),
                           child: TextWithPoppinsSize20FwBold(
-                              text: "New today ?", color: Colors.black),
+                              text: "New today!", color: Colors.black),
                         )
                       ],
                     ),

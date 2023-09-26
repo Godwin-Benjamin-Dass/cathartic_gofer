@@ -1,8 +1,23 @@
+import 'dart:convert';
+
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:cathartic_gofer/user/models/dateHistoryModel.dart';
+import 'package:cathartic_gofer/user/models/medicineSheduleModel.dart';
+import 'package:cathartic_gofer/user/provider/medicineSheduleProvider.dart';
+import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/trackMedicScreen.dart';
+import 'package:cathartic_gofer/user/screens/dashboard/homepage.dart';
+import 'package:cathartic_gofer/user/service/DateHistoryService.dart';
+import 'package:cathartic_gofer/user/service/firebaseService.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddMedicine extends StatefulWidget {
-  AddMedicine({super.key});
+  AddMedicine({super.key, this.isfromGuardian = false});
+  final bool isfromGuardian;
 
   @override
   State<AddMedicine> createState() => _AddMedicineState();
@@ -21,10 +36,17 @@ class _AddMedicineState extends State<AddMedicine> {
   List<String> typeOfIntake = ["Before", "After"];
   String? timeDDV;
   String? typeDDV;
-  setData() {
+  List<DateTime?> _dates = [];
+  List<dateHistoryModel> dhv = [];
+  setData() async {
     timeDDV = timeList.first;
     typeDDV = typeOfIntake.first;
+    _dates = await DateHistoryService.getAllDates();
+    _dates.sort();
+    _dates = _dates.reversed.toList();
   }
+
+  TextEditingController _medicineName = TextEditingController();
 
   bool click1 = false;
   bool click2 = false;
@@ -40,7 +62,6 @@ class _AddMedicineState extends State<AddMedicine> {
     // timeDDV = "Morning";
     // typeDDV = "Before";
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -101,6 +122,7 @@ class _AddMedicineState extends State<AddMedicine> {
                         child: SizedBox(
                           height: 55,
                           child: TextField(
+                            controller: _medicineName,
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
@@ -301,23 +323,37 @@ class _AddMedicineState extends State<AddMedicine> {
                           SizedBox(
                             height: 40,
                             width: 120,
-                            child: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    elevation: 10,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        side: BorderSide(
-                                            width: 2,
-                                            color: Color(0xff358FEA))),
-                                    backgroundColor: Colors.white),
-                                child: Text(
-                                  "Add",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 17,
-                                      color: Color(0xff358FEA)),
-                                )),
+                            child: Consumer<medicineSheduleProvider>(
+                              builder: (context, value, child) =>
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        print("object");
+                                        value.addMedicine(medicineSheduleModel(
+                                            id: value.msl.length,
+                                            intakeMethod: typeDDV,
+                                            medicine: _medicineName.text,
+                                            status: false,
+                                            time: timeDDV,
+                                            type: "normal",
+                                            dateTime: DateTime.now()));
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          elevation: 10,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              side: BorderSide(
+                                                  width: 2,
+                                                  color: Color(0xff358FEA))),
+                                          backgroundColor: Colors.white),
+                                      child: Text(
+                                        "Add",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 17,
+                                            color: Color(0xff358FEA)),
+                                      )),
+                            ),
                           ),
                         ],
                       )
@@ -340,38 +376,169 @@ class _AddMedicineState extends State<AddMedicine> {
                 Padding(
                   padding: const EdgeInsets.only(right: 25),
                   child: SizedBox(
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                side: BorderSide(
-                                    width: 2, color: Color(0xff358FEA))),
-                            backgroundColor: Colors.white),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 10, top: 12, bottom: 12),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Proceed",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 17,
-                                    color: Color(0xff358FEA)),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(
-                                Icons.arrow_forward,
-                                size: 20,
-                                color: Color(0xFF0075FF),
-                              )
-                            ],
-                          ),
-                        )),
+                    child: Consumer<medicineSheduleProvider>(
+                      builder: (context, provider, child) => ElevatedButton(
+                          onPressed: () async {
+                            try {
+                              final SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              final values =
+                                  await showCalendarDatePicker2Dialog(
+                                context: context,
+                                config:
+                                    CalendarDatePicker2WithActionButtonsConfig(
+                                  firstDayOfWeek: 1,
+                                  calendarType: CalendarDatePicker2Type.range,
+                                  selectedDayTextStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700),
+                                  selectedDayHighlightColor: Colors.purple[800],
+                                  centerAlignModePicker: true,
+                                  customModePickerIcon: const SizedBox(),
+                                ),
+                                dialogSize: const Size(325, 400),
+                                borderRadius: BorderRadius.circular(15),
+                                value: _dates,
+                                dialogBackgroundColor: Colors.white,
+                              );
+                              if (values != null) {
+                                dhv.clear();
+                                firebaseService.TrackActivity(
+                                    "dates have been changed to");
+                                _dates = values;
+                                var start = _dates.first;
+                                var end = _dates.last;
+                                for (var date = start;
+                                    date!.isBefore(
+                                        end!.add(const Duration(days: 1)));
+                                    date = date.add(const Duration(days: 1))) {
+                                  String? mor =
+                                      prefs.getString("mor") ?? "08:00";
+                                  String? aft =
+                                      prefs.getString("aft") ?? "13:00";
+                                  String? nig =
+                                      prefs.getString("nig") ?? "20:00";
+                                  debugPrint(mor.substring(0, 2));
+                                  debugPrint(mor.substring(3, 5));
+                                  if (provider.mor.isNotEmpty) {
+                                    print(date);
+
+                                    dhv.add(dateHistoryModel(
+                                        date: date.add(Duration(
+                                            hours: int.parse(
+                                              mor.substring(0, 2),
+                                            ),
+                                            minutes: int.parse(
+                                                mor.substring(3, 5)))),
+                                        id: _dates.length.toString(),
+                                        isTaken: false,
+                                        time: "morning",
+                                        medicine: provider.mor,
+                                        type: "normal"));
+                                  }
+                                  if (provider.aft.isNotEmpty) {
+                                    dhv.add(dateHistoryModel(
+                                        date: date.add(Duration(
+                                            hours: int.parse(
+                                              aft.substring(0, 2),
+                                            ),
+                                            minutes: int.parse(
+                                                aft.substring(3, 5)))),
+                                        id: _dates.length.toString(),
+                                        isTaken: false,
+                                        time: "afternoon",
+                                        medicine: provider.aft,
+                                        type: "normal"));
+                                  }
+                                  if (provider.nig.isNotEmpty) {
+                                    dhv.add(dateHistoryModel(
+                                        date: date.add(Duration(
+                                            hours: int.parse(
+                                              nig.substring(0, 2),
+                                            ),
+                                            minutes: int.parse(
+                                                nig.substring(3, 5)))),
+                                        id: _dates.length.toString(),
+                                        time: "night",
+                                        isTaken: false,
+                                        medicine: provider.nig,
+                                        type: "normal"));
+                                  }
+                                }
+                                DateHistoryService.clearAllHistories();
+
+                                DateHistoryService.saveDateHistories(dhv);
+
+                                for (int i = 0; i < dhv.length; i++) {
+                                  print(dateHistoryModelToJson((dhv[0])));
+                                  Map<String, dynamic> data = jsonDecode(
+                                      dateHistoryModelToJson((dhv[i])));
+                                  print(data);
+                                  final _CollectionReference = FirebaseFirestore
+                                      .instance
+                                      .collection("shedules")
+                                      .doc(FirebaseAuth
+                                          .instance.currentUser!.phoneNumber)
+                                      .collection('alarms')
+                                      .doc();
+                                  data.addAll(
+                                      {"docId": _CollectionReference.id});
+                                  _CollectionReference.set(data);
+                                  print(data);
+                                }
+                                if (widget.isfromGuardian) {
+                                  Navigator.pop(context);
+                                } else {
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Homepage()),
+                                      (route) => false);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              TrackMedicScreen()));
+                                }
+
+                                print("added");
+                              }
+                              print(dhv.toList());
+                            } catch (e) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                              elevation: 10,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  side: BorderSide(
+                                      width: 2, color: Color(0xff358FEA))),
+                              backgroundColor: Colors.white),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 10, top: 12, bottom: 12),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Proceed",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 17,
+                                      color: Color(0xff358FEA)),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward,
+                                  size: 20,
+                                  color: Color(0xFF0075FF),
+                                )
+                              ],
+                            ),
+                          )),
+                    ),
                   ),
                 ),
               ],

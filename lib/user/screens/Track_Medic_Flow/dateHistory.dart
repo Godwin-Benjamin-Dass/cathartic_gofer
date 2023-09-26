@@ -4,19 +4,45 @@ import 'package:cathartic_gofer/user/service/DateHistoryService.dart';
 import 'package:flutter/material.dart';
 
 class dateHistory extends StatefulWidget {
-  const dateHistory({super.key});
+  const dateHistory({super.key, this.isFromGuardian = false, this.dh = null});
+  final bool isFromGuardian;
+  final List<dateHistoryModel>? dh;
 
   @override
   State<dateHistory> createState() => _dateHistoryState();
 }
 
 class _dateHistoryState extends State<dateHistory> {
+  String daysTook() {
+    int sum = 0;
+    for (int i = 0; i < dhm.length; i++) {
+      if (dhm[i].isTaken == true && dhm[i].date!.isBefore(DateTime.now())) {
+        sum++;
+      }
+    }
+    return sum.toString();
+  }
+
+  String daysNotTook() {
+    int sum = 0;
+    for (int i = 0; i < dhm.length; i++) {
+      if (dhm[i].isTaken == false && dhm[i].date!.isBefore(DateTime.now())) {
+        sum++;
+      }
+    }
+    return sum.toString();
+  }
+
   List<dateHistoryModel> dhm = [];
   bool isLoading = false;
   fetchShedule() async {
     isLoading = true;
     setState(() {});
-    dhm = await DateHistoryService.getAllDateHistories();
+    if (widget.isFromGuardian) {
+      dhm = widget.dh!;
+    } else {
+      dhm = await DateHistoryService.getAllDateHistories();
+    }
     debugPrint(dhm.toString());
     isLoading = false;
     setState(() {});
@@ -215,14 +241,14 @@ class _dateHistoryState extends State<dateHistory> {
                     height: 8,
                   ),
                   Text(
-                    "No Of Medicine took: ${dhm.length}",
+                    "No Of Medicine took: ${daysTook()}",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
                     height: 8,
                   ),
                   Text(
-                    "No Of Medicine Missed: ${dhm.length}",
+                    "No Of Medicine Missed: ${daysNotTook()}",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(

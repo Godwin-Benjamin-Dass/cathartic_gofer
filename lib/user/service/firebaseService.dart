@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cathartic_gofer/user/models/chatRoomModel.dart';
 import 'package:cathartic_gofer/user/models/dateHistoryModel.dart';
 import 'package:cathartic_gofer/user/models/trackModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -78,12 +79,20 @@ class firebaseService {
   static Future<UserModel> getDataFromFirestore() async {
     final CollectionReference collection = FirebaseFirestore.instance
         .collection('UserBio'); // Replace with your collection name
-    print("object");
     final DocumentSnapshot document = await collection
         .doc(FirebaseAuth.instance.currentUser!.phoneNumber)
         .get();
 
-    // Convert the Firestore document data to a JSON Map
+    var data = document.data() as Map<String, dynamic>;
+
+    return UserModel.fromJson(data);
+  }
+
+  static Future<UserModel> getUserByPhno(no) async {
+    final CollectionReference collection = FirebaseFirestore.instance
+        .collection('UserBio'); // Replace with your collection name
+    final DocumentSnapshot document = await collection.doc(no).get();
+
     var data = document.data() as Map<String, dynamic>;
 
     return UserModel.fromJson(data);
@@ -139,7 +148,7 @@ class firebaseService {
         final doctor = UserModel.fromJson(user);
 
         print(doctor.userType);
-        if (doctor.userType == "vendor" && doctor.status == "verified") {
+        if (doctor.userType == "doctor" && doctor.status == "verified") {
           um.add(doctor);
           print(doctor.name);
           print(doctor);
@@ -240,5 +249,52 @@ class firebaseService {
       "activity": activity,
     });
     print("activity tracked");
+  }
+
+  static Future<List<chatRoomModel>> fetchPatientWaitList() async {
+    List<chatRoomModel> dhm = [];
+    QuerySnapshot data =
+        await FirebaseFirestore.instance.collection("chatroom").get();
+
+    for (var documentSnapshot in data.docs) {
+      if (documentSnapshot.exists) {
+        final requests = documentSnapshot.data() as Map<String, dynamic>;
+        chatRoomModel crm = chatRoomModel.fromJson(requests);
+        if (crm.doctor == FirebaseAuth.instance.currentUser!.phoneNumber &&
+            crm.status == "waiting") {
+          dhm.add(crm);
+        }
+      }
+    }
+    return dhm;
+  }
+
+  static Future<List<chatRoomModel>> fetchPatientList() async {
+    List<chatRoomModel> dhm = [];
+    QuerySnapshot data =
+        await FirebaseFirestore.instance.collection("chatroom").get();
+
+    for (var documentSnapshot in data.docs) {
+      if (documentSnapshot.exists) {
+        final requests = documentSnapshot.data() as Map<String, dynamic>;
+        chatRoomModel crm = chatRoomModel.fromJson(requests);
+        if (crm.doctor == FirebaseAuth.instance.currentUser!.phoneNumber &&
+            crm.status != "waiting") {
+          dhm.add(crm);
+        }
+      }
+    }
+    return dhm;
+  }
+
+  static Future<void> updateStatusOfChatRoom(
+      String chatRoomId, String status) async {
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('chatroom');
+    return users
+        .doc(chatRoomId)
+        .update({'status': status})
+        .then((value) => print("status Updated"))
+        .catchError((error) => print("Failed to status user: $error"));
   }
 }

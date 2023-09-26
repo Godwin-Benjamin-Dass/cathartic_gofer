@@ -21,6 +21,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService.initializeNotification();
   await Hive.initFlutter();
+  var box = await Hive.openBox('user');
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

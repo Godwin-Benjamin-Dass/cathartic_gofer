@@ -5,12 +5,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage(
-      {super.key,
-      required this.name,
-      required this.img,
-      required this.chatRoomId});
-  final String name, img, chatRoomId;
+  const ChatPage({
+    super.key,
+    required this.name,
+    required this.img,
+    required this.chatRoomId,
+    required this.docNo,
+    this.isfromDoctor = false,
+  });
+  final String name, img, chatRoomId, docNo;
+  final bool isfromDoctor;
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -44,7 +48,19 @@ class _ChatPageState extends State<ChatPage> {
           .collection('chatroom')
           .doc(widget.chatRoomId)
           .collection('chats')
-          .add(messages);
+          .add(messages)
+          .then((value) async {
+        if (widget.isfromDoctor) {
+        } else {
+          await _firestore.collection('chatroom').doc(widget.chatRoomId).set({
+            "status": "waiting",
+            "doctor": widget.docNo,
+            "user": FirebaseAuth.instance.currentUser!.phoneNumber,
+            "time": DateTime.now(),
+            "chatRoomId": widget.chatRoomId
+          });
+        }
+      });
     } else {
       print("Enter Some Text");
     }

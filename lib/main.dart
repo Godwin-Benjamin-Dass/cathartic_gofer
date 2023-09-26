@@ -16,13 +16,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' as rp;
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService.initializeNotification();
   await Hive.initFlutter();
-  var box = await Hive.openBox('user');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -50,12 +48,9 @@ class SplashScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.black,
-      nextScreen:
-          //  FirebaseAuth.instance.currentUser == null
-          // ? Startingpage()
-
-          GuardianHomePage(),
-      // : navigatingPage(),
+      nextScreen: FirebaseAuth.instance.currentUser == null
+          ? Startingpage()
+          : navigatingPage(),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.bottomToTop,
     );
@@ -128,10 +123,15 @@ class _navigatingPageState extends State<navigatingPage> {
             context,
             MaterialPageRoute(builder: (context) => doctorWaitingPage()),
             (route) => false);
-      } else {
+      } else if (value.userType == "vendor") {
         return Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => pharmacistWaitingPage()),
+            (route) => false);
+      } else {
+        return Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => GuardianHomePage()),
             (route) => false);
       }
     });

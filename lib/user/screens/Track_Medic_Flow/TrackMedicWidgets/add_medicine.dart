@@ -16,7 +16,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddMedicine extends StatefulWidget {
-  AddMedicine({super.key});
+  AddMedicine({super.key, this.isfromGuardian = false});
+  final bool isfromGuardian;
 
   @override
   State<AddMedicine> createState() => _AddMedicineState();
@@ -41,6 +42,8 @@ class _AddMedicineState extends State<AddMedicine> {
     timeDDV = timeList.first;
     typeDDV = typeOfIntake.first;
     _dates = await DateHistoryService.getAllDates();
+    _dates.sort();
+    _dates = _dates.reversed.toList();
   }
 
   TextEditingController _medicineName = TextEditingController();
@@ -376,120 +379,134 @@ class _AddMedicineState extends State<AddMedicine> {
                     child: Consumer<medicineSheduleProvider>(
                       builder: (context, provider, child) => ElevatedButton(
                           onPressed: () async {
-                            final SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            final values = await showCalendarDatePicker2Dialog(
-                              context: context,
-                              config:
-                                  CalendarDatePicker2WithActionButtonsConfig(
-                                firstDayOfWeek: 1,
-                                calendarType: CalendarDatePicker2Type.range,
-                                selectedDayTextStyle: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700),
-                                selectedDayHighlightColor: Colors.purple[800],
-                                centerAlignModePicker: true,
-                                customModePickerIcon: const SizedBox(),
-                              ),
-                              dialogSize: const Size(325, 400),
-                              borderRadius: BorderRadius.circular(15),
-                              value: _dates,
-                              dialogBackgroundColor: Colors.white,
-                            );
-                            if (values != null) {
-                              dhv.clear();
-                              firebaseService.TrackActivity(
-                                  "dates have been changed to");
-                              _dates = values;
-                              var start = _dates.first;
-                              var end = _dates.last;
-                              for (var date = start;
-                                  date!.isBefore(
-                                      end!.add(const Duration(days: 1)));
-                                  date = date.add(const Duration(days: 1))) {
-                                String? mor = prefs.getString("mor") ?? "08:00";
-                                String? aft = prefs.getString("aft") ?? "13:00";
-                                String? nig = prefs.getString("nig") ?? "20:00";
-                                debugPrint(mor.substring(0, 2));
-                                debugPrint(mor.substring(3, 5));
-                                if (provider.mor.isNotEmpty) {
-                                  print(date);
+                            try {
+                              final SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              final values =
+                                  await showCalendarDatePicker2Dialog(
+                                context: context,
+                                config:
+                                    CalendarDatePicker2WithActionButtonsConfig(
+                                  firstDayOfWeek: 1,
+                                  calendarType: CalendarDatePicker2Type.range,
+                                  selectedDayTextStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700),
+                                  selectedDayHighlightColor: Colors.purple[800],
+                                  centerAlignModePicker: true,
+                                  customModePickerIcon: const SizedBox(),
+                                ),
+                                dialogSize: const Size(325, 400),
+                                borderRadius: BorderRadius.circular(15),
+                                value: _dates,
+                                dialogBackgroundColor: Colors.white,
+                              );
+                              if (values != null) {
+                                dhv.clear();
+                                firebaseService.TrackActivity(
+                                    "dates have been changed to");
+                                _dates = values;
+                                var start = _dates.first;
+                                var end = _dates.last;
+                                for (var date = start;
+                                    date!.isBefore(
+                                        end!.add(const Duration(days: 1)));
+                                    date = date.add(const Duration(days: 1))) {
+                                  String? mor =
+                                      prefs.getString("mor") ?? "08:00";
+                                  String? aft =
+                                      prefs.getString("aft") ?? "13:00";
+                                  String? nig =
+                                      prefs.getString("nig") ?? "20:00";
+                                  debugPrint(mor.substring(0, 2));
+                                  debugPrint(mor.substring(3, 5));
+                                  if (provider.mor.isNotEmpty) {
+                                    print(date);
 
-                                  dhv.add(dateHistoryModel(
-                                      date: date.add(Duration(
-                                          hours: int.parse(
-                                            mor.substring(0, 2),
-                                          ),
-                                          minutes:
-                                              int.parse(mor.substring(3, 5)))),
-                                      id: _dates.length.toString(),
-                                      isTaken: false,
-                                      time: "morning",
-                                      medicine: provider.mor,
-                                      type: "normal"));
+                                    dhv.add(dateHistoryModel(
+                                        date: date.add(Duration(
+                                            hours: int.parse(
+                                              mor.substring(0, 2),
+                                            ),
+                                            minutes: int.parse(
+                                                mor.substring(3, 5)))),
+                                        id: _dates.length.toString(),
+                                        isTaken: false,
+                                        time: "morning",
+                                        medicine: provider.mor,
+                                        type: "normal"));
+                                  }
+                                  if (provider.aft.isNotEmpty) {
+                                    dhv.add(dateHistoryModel(
+                                        date: date.add(Duration(
+                                            hours: int.parse(
+                                              aft.substring(0, 2),
+                                            ),
+                                            minutes: int.parse(
+                                                aft.substring(3, 5)))),
+                                        id: _dates.length.toString(),
+                                        isTaken: false,
+                                        time: "afternoon",
+                                        medicine: provider.aft,
+                                        type: "normal"));
+                                  }
+                                  if (provider.nig.isNotEmpty) {
+                                    dhv.add(dateHistoryModel(
+                                        date: date.add(Duration(
+                                            hours: int.parse(
+                                              nig.substring(0, 2),
+                                            ),
+                                            minutes: int.parse(
+                                                nig.substring(3, 5)))),
+                                        id: _dates.length.toString(),
+                                        time: "night",
+                                        isTaken: false,
+                                        medicine: provider.nig,
+                                        type: "normal"));
+                                  }
                                 }
-                                if (provider.aft.isNotEmpty) {
-                                  dhv.add(dateHistoryModel(
-                                      date: date.add(Duration(
-                                          hours: int.parse(
-                                            aft.substring(0, 2),
-                                          ),
-                                          minutes:
-                                              int.parse(aft.substring(3, 5)))),
-                                      id: _dates.length.toString(),
-                                      isTaken: false,
-                                      time: "afternoon",
-                                      medicine: provider.aft,
-                                      type: "normal"));
+                                DateHistoryService.clearAllHistories();
+
+                                DateHistoryService.saveDateHistories(dhv);
+
+                                for (int i = 0; i < dhv.length; i++) {
+                                  print(dateHistoryModelToJson((dhv[0])));
+                                  Map<String, dynamic> data = jsonDecode(
+                                      dateHistoryModelToJson((dhv[i])));
+                                  print(data);
+                                  final _CollectionReference = FirebaseFirestore
+                                      .instance
+                                      .collection("shedules")
+                                      .doc(FirebaseAuth
+                                          .instance.currentUser!.phoneNumber)
+                                      .collection('alarms')
+                                      .doc();
+                                  data.addAll(
+                                      {"docId": _CollectionReference.id});
+                                  _CollectionReference.set(data);
+                                  print(data);
                                 }
-                                if (provider.nig.isNotEmpty) {
-                                  dhv.add(dateHistoryModel(
-                                      date: date.add(Duration(
-                                          hours: int.parse(
-                                            nig.substring(0, 2),
-                                          ),
-                                          minutes:
-                                              int.parse(nig.substring(3, 5)))),
-                                      id: _dates.length.toString(),
-                                      time: "night",
-                                      isTaken: false,
-                                      medicine: provider.nig,
-                                      type: "normal"));
+                                if (widget.isfromGuardian) {
+                                  Navigator.pop(context);
+                                } else {
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Homepage()),
+                                      (route) => false);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              TrackMedicScreen()));
                                 }
+
+                                print("added");
                               }
-                              DateHistoryService.clearAllHistories();
-
-                              DateHistoryService.saveDateHistories(dhv);
-
-                              for (int i = 0; i < dhv.length; i++) {
-                                print(dateHistoryModelToJson((dhv[0])));
-                                Map<String, dynamic> data = jsonDecode(
-                                    dateHistoryModelToJson((dhv[i])));
-                                print(data);
-                                final _CollectionReference = FirebaseFirestore
-                                    .instance
-                                    .collection("shedules")
-                                    .doc(FirebaseAuth
-                                        .instance.currentUser!.phoneNumber)
-                                    .collection('alarms')
-                                    .doc();
-                                data.addAll({"docId": _CollectionReference.id});
-                                _CollectionReference.set(data);
-                                print(data);
-                              }
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Homepage()),
-                                  (route) => false);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          TrackMedicScreen()));
-                              print("added");
+                              print(dhv.toList());
+                            } catch (e) {
+                              Navigator.pop(context);
                             }
-                            print(dhv.toList());
                           },
                           style: ElevatedButton.styleFrom(
                               elevation: 10,

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cathartic_gofer/user/models/dateHistoryModel.dart';
+import 'package:cathartic_gofer/user/models/trackModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -164,6 +166,68 @@ class firebaseService {
       "estimate": null
     });
     print("order placed");
+  }
+
+  static Future<List<UserModel>> fetchMates() async {
+    List<UserModel> um = [];
+    final QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('UserBio').get();
+    for (var documentSnapshot in querySnapshot.docs) {
+      if (documentSnapshot.exists) {
+        final user = documentSnapshot.data() as Map<String, dynamic>;
+
+        final mates = UserModel.fromJson(user);
+
+        print(mates.userType);
+        if (mates.userType == "user" &&
+            mates.guardianPhno ==
+                FirebaseAuth.instance.currentUser!.phoneNumber) {
+          um.add(mates);
+          print(mates.name);
+          print(mates);
+        }
+      }
+    }
+    return um;
+  }
+
+  static Future<List<trackModel>> fetchActivity(no) async {
+    List<trackModel> tm = [];
+    QuerySnapshot data = await FirebaseFirestore.instance
+        .collection("tracker")
+        .doc(no)
+        .collection('history')
+        .get();
+    ;
+    for (var documentSnapshot in data.docs) {
+      if (documentSnapshot.exists) {
+        final track = documentSnapshot.data() as Map<String, dynamic>;
+
+        // final doctor = UserModel.fromJson(user);
+        final tac = trackModel.fromJson(track);
+        tm.add(tac);
+      }
+    }
+    return tm;
+  }
+
+  static Future<List<dateHistoryModel>> fetchSchedule(no) async {
+    List<dateHistoryModel> dhm = [];
+    QuerySnapshot data = await FirebaseFirestore.instance
+        .collection("shedules")
+        .doc(no)
+        .collection('alarms')
+        .get();
+    for (var documentSnapshot in data.docs) {
+      if (documentSnapshot.exists) {
+        final track = documentSnapshot.data() as Map<String, dynamic>;
+
+        // final doctor = UserModel.fromJson(user);
+        final tac = dateHistoryModel.fromJson(track);
+        dhm.add(tac);
+      }
+    }
+    return dhm;
   }
 
   static TrackActivity(String activity) {

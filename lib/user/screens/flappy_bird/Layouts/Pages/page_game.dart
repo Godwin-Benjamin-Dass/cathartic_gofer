@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:cathartic_gofer/user/screens/flappy_bird/Layouts/Pages/page_start_screen.dart';
 import 'package:cathartic_gofer/user/screens/flappy_bird/Layouts/Widgets/widget_barrier.dart';
 import 'package:cathartic_gofer/user/screens/flappy_bird/Layouts/Widgets/widget_bird.dart';
-import 'package:cathartic_gofer/user/screens/flappy_bird/Layouts/Widgets/widget_cover.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import '../../Database/database.dart';

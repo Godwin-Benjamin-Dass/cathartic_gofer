@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cathartic_gofer/user/models/userModel.dart';
 import 'package:cathartic_gofer/user/screens/BMI/bmi_homepage.dart';
-import 'package:cathartic_gofer/user/screens/Quiz/quiz_page.dart';
 import 'package:cathartic_gofer/user/screens/Track_Medic_Flow/trackMedicScreen.dart';
 import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
 import 'package:cathartic_gofer/user/screens/chatBot/chat_bot_controller.dart';
@@ -10,12 +9,10 @@ import 'package:cathartic_gofer/user/screens/dashboard/widgets/black_divider.dar
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/text_with_poppins_20_bold.dart';
 import 'package:cathartic_gofer/user/screens/dashboard/widgets/text_with_poppins_22_bold.dart';
 import 'package:cathartic_gofer/user/screens/flappy_bird/Layouts/Pages/page_start_screen.dart';
-import 'package:cathartic_gofer/user/screens/flappy_bird/Layouts/Widgets/widget_cover.dart';
 import 'package:cathartic_gofer/user/screens/pharmacy/pharmacy_details.dart';
 import 'package:cathartic_gofer/user/screens/searchFlow/searchScreen.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../service/firebaseService.dart';

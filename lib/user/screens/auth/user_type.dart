@@ -2,11 +2,10 @@
 
 import 'dart:ui';
 
+import 'package:cathartic_gofer/guardian/auth/guardian_form_Page.dart';
 import 'package:cathartic_gofer/pharmacist/auth/pharmacist_register_form.dart';
-import 'package:cathartic_gofer/screens/auth/user_register_form.dart';
 import 'package:cathartic_gofer/user/provider/register_and_login_controller.dart';
 import 'package:cathartic_gofer/user/screens/auth/controller/user_type_controller.dart';
-import 'package:cathartic_gofer/user/screens/auth/loginpage.dart';
 import 'package:cathartic_gofer/user/screens/auth/user_register_form.dart';
 import 'package:cathartic_gofer/user/screens/auth/widgets/professionContainer.dart';
 import 'package:flutter/material.dart';
@@ -153,6 +152,14 @@ class UserType extends ConsumerWidget {
                                               )));
                                   ref.read(registerProvider.notifier).state =
                                       "register";
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              guardian_form_page(
+                                                phno: Phno,
+                                              )));
                                 }
                               },
                               style: ElevatedButton.styleFrom(
